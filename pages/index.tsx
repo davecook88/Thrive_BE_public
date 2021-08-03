@@ -12,9 +12,3 @@ export default function Home() {
   )
 }
 
-
-// Home.prototype ={
-//   name:PropTypes.string,
-// }
-
-
