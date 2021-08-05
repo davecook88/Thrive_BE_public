@@ -1,22 +1,18 @@
-import React, {useState} from 'react'
+import React, { useState } from "react";
 
 const Toggle = () => {
   const [checked, setChecked] = useState<boolean>(true);
 
-    return (
-        <>
-          {/* <label>
-      <input type="checkbox"
-        defaultChecked={checked}
-        onChange={() => setChecked(!checked)}
-      />
-      Check Me!
-    </label> */}
+  return (
+    <>
+      <div className="form-control">
+        <label className="cursor-pointer label space-x-5">
+          <input type="checkbox" className="toggle toggle-secondary" />
+          <span className="label-text">Dark Mode</span>
+        </label>
+      </div>
+    </>
+  );
+};
 
-<button className="btn btn-primary">DaisyUI Button</button>
-
-        </>
-    )
-}
-
-export default Toggle
+export default Toggle;
