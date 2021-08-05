@@ -5,6 +5,14 @@ const Toggle = () => {
 
   const ToggleNow = () =>{
     setChecked(!checked)
+    if(checked === true){
+          localStorage.theme = 'dark';
+        document.documentElement.classList.add('dark')
+    } 
+    if(checked === false){
+              localStorage.theme = 'light';
+        document.documentElement.classList.remove('dark')
+    }
   }
 
   return (
