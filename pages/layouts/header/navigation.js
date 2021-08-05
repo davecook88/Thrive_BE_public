@@ -8,7 +8,6 @@ const Navigation = () => {
         <div>
             <div className="ml-10 flex items-baseline space-x-4">
                 <DarkMode/>
-                <Toggle/>
             </div>
         </div>
     )

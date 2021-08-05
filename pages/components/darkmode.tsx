@@ -1,23 +1,20 @@
 import React from 'react'
+import Toggle from './toggle'
 
 const DarkMode = () => {
-    const enableDarkMode = () => {
-        localStorage.theme = 'dark';
-        document.documentElement.classList.add('dark')
-    }
+    // const enableDarkMode = () => {
+    //     localStorage.theme = 'dark';
+    //     document.documentElement.classList.add('dark')
+    // }
 
-    const disableDarkMode = () => {
-        localStorage.theme = 'light';
-        document.documentElement.classList.remove('dark')
+    // const disableDarkMode = () => {
+    //     localStorage.theme = 'light';
+    //     document.documentElement.classList.remove('dark')
 
-    }
+    // }
     return (
         <>
-            <button className="dark:text-white" onClick={enableDarkMode}>
-                Enable Dark Mode
-            </button>
-
-            <button className="dark:text-white" onClick={disableDarkMode}>Disable Dark Mode</button>
+            <Toggle/>
         </>
     )
 }
