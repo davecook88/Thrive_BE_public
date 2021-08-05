@@ -10,4 +10,9 @@ module.exports = {
   plugins: [
     require('daisyui'),
   ],
+  daisyui: {
+    styled: true,
+    themes: false,
+    rtl: false,
+  },
 }

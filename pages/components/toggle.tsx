@@ -1,49 +1,39 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const Toggle = () => {
   const [checked, setChecked] = useState<boolean>();
+  // const darkmodeState = useState(localStorage.theme);
 
-  const ToggleNow = () =>{
-    setChecked(!checked)
-  }
+  const ToggleNow = () => {
+    setChecked(!checked);
+  };
 
   useEffect(() => {
-    if(checked === true){
-          localStorage.theme = 'dark';
-        document.documentElement.classList.add('dark')
-    } 
-    if(checked === false){
-              localStorage.theme = 'light';
-        document.documentElement.classList.remove('dark')
+    if (checked === true) {
+      localStorage.theme = "dark";
+      document.documentElement.classList.add("dark");
     }
-  }, [checked])
+    if (checked === false) {
+      localStorage.theme = "light";
+      document.documentElement.classList.remove("dark");
+    }
+  }, [checked]);
 
   useEffect(() => {
-    if(localStorage.theme === 'dark'){
-      setChecked(true)
-    } 
-    // if(checked === false){
-    //           localStorage.theme = 'light';
-    //     document.documentElement.classList.remove('dark')
-    // }
-  }, [])
-
-  // const CheckMe = () => {
-  //   if(localStorage.theme = 'dark'){
-  //     document.documentElement.classList.add('dark')
-  //   } else {
-  //     checked === false;
-  //   }
-
-  //   return checked;
- 
-  // }
+    if (localStorage.theme === "dark") {
+      setChecked(true);
+    }
+  }, []);
 
   return (
     <>
       <div className="form-control">
         <label className="cursor-pointer label space-x-5">
-          <input type="checkbox" defaultChecked={checked} onChange={ToggleNow} className="toggle toggle-secondary" />
+          <input
+            type="checkbox"
+            onChange={ToggleNow}
+            className="toggle toggle-secondary"
+          />
           <span className="label-text">Dark Mode</span>
         </label>
       </div>
