@@ -11,19 +11,20 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [loading,setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log("checkme")
-    // setLoading(false);
-    setTimeout(function(){ setLoading(false); }, 300);
+
+    setTimeout(function(){ setLoading(false); }, 500);
 
     return () => {
       setLoading(true)
     }
 
   }, [pageProps])
+
+
   return (
     <>
     <Header />
-    <div className={loading === true ? 'animate-pulse' : ''}>
+    <div className={loading === true ? 'animate-Loading' : ''}>
     <Component {...pageProps} />
     </div>
     
