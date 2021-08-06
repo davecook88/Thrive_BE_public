@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
 
-    setTimeout(function(){ setLoading(false); }, 500);
+    setTimeout(function(){ setLoading(false); }, 250);
 
     return () => {
       setLoading(true)

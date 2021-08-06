@@ -1,6 +1,6 @@
 import React from 'react'
 import Toggle from '../../components/toggle';
-import DarkMode from './../../components/darkmode';
+import DarkMode from '../../components/darkmode';
 // import { FaGithubSquare } from 'react-icons/fa';
 import GithubIcon from '../../components/icons/github'
 import Link from 'next/link'
