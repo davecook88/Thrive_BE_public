@@ -3,7 +3,6 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import Header from './layouts/header/header'
 import Footer from './layouts/Footer/footer'
-import { useRouter } from 'next/router'
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -24,8 +23,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
     <Header />
+    
     <div className={loading === true ? 'animate-Loading' : ''}>
-    <Component {...pageProps} />
+
+      <Component {...pageProps} />
+
     </div>
     
     <Footer />
