@@ -16,7 +16,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
     <Header />
+    <div className="animate-pulse">
     <Component {...pageProps} />
+    </div>
+    
     <Footer />
     </>
   )
