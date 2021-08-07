@@ -19,6 +19,7 @@ module.exports = {
         skin:{
           fill: 'var(--color-fill)',
           dark:'var(--color-dark)',
+          darkmode:'var(--color-darkmode)',
           'button-accent': 'var(--color-button-accent)',
           'button-accent-hover': 'var(--color-button-accent-hover)',
           'button-muted': 'var(--color-button-muted)',
@@ -44,7 +45,11 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      filter: ['dark'],
+      sepia: ['dark'],
+      grayscale:['dark']
+    },
   },
   plugins: [
     // require('daisyui'),
