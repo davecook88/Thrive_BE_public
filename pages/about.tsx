@@ -13,14 +13,18 @@ const About = () => {
                 <small>Krishna</small>
             </button> */}
 
-           <div className=" relative  w-28 h-28">
-           <img src="/avatar.jpg" className="rounded-full border border-gray-100 shadow-sm"/>
-           <p className="absolute bottom-0 right-0 h-7 w-7">
-               Working from Home
-           </p>
-           {/* <div className="absolute bottom-0 right-0 h-7 w-7 my-1 border-2 border-white rounded-full bg-green-400 z-2"> Working From Home</div> */}
+           <div className=" relative  w-28 h-28 ">
+           <img src="/avatar.jpg" className="rounded-full border border-gray-100 shadow-sm "/>
+           
+           <div className="absolute bottom-0 right-0 w-6 h-6 my-2 border-2 border-white rounded-full bg-green-400 z-2
+           	hover:bg-skin-dark hover:scale-200
+           ">
+               
+           </div>
            </div>
             </div>
+
+            
             
         </div>
     )
