@@ -1,6 +1,7 @@
 module.exports = {
-  purge: [], // use this during development state
-  // purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'], // use this during production state
+  mode: 'jit',
+  // purge: [], // use this during development state
+  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'], // use this during production state
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
@@ -28,7 +29,8 @@ module.exports = {
 
 
       animation: {
-        Loading: 'Loading 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        Loading: 'Loading 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        // Nothing: 'Loading 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
 
 
@@ -40,7 +42,9 @@ module.exports = {
           '50%': {
             opacity: 0.1,
           }
-         }
+         },
+
+        
        }
     },
   },
@@ -48,15 +52,11 @@ module.exports = {
     extend: {
       filter: ['dark'],
       sepia: ['dark'],
-      grayscale:['dark']
+      grayscale:['dark'],
+      opacity:['dark'],
+      'animate-none':['dark'],
+      
     },
   },
-  plugins: [
-    // require('daisyui'),
-  ],
-  // daisyui: {
-  //   styled: true,
-  //   themes: false,
-  //   rtl: false,
-  // },
+  plugins: [],
 }

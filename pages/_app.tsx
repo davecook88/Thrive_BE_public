@@ -24,7 +24,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
     <Header />
 
-    <div className={loading === true ? 'dark:animation-none animate-Loading ' : ''}>
+    <div className={loading === true ? 'dark:animate-none animate-Loading ' : ''}>
+
 
       <Component {...pageProps} />
 
