@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import MoonIcon from "./icons/moon";
 import SunIcon from "./icons/sun";
+import { useSelector, useDispatch } from 'react-redux'
+
+import { changeDarkMode } from "./redux/reducers/darkMode";
 
 const Toggle = () => {
   const [darkmode, setDarkmode] = useState<boolean>();
 
+  // const datasss = useSelector((state) => state.themeMode.value)
+  const dispatch = useDispatch()
+
   const ToggleNow = () => {
     setDarkmode(!darkmode);
+    dispatch(changeDarkMode())
   };
 
   useEffect(() => {
