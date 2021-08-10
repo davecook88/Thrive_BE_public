@@ -1,7 +1,7 @@
 module.exports = {
-  // mode: 'jit',
+  mode: 'jit',
   // purge: [], // use this during development state
-  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'], // use this during production state
+  purge: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}'], // use this during production state
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
