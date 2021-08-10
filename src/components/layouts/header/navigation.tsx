@@ -1,35 +1,37 @@
-import React from 'react'
-import Toggle from '../../toggle';
-// import DarkMode from '../../darkmode';
-// import { FaGithubSquare } from 'react-icons/fa';
-import GithubIcon from '../../icons/github'
-import Link from 'next/link'
-
-
-
+import React from "react";
+import Toggle from "../../toggle";
+import GithubIcon from "../../icons/github";
+import Link from "next/link";
 
 const Navigation = () => {
-    return (
+  return (
+    <div>
+      <div className="ml-10 flex items-baseline space-x-4 gap-4">
+        
+
         <div>
-            <div className="ml-10 flex items-baseline space-x-4">
-                <div><Toggle/></div>
-                {/* <div><FaGithubSquare/></div> */}
-                <div className="max-w-1 w-1"><GithubIcon /></div>
-
-                <div>
-                <Link href="/">
-                    <a>Home</a>
-                </Link>
-                </div>
-
-                <div>
-                <Link href="/about">
-                    <a>About Us</a>
-                </Link>
-                </div>
-            </div>
+          <Link href="/">
+            <a>Home</a>
+          </Link>
         </div>
-    )
-}
 
-export default Navigation
+        <div>
+          <Link href="/about">
+            <a>About Us</a>
+          </Link>
+        </div>
+
+        {/* <div className="place-self-center">
+        <a className="flex gap-1">Github <GithubIcon /></a>
+          
+        </div> */}
+        <div className="place-self-center">
+          
+          <Toggle />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Navigation;
