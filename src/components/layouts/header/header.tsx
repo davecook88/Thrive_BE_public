@@ -1,26 +1,41 @@
-import React from "react";
+import React, {useState} from "react";
 import NavIcon from "../../icons/navicon";
 import Logo from "./logo";
 import Navigation from "./navigation";
 
 const Header = () => {
+
+    // let clicked = "clicked";
+    // const [classes, setClasses] = useState<string>("clicked")
+    const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState<boolean>(false);
+
+
+    const navClicked = () => {
+        console.log("Clicked")
+        // clicked = "yesclicked";
+        setClasses("yesclicked")
+    }
+
+    
   return (
     <>
       <section className="container mx-auto header bg-gray-10 border-b dark:bg-gray-900">
-        <div className="flex items-center justify-between h-16 mx-auto gap-4">
+        <div className="flex flex-wrap items-center justify-between py-4 mx-auto gap-4">
           <div className="flex-none">
             <Logo />
           </div>
 
-          <div className="flex-grow float-right	place-self-center hidden lg:block">
-              <div className="float-right">
+          
+
+          <div className="flex-none  gap-4 lg:hidden" onClick={() => setMobileMenuIsOpen(!mobileMenuIsOpen)}>
+            <NavIcon />
+          </div>
+
+          <div className={`lg:flex flex-col lg:flex-row lg:items-center lg:justify-center text-sm w-full lg:w-auto ${mobileMenuIsOpen ? `block` : `hidden`}`}>
+              <div className={`${mobileMenuIsOpen ? `p-2 ` : `float-right`}`}>
               <Navigation  />
               </div>
             
-          </div>
-
-          <div className="flex-none  gap-4 lg:hidden">
-            <NavIcon />
           </div>
         </div>
       </section>

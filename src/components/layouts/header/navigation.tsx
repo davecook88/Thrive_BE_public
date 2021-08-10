@@ -5,32 +5,29 @@ import Link from "next/link";
 
 const Navigation = () => {
   return (
-    <div>
-      <div className="ml-10 flex items-baseline space-x-4 gap-4">
+    <>
+      {/* <div className="ml-10 flex items-baseline space-x-4 gap-4"> */}
         
-
-        <div>
+      <div className="md:block lg:flex lg:gap-8">
+        <div className="py-2 border-b-2 border-gray-100	lg:border-0">
           <Link href="/">
             <a>Home</a>
           </Link>
         </div>
 
-        <div>
+        <div className="py-2 border-b-2 border-gray-100	lg:border-0">
           <Link href="/about">
             <a>About Us</a>
           </Link>
         </div>
 
-        {/* <div className="place-self-center">
-        <a className="flex gap-1">Github <GithubIcon /></a>
-          
-        </div> */}
-        <div className="place-self-center">
+
+        <div className="place-self-center py-2 border-gray-100 lg:border-0">
           
           <Toggle />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
