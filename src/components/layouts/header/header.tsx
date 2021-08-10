@@ -9,13 +9,6 @@ const Header = () => {
     // const [classes, setClasses] = useState<string>("clicked")
     const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState<boolean>(false);
 
-
-    const navClicked = () => {
-        console.log("Clicked")
-        // clicked = "yesclicked";
-        setClasses("yesclicked")
-    }
-
     
   return (
     <>
