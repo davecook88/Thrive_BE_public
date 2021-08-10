@@ -8,12 +8,10 @@ import { changeDarkMode } from "./redux/reducers/darkMode";
 const Toggle = () => {
   const [darkmode, setDarkmode] = useState<boolean>();
 
-  // const datasss = useSelector((state) => state.themeMode.value)
   const dispatch = useDispatch();
 
   const ToggleNow = () => {
     setDarkmode(!darkmode);
-    // dispatch(changeDarkMode(localStorage.theme))
   };
 
   useEffect(() => {
@@ -27,12 +25,11 @@ const Toggle = () => {
       document.documentElement.classList.remove("dark");
       dispatch(changeDarkMode(localStorage.theme));
     }
-  }, [darkmode]);
+  }, [darkmode, dispatch]);
 
   useEffect(() => {
     if (localStorage.theme === "dark") {
       setDarkmode(true);
-      // dispatch(changeDarkMode(localStorage.theme))
     }
   }, []);
 
