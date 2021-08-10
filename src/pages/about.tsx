@@ -14,11 +14,11 @@ const About = () => {
       <div className="bg-skin-fill dark:bg-skin-darkmode m-auto flex justify-center h-screen">
         <div className="my-auto">
           <div className=" relative w-40 h-40 ">
-            {/* <img
+            <img
               src="https://avatars.githubusercontent.com/u/60743337?v=4"
               className="rounded-full border border-gray-100 shadow-sm 
             filter dark:grayscale"
-            /> */}
+            />
 
             <div
               className="absolute bottom-0 right-0 w-9 h-9 my-2 border-2 border-white rounded-full bg-green-400 dark:bg-gray-500 z-2
