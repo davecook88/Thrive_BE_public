@@ -30,6 +30,7 @@ module.exports = {
         skin:{
           fill: 'var(--color-fill)',
           dark:'var(--color-dark)',
+          bgdark:'var(--color-bgdark)',
           darkmode:'var(--color-darkmode)',
           'button-accent': 'var(--color-button-accent)',
           'button-accent-hover': 'var(--color-button-accent-hover)',
