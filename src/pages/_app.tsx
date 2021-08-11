@@ -24,11 +24,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <Header />
 
-      <div
+      <section
         className={loading === true ? "dark:animate-none animate-Loading " : ""}
       >
         <Component {...pageProps} />
-      </div>
+      </section>
 
       <Footer />
       </Provider>
