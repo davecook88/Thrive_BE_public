@@ -11,13 +11,13 @@ const Navigation = () => {
       <div className="md:block lg:flex lg:gap-8">
         <div className="py-2 border-b-2 border-gray-100	lg:border-0">
           <Link href="/">
-            <a>Home</a>
+            <a className="dark:text-skin-white">Home</a>
           </Link>
         </div>
 
         <div className="py-2 border-b-2 border-gray-100	lg:border-0">
           <Link href="/about">
-            <a>About Us</a>
+            <a className="dark:text-skin-white">About Us</a>
           </Link>
         </div>
 

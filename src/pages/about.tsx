@@ -12,35 +12,38 @@ const About = () => {
   // };
 
   return (
-    <>
-      <div className="bg-skin-fill dark:bg-skin-darkmode m-auto flex justify-center h-screen">
-        <div className="my-auto">
-          <div className=" relative w-40 h-40 ">
-            {/* <img
-              src="https://avatars.githubusercontent.com/u/60743337?v=4"
-              className="rounded-full border border-gray-100 shadow-sm 
-            filter dark:grayscale"
-            alt="krishna"
-            /> */}
-
-            <Image
-              src={"/avatar.jpg"}
-              alt="Picture of the author"
-              className="rounded-full border border-gray-100 shadow-sm 
-            filter dark:grayscale"
-              width={500}
-              height={500}
-            />
-
-            <div
-              className="absolute bottom-0 right-0 w-9 h-9 my-2 border-2 border-white rounded-full bg-green-400 dark:bg-gray-500 z-2
-           	hover:bg-skin-dark hover:scale-200
-           "
-            ></div>
-          </div>
+    <div className="bg-skin-fill">
+    <div className="bg-gray-50 dark:bg-gray-900">
+    <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
+      <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+        <span className="block dark:text-skin-white">About our team</span>
+        <span className="block text-skin-base">Start your free trial today.</span>
+      </h2>
+      <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+        <div className="inline-flex rounded-md shadow">
+          <a
+            href="#"
+            className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-skin-fill hover:bg-skin-fill"
+          >
+            Get started
+          </a>
+        </div>
+        <div className="ml-3 inline-flex rounded-md shadow">
+          <a
+            href="#"
+            className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-skin-base bg-white hover:bg-indigo-50
+            dark:bg-skin-bgdark dark:text-skin-white dark:border-gray-100
+            "
+          >
+            Learn more
+          </a>
         </div>
       </div>
-    </>
+    </div>
+  </div>
+  
+  
+  </div>
   );
 };
 

@@ -12,7 +12,7 @@ const Header = () => {
     
   return (
     <>
-      <section className="container mx-auto header bg-gray-10 border-b dark:bg-gray-900">
+      <section className="container mx-auto header bg-gray-10 border-b dark:bg-gray-900 dark:border-opacity-10">
         <div className="flex flex-wrap items-center justify-between py-4 mx-auto gap-4">
           <div className="flex-none">
             <Logo />
