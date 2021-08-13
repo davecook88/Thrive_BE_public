@@ -41,7 +41,7 @@ module.exports = {
 
       animation: {
         Loading: 'Loading 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        slideIn :'slideIn 2s cubic-bezier(1, 0, 0, 0  )'
+        slideIn :'slideIn 0.4s cubic-bezier(1, 0, 0, 0  )'
         // Nothing: 'Loading 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
 
