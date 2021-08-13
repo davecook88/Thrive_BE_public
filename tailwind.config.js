@@ -41,17 +41,32 @@ module.exports = {
 
       animation: {
         Loading: 'Loading 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        slideIn :'slideIn 0.3 s cubic-bezier(1, 0, 0, 0  )'
         // Nothing: 'Loading 10s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
 
 
        keyframes :{
+
+        //  loading animation
          Loading :{
           '0%, 100% ':{
             opacity: 0.1,
           },
           '50%': {
             opacity: 0.1,
+          }
+         },
+
+        //  slidein animation
+        slideIn :{
+          '75%, 100% ':{
+            transform: 'scale(1)',
+           opacity: 1,
+          },
+          '0%,50%': {
+            transform: 'scale(1)',
+            opacity: 0,
           }
          },
 
