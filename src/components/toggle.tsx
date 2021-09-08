@@ -35,13 +35,13 @@ const Toggle = () => {
 
   return (
     <>
-      <a href="#">
+      <button>
         {darkmode === true ? (
           <MoonIcon callfunc={ToggleNow} />
         ) : (
           <SunIcon callfunc={ToggleNow} />
         )}
-      </a>
+      </button>
     </>
   );
 };
