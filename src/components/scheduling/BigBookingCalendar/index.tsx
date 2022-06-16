@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { selectAvailability } from "../redux/reducers/calendar/availabilitySlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { selectAvailability } from "../../redux/reducers/calendar/availabilitySlice";
 
-import { Calendar, momentLocalizer } from "./ReactBigCalendar";
+import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { AvailabilityStateEntry } from "../types/calendar/types";
+import { AvailabilityStateEntry } from "../../types/calendar/types";
 
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
-interface Props {
+interface BigBookingCalendarProps {
   height: string;
 }
 
@@ -29,16 +29,18 @@ const backgroundEvents = [
   },
 ];
 
-const BigBookingCalendar: React.FC<Props> = ({ height }) => {
+const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({ height }) => {
   const availability = useAppSelector(selectAvailability);
   const dispatch = useAppDispatch();
 
-  const formatEvents = (entry: AvailabilityStateEntry): EventDetails => ({
-    title: "available",
-    id: entry.from.getTime(),
-    start: entry.from,
-    end: entry.until,
-  });
+  const formatEvents =
+    (title?: string) =>
+    (entry: AvailabilityStateEntry): EventDetails => ({
+      title: entry?.title || title || "",
+      id: entry.from.getTime(),
+      start: entry.from,
+      end: entry.until,
+    });
 
   const background = {
     id: 0,
@@ -51,10 +53,12 @@ const BigBookingCalendar: React.FC<Props> = ({ height }) => {
   return (
     <div style={{ height }}>
       <Calendar
-        backgroundEvents={backgroundEvents} //{availability.available.map(formatEvents)}
+        backgroundEvents={availability.available.map(formatEvents("available"))} //{availability.available.map(formatEvents)}
+        scrollToTime={new Date()}
         showMultiDayTimes
+        defaultView="week"
         localizer={localizer}
-        // events={backgroundEvents}
+        events={[]}
         startAccessor="start"
         endAccessor="end"
       />

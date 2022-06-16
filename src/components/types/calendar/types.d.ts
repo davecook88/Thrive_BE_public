@@ -9,6 +9,7 @@ export interface AvailabilityState {
 }
 
 export interface AvailabilityStateEntry {
+  title?: string;
   status: BookingStatus;
   from: Date;
   until: Date;
