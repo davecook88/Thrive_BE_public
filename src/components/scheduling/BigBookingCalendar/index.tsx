@@ -20,15 +20,6 @@ interface EventDetails {
   end: Date;
 }
 
-const backgroundEvents = [
-  {
-    id: 0,
-    title: "Available for Clients",
-    start: new Date(2022, 5, 13, 6),
-    end: new Date(2022, 5, 13, 18),
-  },
-];
-
 const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({ height }) => {
   const availability = useAppSelector(selectAvailability);
   const dispatch = useAppDispatch();
@@ -41,14 +32,6 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({ height }) => {
       start: entry.from,
       end: entry.until,
     });
-
-  const background = {
-    id: 0,
-    title: "Board meeting",
-    start: new Date(2022, 5, 29, 9, 0, 0),
-    end: new Date(2022, 5, 29, 13, 0, 0),
-    resourceId: 1,
-  };
 
   return (
     <div style={{ height }}>

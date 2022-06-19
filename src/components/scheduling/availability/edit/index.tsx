@@ -11,23 +11,46 @@ import {
 } from "../../../redux/reducers/calendar/editAvailabilitySlice";
 import WeekdayRow, { AvailabilityInputType } from "./WeekdayRow";
 
-const getWeekStart = (moment: Moment) => {
-  return moment.startOf("week");
+const getMondayFromDate = (momentDate?: Moment) => {
+  const monday = momentDate?.startOf("week") || moment().startOf("week");
+  return monday;
 };
 
 const EditAvailabilityForm = () => {
   const dispatch = useAppDispatch();
   const _editAvailabilityConfig = useAppSelector(editAvailabilityConfig);
-  const [weekStart, setWeekStart] = useState<Moment>(moment());
-  const [everyWeek, setEveryWeek] = useState<boolean>(false);
+  const [weekStart, setWeekStart] = useState<number>(
+    getMondayFromDate().valueOf()
+  );
+  const [weekEnd, setWeekEnd] = useState<number>(
+    weekStart + 7 * 24 * 60 * 60 * 1000
+  );
 
-  const onSelectWeekStart: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    const { value } = event.target;
-    const date = new Date(value);
-    setWeekStart(getWeekStart(moment(date)));
+  const calculateWeeksSelected = () => {
+    return (weekEnd - weekStart) / (7 * 24 * 60 * 60 * 1000);
   };
+
+  const onUpdateEndDate = (timestamp: number) => {
+    if (timestamp < weekStart) {
+      throw new Error("Your end date must be after the start date");
+    }
+    setWeekEnd(timestamp);
+  };
+
+  const onUpdateDateRange =
+    (callback: Function): React.ChangeEventHandler<HTMLInputElement> =>
+    (event) => {
+      try {
+        const { value } = event.target;
+        const date = new Date(value);
+        if (date < new Date()) {
+          throw new Error("You must select a date in the future");
+        }
+        callback(getMondayFromDate(moment(date)).valueOf());
+      } catch (err: any) {
+        alert(err.message);
+      }
+    };
 
   const onEditAvailability =
     (dayName: string, dateString: string) =>
@@ -67,11 +90,39 @@ const EditAvailabilityForm = () => {
       );
     };
 
+  const onSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    // Send entries to backend
+    e.preventDefault();
+    if (
+      !confirm(
+        `Are you sure? This will overwrite settings for ${calculateWeeksSelected()} weeks`
+      )
+    ) {
+      return;
+    }
+    const availabilityEntries = Object.values(
+      _editAvailabilityConfig.config
+    ).reduce((acc, val) => acc.concat(val), []);
+
+    const filteredEntries = availabilityEntries.filter(
+      (entry) => entry.from && entry.until
+    );
+
+    for (const entry of filteredEntries) {
+      if (new Date(entry.from as string) > new Date(entry.until as string)) {
+        alert(`Ensure that all end times are after the start time. Error found here: 
+From ${entry.from}
+Until: ${entry.until}`);
+        return;
+      }
+    }
+  };
+
   return (
     <div className="w-full ">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4">
-          <div id="week_start_section" className="grid grid-cols-3 gap-2">
+          <div id="week_start_section" className="grid grid-cols-4 gap-2">
             <div className="text-center">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -79,11 +130,8 @@ const EditAvailabilityForm = () => {
               >
                 Week Beginning
               </label>
-              <span
-                className={clsx(everyWeek && "text-white")}
-                id="week_beginning_text"
-              >
-                {weekStart.format("LL")}
+              <span id="week_beginning_text">
+                {moment(weekStart)?.format("LL")}
               </span>
             </div>
             <div className="text-center">
@@ -96,39 +144,62 @@ const EditAvailabilityForm = () => {
                 )}
                 htmlFor="select_week_start"
               >
-                Select Week Start
+                Select Start Week
               </label>
               <input
                 type="date"
                 id="select_week_start"
-                disabled={everyWeek}
-                onChange={onSelectWeekStart}
+                onChange={onUpdateDateRange(setWeekStart)}
+                value={moment(weekStart).toISOString().slice(0, 10)}
+              />
+            </div>
+            <div className="text-center">
+              <label
+                className={clsx(
+                  "block",
+                  "text-gray-700",
+                  "text-sm",
+                  "font-bold mb-2"
+                )}
+                htmlFor="select_week_end"
+              >
+                Select End Week
+              </label>
+              <input
+                type="date"
+                id="select_week_end"
+                onChange={onUpdateDateRange(onUpdateEndDate)}
+                value={moment(weekEnd).toISOString().slice(0, 10)}
               />
             </div>
             <div className="text-center">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="set_every_week_checkbox"
+                htmlFor="set_multi_week_checkbox"
               >
-                Every Week?
+                Weeks To Update
               </label>
-              <input
-                id="set_every_week_checkbox"
-                type="checkbox"
-                onChange={() => setEveryWeek(!everyWeek)}
-              />
+              <span>{calculateWeeksSelected()}</span>
             </div>
           </div>
+        </div>
+        <div className="w-full text-center">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={onSubmit}
+          >
+            Save Updates
+          </button>
         </div>
 
         <div>
           {DAY_NAMES.map((dayName, index) => {
-            const date = moment(weekStart.add(index, "days"));
+            const date = moment(moment(weekStart)?.add(index, "days"));
             return (
               <WeekdayRow
                 key={dayName}
                 dayName={dayName}
-                date={date}
+                date={calculateWeeksSelected() === 1 ? date : null}
                 onEntryUpdate={onEditAvailability(
                   dayName,
                   date.format("YYYY-MM-DD")
@@ -140,24 +211,7 @@ const EditAvailabilityForm = () => {
             );
           })}
         </div>
-        <div className="flex items-center justify-around ">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
-          >
-            Sign In
-          </button>
-          <a
-            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-            href="#"
-          >
-            Forgot Password?
-          </a>
-        </div>
       </form>
-      <p className="text-center text-gray-500 text-xs">
-        &copy;2020 Acme Corp. All rights reserved.
-      </p>
     </div>
   );
 };
