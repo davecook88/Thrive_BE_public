@@ -8,11 +8,25 @@ import {
   DAY_NAMES,
   editAvailabilityConfig,
   removeEditAvailabilityDayEntry,
+  resetEditAvailabilityState,
   updateEditAvailabilityDayEntry,
 } from "../../../redux/reducers/calendar/editAvailabilitySlice";
 import WeekdayRow, { AvailabilityInputType } from "./WeekdayRow";
 import { v4 as uuidv4 } from "uuid";
 import { StandardButton } from "../../../styled/Buttons";
+import { CreateAvailabilityCalendarEvent } from "../../BigBookingCalendar";
+
+import ApiAdaptor from "../../../../backend/apiAdaptor";
+import { EditAvailabilityEntry } from "../../../types/availability/editAvailability";
+export interface CompleteEditAvailabilityEntry extends EditAvailabilityEntry {
+  start: number;
+  end: number;
+}
+
+export const editAvailabilityEntryIsComplete = (
+  entry: EditAvailabilityEntry
+): entry is CompleteEditAvailabilityEntry =>
+  Boolean(entry.end) && Boolean(entry.start);
 
 const getMondayFromDate = (momentDate?: Moment) => {
   const monday = momentDate?.startOf("week") || moment().startOf("week");
@@ -28,10 +42,6 @@ const EditAvailabilityForm = () => {
   const [weekEnd, setWeekEnd] = useState<number>(
     weekStart + 7 * 24 * 60 * 60 * 1000
   );
-
-  useEffect(() => {
-    console.log(_editAvailabilityConfig);
-  }, [_editAvailabilityConfig]);
 
   const calculateWeeksSelected = () => {
     return (weekEnd - weekStart) / (7 * 24 * 60 * 60 * 1000);
@@ -63,6 +73,7 @@ const EditAvailabilityForm = () => {
     (dayName: string, dateString: string) =>
     (index: number) =>
     (type: AvailabilityInputType, value: string) => {
+      debugger;
       const entry = _editAvailabilityConfig.config[dayName][index];
       dispatch(
         updateEditAvailabilityDayEntry({
@@ -115,18 +126,47 @@ const EditAvailabilityForm = () => {
       _editAvailabilityConfig.config
     ).reduce((acc, val) => acc.concat(val), []);
 
-    const filteredEntries = availabilityEntries.filter(
-      (entry) => entry.start && entry.end
-    );
+    debugger;
+    const filteredEntries = availabilityEntries.filter((entry) =>
+      editAvailabilityEntryIsComplete(entry)
+    ) as CompleteEditAvailabilityEntry[];
 
     for (const entry of filteredEntries) {
-      if (new Date(entry.start as string) > new Date(entry.end as string)) {
+      if (new Date(entry.start as number) > new Date(entry.end as number)) {
         alert(`Ensure that all end times are after the start time. Error found here: 
 From ${entry.start}
 Until: ${entry.end}`);
         return;
       }
     }
+    if (!filteredEntries.length) {
+      alert("No valid updates to submit");
+      return;
+    }
+    updateAvailability(filteredEntries);
+  };
+
+  const updateAvailability = async (
+    entries: CompleteEditAvailabilityEntry[]
+  ) => {
+    const events: CreateAvailabilityCalendarEvent[] = entries.map((entry) => ({
+      id: entry.id || uuidv4(),
+      end: new Date(entry.end),
+      start: new Date(entry.end),
+      status: "available",
+      title: "available",
+    }));
+    debugger;
+    const startTimes = entries.map((e) => e.start);
+    const endTimes = entries.map((e) => e.end);
+    await ApiAdaptor.postAvailability({
+      events,
+      timeframe: {
+        from: new Date(Math.min(...startTimes)),
+        until: new Date(Math.max(...endTimes)),
+      },
+    });
+    dispatch(resetEditAvailabilityState({}));
   };
 
   return (

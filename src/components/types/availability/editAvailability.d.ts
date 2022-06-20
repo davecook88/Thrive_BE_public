@@ -1,9 +1,17 @@
 export interface EditAvailabilityEntry {
   id: string;
-  start: string | null;
-  end: string | null;
+  start: number | null;
+  end: number | null;
+}
+export interface CompleteEditAvailabilityEntry extends EditAvailabilityEntry {
+  start: number;
+  end: number;
 }
 
+export const editAvailabilityEntryIsComplete = (
+  entry: EditAvailabilityEntry
+): entry is CompleteEditAvailabilityEntry =>
+  Boolean(entry.end) && Boolean(entry.start);
 export interface EditAvailabilityObject {
   [key: string]: EditAvailabilityEntry[];
 }

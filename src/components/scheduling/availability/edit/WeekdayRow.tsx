@@ -63,7 +63,9 @@ const WeekdayRow: React.FC<WeekdayRowProps> = ({
             <input
               type={"time"}
               onChange={(event) => onUpdate(index, "start", event)}
-              value={entry.start || undefined}
+              value={
+                entry.start ? moment(entry.start).format("HH:mm") : undefined
+              }
             />
           </div>
           <div className="col-span-1">
@@ -71,7 +73,7 @@ const WeekdayRow: React.FC<WeekdayRowProps> = ({
             <input
               type={"time"}
               onChange={(event) => onUpdate(index, "end", event)}
-              value={entry.end || undefined}
+              value={entry.end ? moment(entry.end).format("HH:mm") : undefined}
             />
           </div>
           <div>

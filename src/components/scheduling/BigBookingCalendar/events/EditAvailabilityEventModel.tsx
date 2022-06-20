@@ -24,7 +24,7 @@ interface EditAvailabilityEventModalProps {
   ) => AvailabilityStateEntry[];
 }
 
-const eventHasAllDetails = (
+export const eventHasAllDetails = (
   event: AvailabilityCalendarEvent
 ): event is CreateAvailabilityCalendarEvent => {
   if (!event.start) {

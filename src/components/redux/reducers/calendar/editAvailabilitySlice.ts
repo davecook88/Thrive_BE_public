@@ -72,6 +72,7 @@ export const editAvailabilityConfigSlice = createSlice({
       state,
       action: PayloadAction<EditAvailabilityEntryPayload>
     ) => {
+      debugger;
       const dayUpdates = state.config[action.payload.dayName];
       const updatedUpdates = dayUpdates.map((entry, i) => {
         if (i === action.payload.entryIndex) return action.payload.entry;
