@@ -5,8 +5,7 @@ import EditAvailabilityForm from "../components/scheduling/availability/edit";
 const BookingPage = () => {
   return (
     <div>
-      <EditAvailabilityForm />
-      <BigBookingCalendar height="400px" />
+      <BigBookingCalendar height="800px" defaultView="week" />
     </div>
   );
 };

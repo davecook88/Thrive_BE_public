@@ -6,10 +6,11 @@ import {
   EditAvailabilityState,
 } from "../../../types/availability/editAvailability";
 import { RootState } from "../../store";
+import { v4 as uuidv4 } from "uuid";
 
 const blankAvailabilityEntry = {
-  from: null,
-  until: null,
+  start: null,
+  end: null,
 };
 
 export const DAY_NAMES = [
@@ -45,7 +46,7 @@ export const editAvailabilityConfigSlice = createSlice({
     ) => {
       state.config[action.payload.dayName] = [
         ...state.config[action.payload.dayName],
-        { ...blankAvailabilityEntry },
+        { ...blankAvailabilityEntry, id: uuidv4() },
       ];
     },
     removeEditAvailabilityDayEntry: (

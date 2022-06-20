@@ -1,6 +1,7 @@
 export interface EditAvailabilityEntry {
-  from: string | null;
-  until: string | null;
+  id: string;
+  start: string | null;
+  end: string | null;
 }
 
 export interface EditAvailabilityObject {

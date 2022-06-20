@@ -15,18 +15,21 @@ import { RootState } from "../../store";
 
 const initialState: AvailabilityState = {
   loadStatus: "ready",
-  available: [
-    {
-      from: new Date("2022-06-16T12:48:33.492Z"),
-      until: new Date("2022-06-16T14:48:33.492Z"),
-      status: "available",
-    },
-  ],
   booked: [
     {
-      from: new Date("2022-06-20"),
-      until: new Date("2022-06-25"),
+      id: "1",
+      start: new Date("2022-06-23T12:48:33.492Z"),
+      end: new Date("2022-06-23T14:48:33.492Z"),
       status: "booked",
+      title: "Karen: Basic 101",
+    },
+  ],
+  available: [
+    {
+      id: "2",
+      start: new Date("2022-06-20"),
+      end: new Date("2022-06-25"),
+      status: "available",
     },
   ],
   unavailable: [],

@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { randomUUID } from "crypto";
 import moment, { Moment } from "moment";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -10,6 +11,8 @@ import {
   updateEditAvailabilityDayEntry,
 } from "../../../redux/reducers/calendar/editAvailabilitySlice";
 import WeekdayRow, { AvailabilityInputType } from "./WeekdayRow";
+import { v4 as uuidv4 } from "uuid";
+import { StandardButton } from "../../../styled/Buttons";
 
 const getMondayFromDate = (momentDate?: Moment) => {
   const monday = momentDate?.startOf("week") || moment().startOf("week");
@@ -62,6 +65,7 @@ const EditAvailabilityForm = () => {
           dayName,
           entry: {
             ...entry,
+            id: entry.id || uuidv4(),
             [type]: moment(`${dateString} ${value}`, "YYYY-MM-DD HH:mm"),
           },
           entryIndex: index,
@@ -105,14 +109,14 @@ const EditAvailabilityForm = () => {
     ).reduce((acc, val) => acc.concat(val), []);
 
     const filteredEntries = availabilityEntries.filter(
-      (entry) => entry.from && entry.until
+      (entry) => entry.start && entry.end
     );
 
     for (const entry of filteredEntries) {
-      if (new Date(entry.from as string) > new Date(entry.until as string)) {
+      if (new Date(entry.start as string) > new Date(entry.end as string)) {
         alert(`Ensure that all end times are after the start time. Error found here: 
-From ${entry.from}
-Until: ${entry.until}`);
+From ${entry.start}
+Until: ${entry.end}`);
         return;
       }
     }
@@ -184,12 +188,7 @@ Until: ${entry.until}`);
           </div>
         </div>
         <div className="w-full text-center">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={onSubmit}
-          >
-            Save Updates
-          </button>
+          <StandardButton onClick={onSubmit}>Save Updates</StandardButton>
         </div>
 
         <div>
