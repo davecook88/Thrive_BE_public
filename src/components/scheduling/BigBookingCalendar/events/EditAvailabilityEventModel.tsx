@@ -8,6 +8,10 @@ import {
   BookingStatus,
 } from "../../../types/calendar/types";
 import { v4 as uuidv4 } from "uuid";
+import { useAppDispatch } from "../../../redux/hooks";
+import { fetchAvailabilityAsync } from "../../../redux/reducers/calendar/availabilitySlice";
+import ApiAdaptor from "../../../../backend/apiAdaptor";
+import { resetEditAvailabilityState } from "../../../redux/reducers/calendar/editAvailabilitySlice";
 
 interface EditAvailabilityEventModalProps {
   eventDetails?: AvailabilityCalendarEvent;
@@ -36,6 +40,8 @@ const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
   checkOverlap,
   eventDetails,
 }) => {
+  const dispatch = useAppDispatch();
+
   const baseEvent: AvailabilityCalendarEvent = eventDetails
     ? {
         ...eventDetails,
@@ -46,6 +52,7 @@ const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
         title: "",
         status: "available",
       };
+  const isNewEvent = Boolean(eventDetails);
   const [tempEvent, setTempEvent] =
     useState<AvailabilityCalendarEvent>(baseEvent);
 
@@ -66,9 +73,21 @@ const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
   const datesAreSet = () =>
     tempEvent.end && tempEvent.start ? null : "Ensure that both dates are set";
 
-  const handleSubmission = (event: CreateAvailabilityCalendarEvent) => {};
+  const handleSubmission = async (event: CreateAvailabilityCalendarEvent) => {
+    if (isNewEvent) {
+      await ApiAdaptor.postAvailability({
+        events: [event],
+        timeframe: { from: event.start, until: event.end },
+      });
+    } else {
+      await ApiAdaptor.updateAvailabilityEntry(event.id, event);
+    }
+    dispatch(resetEditAvailabilityState({}));
+    dispatch(fetchAvailabilityAsync());
+  };
 
-  const onSubmit = () => {
+  const onSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
     if (!eventHasAllDetails(tempEvent)) {
       alert("Please ensure all fields are set");
       return;

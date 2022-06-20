@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import ApiAdaptor from "../../../../backend/apiAdaptor";
 import {
   AvailabilityState,
   SetAvailabilityAction,
@@ -14,26 +15,23 @@ import { RootState } from "../../store";
 */
 
 const initialState: AvailabilityState = {
-  loadStatus: "ready",
-  booked: [
-    {
-      id: "1",
-      start: new Date("2022-06-23T12:48:33.492Z"),
-      end: new Date("2022-06-23T14:48:33.492Z"),
-      status: "booked",
-      title: "Karen: Basic 101",
-    },
-  ],
-  available: [
-    {
-      id: "2",
-      start: new Date("2022-06-20"),
-      end: new Date("2022-06-25"),
-      status: "available",
-    },
-  ],
+  loadStatus: "loading",
+  booked: [],
+  available: [],
   unavailable: [],
 };
+async function fetchAvailability() {
+  return ApiAdaptor.getAvailability();
+}
+
+export const fetchAvailabilityAsync = createAsyncThunk(
+  "availability/fetchAvailability",
+  async () => {
+    const response = await fetchAvailability();
+    // The value we return becomes the `fulfilled` action payload
+    return response;
+  }
+);
 
 export const availabilitySlice = createSlice({
   name: "availability",
@@ -43,30 +41,23 @@ export const availabilitySlice = createSlice({
       state[action.payload.status] = action.payload.entries;
     },
   },
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchAvailabilityAsync.fulfilled, (state, action) => {
+      state.available = action.payload.available;
+      state.booked = action.payload.booked;
+      state.loadStatus = "ready";
+      state.unavailable = action.payload.unavailable;
+    });
+  },
 });
 
 export const { setAvailability } = availabilitySlice.actions;
-
-export const fetchAvailabilityAsync = createAsyncThunk(
-  "availability/fetchAvailability",
-  async () => {
-    const response = await fetchAvailability();
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
-  }
-);
 
 /* 
   TODO: add call to API here
 
 
   */
-async function fetchAvailability() {
-  return {
-    data: {},
-  };
-}
 
 export const selectAvailability = (state: RootState) => state.availability;
 export default availabilitySlice.reducer;

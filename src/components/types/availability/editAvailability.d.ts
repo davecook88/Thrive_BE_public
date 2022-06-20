@@ -25,3 +25,5 @@ export interface EditAvailabilityEntryPayload {
   entryIndex: number;
   entry: EditAvailabilityEntry;
 }
+
+export interface ClearEditAvailabilityStorePayload {}

@@ -12,8 +12,8 @@ export interface AvailabilityStateEntry {
   id: string;
   title?: string;
   status: BookingStatus;
-  start: Date;
-  end: Date;
+  start: number;
+  end: number;
 }
 
 interface SetAvailabilityAction {

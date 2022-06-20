@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { selectAvailability } from "../../redux/reducers/calendar/availabilitySlice";
+import {
+  fetchAvailabilityAsync,
+  selectAvailability,
+} from "../../redux/reducers/calendar/availabilitySlice";
 
 import { Calendar, Event, momentLocalizer, View } from "react-big-calendar";
 import moment from "moment";
@@ -47,13 +50,18 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
   >();
   const availability = useAppSelector(selectAvailability);
   const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchAvailabilityAsync());
+  }, []);
 
   const checkOverlap = (
     type: BookingStatus,
     details: { start: Date; end: Date }
   ) => {
     return availability[type].filter(
-      (event) => event.start > details.start && event.end < details.end
+      (event) =>
+        event.start > details.start.getTime() &&
+        event.end < details.end.getTime()
     );
   };
 
@@ -61,7 +69,10 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
     (title?: string) =>
     (entry: AvailabilityStateEntry): AvailabilityCalendarEvent => ({
       title: entry?.title || title || "",
-      ...entry,
+      start: new Date(entry.start),
+      end: new Date(entry.end),
+      status: entry.status,
+      id: entry.id,
     });
 
   const createStyleMap = () => {

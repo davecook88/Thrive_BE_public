@@ -1,12 +1,22 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   AddAvailabilityEntryPayload,
+  ClearEditAvailabilityStorePayload,
   EditAvailabilityEntryPayload,
   EditAvailabilityObject,
   EditAvailabilityState,
 } from "../../../types/availability/editAvailability";
 import { RootState } from "../../store";
 import { v4 as uuidv4 } from "uuid";
+
+/*
+  This slice is for storing updates to a user's availability settings in-memory,
+  before they are submitted to the API.
+
+  This is a local version of current changes, whereas availabilitySlice represents what is
+  stored in the database.
+
+*/
 
 const blankAvailabilityEntry = {
   start: null,
@@ -68,6 +78,12 @@ export const editAvailabilityConfigSlice = createSlice({
       });
       state.config[action.payload.dayName] = updatedUpdates;
     },
+    resetEditAvailabilityState: (
+      state,
+      action: PayloadAction<ClearEditAvailabilityStorePayload>
+    ) => {
+      state.config = initialState.config;
+    },
   },
   extraReducers: (builder) => {},
 });
@@ -75,6 +91,7 @@ export const {
   addEditAvailabilityDayEntry,
   removeEditAvailabilityDayEntry,
   updateEditAvailabilityDayEntry,
+  resetEditAvailabilityState,
 } = editAvailabilityConfigSlice.actions;
 export const editAvailabilityConfig = (state: RootState) =>
   state.editAvailabilityConfig;
