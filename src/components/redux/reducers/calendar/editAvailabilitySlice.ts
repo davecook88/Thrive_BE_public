@@ -54,10 +54,11 @@ export const editAvailabilityConfigSlice = createSlice({
       state,
       action: PayloadAction<AddAvailabilityEntryPayload>
     ) => {
-      state.config[action.payload.dayName] = [
+      const updatedDayEntries = [
         ...state.config[action.payload.dayName],
         { ...blankAvailabilityEntry, id: uuidv4() },
       ];
+      state.config[action.payload.dayName] = updatedDayEntries;
     },
     removeEditAvailabilityDayEntry: (
       state,

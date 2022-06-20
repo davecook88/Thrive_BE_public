@@ -4,7 +4,7 @@ import { Moment } from "moment";
 import React, { MouseEventHandler, useState } from "react";
 import { EditAvailabilityEntry } from "../../../types/availability/editAvailability";
 
-export type AvailabilityInputType = "from" | "until";
+export type AvailabilityInputType = "start" | "end";
 
 interface WeekdayRowProps {
   date: Moment | null;
@@ -25,8 +25,8 @@ const WeekdayRow: React.FC<WeekdayRowProps> = ({
   onEntryUpdate,
 }) => {
   const inputAvailabilityRows = () => {
-    const [start, setStart] = useState<string | undefined>();
-    const [end, setEnd] = useState<string | undefined>();
+    const [start, setStart] = useState<number | undefined>();
+    const [end, setEnd] = useState<number | undefined>();
     if (!entries) return null;
 
     const onUpdate = (
@@ -35,45 +35,47 @@ const WeekdayRow: React.FC<WeekdayRowProps> = ({
       event: React.ChangeEvent<HTMLInputElement>
     ) => {
       const { value } = event.target;
-      if (type === "from") {
-        setStart(value);
-      } else if (type === "until") {
-        setEnd(value);
+      const timestamp = moment(
+        `${date?.format("YYYY-MM-DD")}T${value}`
+      ).valueOf();
+      if (type === "start") {
+        setStart(timestamp);
+      } else if (type === "end") {
+        setEnd(timestamp);
       }
 
       onEntryUpdate(index)(type, value);
     };
 
-    const showError = () => {
-      if (!(start && end)) return;
-      const startDate = moment(start, "HH:mm");
-      const endDate = moment(end, "HH:mm");
-      if (startDate < endDate) return;
-
-      return "From time must be before until time.";
-    };
-
     return entries.map((entry, index) => {
+      const showError = (_entry: EditAvailabilityEntry) => {
+        const { start, end } = _entry;
+        if (!(start && end)) return;
+
+        if (start < end) return;
+
+        return "From time must be before until time.";
+      };
       return (
         <div className="grid grid-cols-3 gap-2" key={dayName + index}>
           <div>
             <label className="m-4 font-bold">From</label>
             <input
               type={"time"}
-              onChange={(event) => onUpdate(index, "from", event)}
-              value={start}
+              onChange={(event) => onUpdate(index, "start", event)}
+              value={entry.start || undefined}
             />
           </div>
           <div className="col-span-1">
             <label className="m-4 font-bold">Until</label>
             <input
               type={"time"}
-              onChange={(event) => onUpdate(index, "until", event)}
-              value={end}
+              onChange={(event) => onUpdate(index, "end", event)}
+              value={entry.end || undefined}
             />
           </div>
           <div>
-            <span className="text-red-500">{showError()}</span>
+            <span className="text-red-500">{showError(entry)}</span>
           </div>
         </div>
       );

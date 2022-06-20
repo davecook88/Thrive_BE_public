@@ -29,6 +29,10 @@ const EditAvailabilityForm = () => {
     weekStart + 7 * 24 * 60 * 60 * 1000
   );
 
+  useEffect(() => {
+    console.log(_editAvailabilityConfig);
+  }, [_editAvailabilityConfig]);
+
   const calculateWeeksSelected = () => {
     return (weekEnd - weekStart) / (7 * 24 * 60 * 60 * 1000);
   };
@@ -66,7 +70,10 @@ const EditAvailabilityForm = () => {
           entry: {
             ...entry,
             id: entry.id || uuidv4(),
-            [type]: moment(`${dateString} ${value}`, "YYYY-MM-DD HH:mm"),
+            [type]: moment(
+              `${dateString} ${value}`,
+              "YYYY-MM-DD HH:mm"
+            ).valueOf(),
           },
           entryIndex: index,
         })
