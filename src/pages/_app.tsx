@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext, createContext } from "react";
 import "../../styles/globals.css";
 import type { AppProps } from "next/app";
 import Header from "../components/layouts/header/header";
 import Footer from "../components/layouts/Footer/footer";
-import {store} from '../components/redux/store';
-import { Provider } from 'react-redux';
+import { store } from "../components/redux/store";
+import { Provider } from "react-redux";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState<boolean>(true);
@@ -21,16 +21,18 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-    <Provider store={store}>
-      <Header />
+      <Provider store={store}>
+        <Header />
 
-      <section
-        className={loading === true ? "dark:animate-none animate-Loading " : ""}
-      >
-        <Component {...pageProps} />
-      </section>
+        <section
+          className={
+            loading === true ? "dark:animate-none animate-Loading " : ""
+          }
+        >
+          <Component {...pageProps} />
+        </section>
 
-      <Footer />
+        <Footer />
       </Provider>
     </>
   );

@@ -25,8 +25,6 @@ const WeekdayRow: React.FC<WeekdayRowProps> = ({
   onEntryUpdate,
 }) => {
   const inputAvailabilityRows = () => {
-    const [start, setStart] = useState<number | undefined>();
-    const [end, setEnd] = useState<number | undefined>();
     if (!entries) return null;
 
     const onUpdate = (
@@ -38,11 +36,6 @@ const WeekdayRow: React.FC<WeekdayRowProps> = ({
       const timestamp = moment(
         `${date?.format("YYYY-MM-DD")}T${value}`
       ).valueOf();
-      if (type === "start") {
-        setStart(timestamp);
-      } else if (type === "end") {
-        setEnd(timestamp);
-      }
 
       onEntryUpdate(index)(type, value);
     };

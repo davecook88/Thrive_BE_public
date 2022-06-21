@@ -73,7 +73,6 @@ const EditAvailabilityForm = () => {
     (dayName: string, dateString: string) =>
     (index: number) =>
     (type: AvailabilityInputType, value: string) => {
-      debugger;
       const entry = _editAvailabilityConfig.config[dayName][index];
       dispatch(
         updateEditAvailabilityDayEntry({
@@ -126,7 +125,6 @@ const EditAvailabilityForm = () => {
       _editAvailabilityConfig.config
     ).reduce((acc, val) => acc.concat(val), []);
 
-    debugger;
     const filteredEntries = availabilityEntries.filter((entry) =>
       editAvailabilityEntryIsComplete(entry)
     ) as CompleteEditAvailabilityEntry[];
@@ -156,7 +154,7 @@ Until: ${entry.end}`);
       status: "available",
       title: "available",
     }));
-    debugger;
+
     const startTimes = entries.map((e) => e.start);
     const endTimes = entries.map((e) => e.end);
     await ApiAdaptor.postAvailability({
