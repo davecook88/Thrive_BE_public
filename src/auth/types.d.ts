@@ -4,10 +4,13 @@ export interface UserState {
 }
 
 export interface ThriveUser {
-  name: string;
-  google_id?: string;
-  id: string;
-  email: string;
+  details: {
+    name: string;
+    google_id?: string;
+    id: string;
+    email: string;
+  };
+  is_teacher: bool;
 }
 
 export interface GoogleProfile {

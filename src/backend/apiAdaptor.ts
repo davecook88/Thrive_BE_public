@@ -1,15 +1,20 @@
 import { CreateAvailabilityCalendarEvent } from "../components/scheduling/BigBookingCalendar";
 import { AvailabilityState } from "../components/types/calendar/types";
 import axios from "axios";
+import { getTokenFromLocalStorage } from "../auth/utils";
+import { ThriveUser } from "../auth/types";
 
 export interface PostAvailabilityPayload {
-  timeframe: { from: Date; until: Date };
+  timeframe: { start: Date; end: Date };
   events: CreateAvailabilityCalendarEvent[];
 }
 
 enum ApiEndpoints {
   verifyGoogleToken = "/auth/google",
+  teacherAvailability = "/bookings/teacher-availability",
 }
+
+export class MissingTokenError extends Error {}
 
 class ApiAdaptor {
   static client = axios.create({
@@ -18,15 +23,25 @@ class ApiAdaptor {
 
   private static async callApi(
     url: string,
-    method: "GET" | "POST",
-    payload?: object
+    method: "GET" | "POST" | "PUT",
+    options?: {
+      payload?: object;
+      token?: string;
+    }
   ) {
+    const token = options?.token || getTokenFromLocalStorage();
+    if (!token) {
+      throw new MissingTokenError();
+    }
     const res = await ApiAdaptor.client.request({
       method,
       url,
-      data: payload,
+      data: options?.payload,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
-
+    debugger;
     return res.data;
   }
 
@@ -35,11 +50,19 @@ class ApiAdaptor {
     email: string,
     googleId: string
   ) {
-    return ApiAdaptor.callApi(ApiEndpoints.verifyGoogleToken, "POST", {
-      token,
-      email,
-      google_id: googleId,
-    });
+    const respone = await ApiAdaptor.callApi(
+      ApiEndpoints.verifyGoogleToken,
+      "POST",
+      {
+        payload: {
+          token,
+          email,
+          google_id: googleId,
+        },
+        token,
+      }
+    );
+    return respone as ThriveUser;
   }
 
   static async getAvailability() {
@@ -68,6 +91,10 @@ class ApiAdaptor {
   }
 
   static async postAvailability(payload: PostAvailabilityPayload) {
+    debugger;
+    return await this.callApi(ApiEndpoints.teacherAvailability, "POST", {
+      payload,
+    });
     // Overwrites availability for a given period
   }
 

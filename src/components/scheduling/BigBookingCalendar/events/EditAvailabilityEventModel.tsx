@@ -77,7 +77,7 @@ const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
     if (isNewEvent) {
       await ApiAdaptor.postAvailability({
         events: [event],
-        timeframe: { from: event.start, until: event.end },
+        timeframe: { start: event.start, end: event.end },
       });
     } else {
       await ApiAdaptor.updateAvailabilityEntry(event.id, event);

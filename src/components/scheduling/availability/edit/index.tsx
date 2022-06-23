@@ -33,6 +33,27 @@ const getMondayFromDate = (momentDate?: Moment) => {
   return monday;
 };
 
+const multiplyEvents = (
+  events: CompleteEditAvailabilityEntry[],
+  endDate: Date
+) => {
+  const allEvents: CompleteEditAvailabilityEntry[] = [];
+  events.forEach((event) => {
+    let tempEvent = { ...event };
+    while (tempEvent.end.valueOf() < endDate.getTime()) {
+      allEvents.push(tempEvent);
+      // Add exactly one week to
+      tempEvent = {
+        ...tempEvent,
+        id: uuidv4(),
+        start: moment(tempEvent.start).add(1, "week").valueOf(),
+        end: moment(tempEvent.end).add(1, "week").valueOf(),
+      };
+    }
+  });
+  return allEvents;
+};
+
 const EditAvailabilityForm = () => {
   const dispatch = useAppDispatch();
   const _editAvailabilityConfig = useAppSelector(editAvailabilityConfig);
@@ -137,11 +158,14 @@ Until: ${entry.end}`);
         return;
       }
     }
+    // If multiple weeks selected, multiply events for the additional weeks
     if (!filteredEntries.length) {
       alert("No valid updates to submit");
       return;
     }
-    updateAvailability(filteredEntries);
+    const allWeekEvents = multiplyEvents(filteredEntries, new Date(weekEnd));
+    debugger;
+    updateAvailability(allWeekEvents);
   };
 
   const updateAvailability = async (
@@ -150,7 +174,7 @@ Until: ${entry.end}`);
     const events: CreateAvailabilityCalendarEvent[] = entries.map((entry) => ({
       id: entry.id || uuidv4(),
       end: new Date(entry.end),
-      start: new Date(entry.end),
+      start: new Date(entry.start),
       status: "available",
       title: "available",
     }));
@@ -160,8 +184,8 @@ Until: ${entry.end}`);
     await ApiAdaptor.postAvailability({
       events,
       timeframe: {
-        from: new Date(Math.min(...startTimes)),
-        until: new Date(Math.max(...endTimes)),
+        start: new Date(Math.min(...startTimes)),
+        end: new Date(Math.max(...endTimes)),
       },
     });
     dispatch(resetEditAvailabilityState({}));
