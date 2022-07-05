@@ -7,7 +7,7 @@ import LoggedOutError from "../components/auth/LoggedOutMessage";
 
 const BookingPage = () => {
   const auth = useAppSelector(selectUser);
-  if (!auth.user) return <LoggedOutError />;
+  if (!auth?.user?.is_teacher) return <LoggedOutError />;
   return (
     <div>
       <BigBookingCalendar height="800px" defaultView="week" />

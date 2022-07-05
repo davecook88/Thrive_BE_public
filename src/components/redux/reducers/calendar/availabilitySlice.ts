@@ -20,14 +20,14 @@ const initialState: AvailabilityState = {
   available: [],
   unavailable: [],
 };
-async function fetchAvailability() {
-  return ApiAdaptor.getAvailability();
-}
 
 export const fetchAvailabilityAsync = createAsyncThunk(
   "availability/fetchAvailability",
-  async () => {
-    const response = await fetchAvailability();
+  async (dateRange: { start: Date; end: Date }) => {
+    const response = await ApiAdaptor.getAvailability(
+      dateRange.start,
+      dateRange.end
+    );
     // The value we return becomes the `fulfilled` action payload
     return response;
   }

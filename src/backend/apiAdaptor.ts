@@ -3,6 +3,7 @@ import { AvailabilityState } from "../components/types/calendar/types";
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../auth/utils";
 import { ThriveUser } from "../auth/types";
+import moment from "moment";
 
 export interface PostAvailabilityPayload {
   timeframe: { start: Date; end: Date };
@@ -23,10 +24,11 @@ class ApiAdaptor {
 
   private static async callApi(
     url: string,
-    method: "GET" | "POST" | "PUT",
+    method: "GET" | "POST" | "PUT" | "DELETE",
     options?: {
       payload?: object;
       token?: string;
+      params?: object;
     }
   ) {
     const token = options?.token || getTokenFromLocalStorage();
@@ -40,8 +42,8 @@ class ApiAdaptor {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      params: options?.params,
     });
-    debugger;
     return res.data;
   }
 
@@ -65,33 +67,44 @@ class ApiAdaptor {
     return respone as ThriveUser;
   }
 
-  static async getAvailability() {
+  static async getAvailability(
+    fromDate: Date,
+    untilDate: Date,
+    limit: number = 100,
+    page: number = 1
+  ) {
+    const response: BaseAPIAvailability[] = await this.callApi(
+      ApiEndpoints.teacherAvailability,
+      "GET",
+      {
+        params: {
+          from_date: fromDate,
+          until_date: untilDate,
+          limit,
+          page,
+        },
+      }
+    );
+    response.forEach((entry) => {
+      console.log(new Date(entry.start), new Date(entry.end));
+    });
+
     const result: AvailabilityState = {
       loadStatus: "ready",
-      booked: [
-        {
-          id: "1",
-          start: new Date("2022-06-23T12:48:33.492Z").getTime(),
-          end: new Date("2022-06-23T14:48:33.492Z").getTime(),
-          status: "booked",
-          title: "Karen: Basic 101",
-        },
-      ],
-      available: [
-        {
-          id: "2",
-          start: new Date("2022-06-20").getTime(),
-          end: new Date("2022-06-25").getTime(),
-          status: "available",
-        },
-      ],
+      booked: [],
+      available: response.map((entry) => ({
+        end: moment.utc(entry.end).valueOf(),
+        start: moment.utc(entry.start).valueOf(),
+        status: entry.type,
+        id: entry.id,
+      })),
       unavailable: [],
     };
+
     return result;
   }
 
   static async postAvailability(payload: PostAvailabilityPayload) {
-    debugger;
     return await this.callApi(ApiEndpoints.teacherAvailability, "POST", {
       payload,
     });
@@ -101,7 +114,26 @@ class ApiAdaptor {
   static async updateAvailabilityEntry(
     entryId: string,
     entry: CreateAvailabilityCalendarEvent
-  ) {}
+  ) {
+    return await this.callApi(
+      `${ApiEndpoints.teacherAvailability}/${entryId}`,
+      "PUT",
+      {
+        payload: {
+          ...entry,
+          start: entry.start.toISOString(),
+          end: entry.end.toISOString(),
+        },
+      }
+    );
+  }
+
+  static async deleteAvailabilityEntry(entryId: string) {
+    return await this.callApi(
+      `${ApiEndpoints.teacherAvailability}/${entryId}`,
+      "DELETE"
+    );
+  }
 }
 
 export default ApiAdaptor;

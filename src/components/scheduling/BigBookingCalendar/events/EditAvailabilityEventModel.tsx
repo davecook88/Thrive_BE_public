@@ -22,6 +22,8 @@ interface EditAvailabilityEventModalProps {
       end: Date;
     }
   ) => AvailabilityStateEntry[];
+  refreshAvailability: () => void;
+  close: () => void;
 }
 
 export const eventHasAllDetails = (
@@ -39,6 +41,8 @@ export const eventHasAllDetails = (
 const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
   checkOverlap,
   eventDetails,
+  refreshAvailability,
+  close,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -52,7 +56,7 @@ const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
         title: "",
         status: "available",
       };
-  const isNewEvent = Boolean(eventDetails);
+  const isNewEvent = !Boolean(eventDetails);
   const [tempEvent, setTempEvent] =
     useState<AvailabilityCalendarEvent>(baseEvent);
 
@@ -80,10 +84,19 @@ const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
         timeframe: { start: event.start, end: event.end },
       });
     } else {
-      await ApiAdaptor.updateAvailabilityEntry(event.id, event);
+      const updateResponse = await ApiAdaptor.updateAvailabilityEntry(
+        event.id,
+        event
+      );
+      console.log(updateResponse);
     }
     dispatch(resetEditAvailabilityState({}));
-    dispatch(fetchAvailabilityAsync());
+    refreshAvailability();
+  };
+
+  const deleteAvailability = async (id: string) => {
+    await ApiAdaptor.deleteAvailabilityEntry(id);
+    refreshAvailability();
   };
 
   const onSubmit = (e: React.SyntheticEvent) => {
@@ -110,6 +123,7 @@ const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
     }
 
     handleSubmission(tempEvent);
+    close();
   };
 
   return (
@@ -174,10 +188,21 @@ const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
           <p className="text-red-500">{displayEndDateInputError()}</p>
         </div>
       </div>
-      <div className="w-full text-center">
+      <div className="w-full flex justify-between">
         <StandardButton onClick={onSubmit}>
-          {eventDetails ? "Edit Event" : "Create Event"}
+          {!isNewEvent ? "Edit Event" : "Create Event"}
         </StandardButton>
+        {eventDetails && (
+          <StandardButton
+            $color="red"
+            onClick={(e: React.SyntheticEvent) => {
+              e.preventDefault();
+              deleteAvailability(eventDetails.id);
+            }}
+          >
+            {"Delete Event"}
+          </StandardButton>
+        )}
       </div>
     </form>
   );

@@ -1,6 +1,8 @@
 import tw from "tailwind-styled-components";
 
-interface ButtonProps {}
+interface ButtonProps {
+  $color?: string;
+}
 
 export const StandardButton = tw.button<ButtonProps>`
     bg-blue-500
@@ -10,4 +12,5 @@ export const StandardButton = tw.button<ButtonProps>`
     py-2
     px-4
     rounded
+    ${(props: ButtonProps) => props.$color}
 `;
