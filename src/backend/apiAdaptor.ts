@@ -4,6 +4,7 @@ import axios from "axios";
 import { getTokenFromLocalStorage } from "../auth/utils";
 import { ThriveUser } from "../auth/types";
 import moment from "moment";
+import { CreatePaymentIntentPayload } from "../components/payment/stripe/types";
 
 export interface PostAvailabilityPayload {
   timeframe: { start: Date; end: Date };
@@ -13,6 +14,7 @@ export interface PostAvailabilityPayload {
 enum ApiEndpoints {
   verifyGoogleToken = "/auth/google",
   teacherAvailability = "/bookings/teacher-availability",
+  paymentCreateIntent = "/payment/create-payment-intent",
 }
 
 export class MissingTokenError extends Error {}
@@ -41,6 +43,7 @@ class ApiAdaptor {
       data: options?.payload,
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       params: options?.params,
     });
@@ -133,6 +136,12 @@ class ApiAdaptor {
       `${ApiEndpoints.teacherAvailability}/${entryId}`,
       "DELETE"
     );
+  }
+
+  static async createStripePaymentIntent(payload: CreatePaymentIntentPayload) {
+    return (await this.callApi(`${ApiEndpoints.paymentCreateIntent}`, "POST", {
+      payload,
+    })) as { secret: string };
   }
 }
 
