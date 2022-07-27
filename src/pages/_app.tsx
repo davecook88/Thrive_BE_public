@@ -1,10 +1,11 @@
-import { useState, useEffect, useContext, createContext } from "react";
+import { useState, useEffect } from "react";
 import "../../styles/globals.css";
 import type { AppProps } from "next/app";
 import Header from "../components/layouts/header/header";
 import Footer from "../components/layouts/Footer/footer";
 import { store } from "../components/redux/store";
 import { Provider } from "react-redux";
+import { ThemeProvider } from "next-themes";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState<boolean>(true);
@@ -20,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [pageProps]);
 
   return (
-    <>
+    <ThemeProvider defaultTheme="pastel">
       <Provider store={store}>
         <Header />
 
@@ -34,7 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
         <Footer />
       </Provider>
-    </>
+    </ThemeProvider>
   );
 }
 export default MyApp;

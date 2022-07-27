@@ -5,6 +5,8 @@ import { getTokenFromLocalStorage } from "../auth/utils";
 import { ThriveUser } from "../auth/types";
 import moment from "moment";
 import { CreatePaymentIntentPayload } from "../components/payment/stripe/types";
+import { CreateCoursePayload } from "../components/types/course/payloads";
+import { ListTeachersResponse } from "../components/types/teacher/responses";
 
 export interface PostAvailabilityPayload {
   timeframe: { start: Date; end: Date };
@@ -15,6 +17,8 @@ enum ApiEndpoints {
   verifyGoogleToken = "/auth/google",
   teacherAvailability = "/bookings/teacher-availability",
   paymentCreateIntent = "/payment/create-payment-intent",
+  course = "/course",
+  teacher = "/teacher",
 }
 
 export class MissingTokenError extends Error {}
@@ -142,6 +146,20 @@ class ApiAdaptor {
     return (await this.callApi(`${ApiEndpoints.paymentCreateIntent}`, "POST", {
       payload,
     })) as { secret: string };
+  }
+
+  static async postCourse(payload: CreateCoursePayload) {
+    return await this.callApi(ApiEndpoints.course, "POST", {
+      payload,
+    });
+  }
+
+  static async listTeachers() {
+    return (await this.callApi(
+      ApiEndpoints.teacher,
+      "GET",
+      {}
+    )) as ListTeachersResponse[];
   }
 }
 
