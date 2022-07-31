@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [pageProps]);
 
   return (
-    <ThemeProvider defaultTheme="pastel">
+    <ThemeProvider defaultTheme="lemonade">
       <Provider store={store}>
         <Header />
 

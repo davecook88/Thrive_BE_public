@@ -8,6 +8,11 @@ import { CreatePaymentIntentPayload } from "../components/payment/stripe/types";
 import { CreateCoursePayload } from "../components/types/course/payloads";
 import { ListTeachersResponse } from "../components/types/teacher/responses";
 
+export interface PaginationParams {
+  limit?: number;
+  page?: number;
+}
+
 export interface PostAvailabilityPayload {
   timeframe: { start: Date; end: Date };
   events: CreateAvailabilityCalendarEvent[];
@@ -146,6 +151,12 @@ class ApiAdaptor {
     return (await this.callApi(`${ApiEndpoints.paymentCreateIntent}`, "POST", {
       payload,
     })) as { secret: string };
+  }
+
+  static async listCourses(params?: PaginationParams) {
+    return await this.callApi(`${ApiEndpoints.course}`, "GET", {
+      params,
+    });
   }
 
   static async postCourse(payload: CreateCoursePayload) {
