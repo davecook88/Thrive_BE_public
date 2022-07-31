@@ -153,6 +153,10 @@ class ApiAdaptor {
     })) as { secret: string };
   }
 
+  static async getCourseById(id: string) {
+    return await this.callApi(`${ApiEndpoints.course}/${id}`, "GET");
+  }
+
   static async listCourses(params?: PaginationParams) {
     return await this.callApi(`${ApiEndpoints.course}`, "GET", {
       params,

@@ -6,10 +6,7 @@ import { Course } from "../../components/types/course/responses";
 const AdminPage = () => {
   return (
     <div className=" p-4">
-      <div
-        id="admin-panel"
-        className="grid grid-cols-2 p-2 gap-4 w-full border border-black"
-      >
+      <div id="admin-panel" className="grid grid-cols-2 p-2 gap-4 w-full ">
         <AdminCourseSection />
       </div>
     </div>

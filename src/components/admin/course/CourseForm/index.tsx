@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import ApiAdaptor from "../../../../backend/apiAdaptor";
 import { StandardButton } from "../../../styled/Buttons";
@@ -6,31 +7,39 @@ import {
   StandardForm,
   StandardFormBody,
 } from "../../../styled/Form";
+import { Course } from "../../../types/course/responses";
 import { ListTeachersResponse } from "../../../types/teacher/responses";
 import DatePicker from "./DatePicker";
 import Dropdown from "./Dropdown";
 import InputSlider from "./InputSlider";
 import SelectedList from "./SelectedList";
 
-interface CourseFormProps {}
+interface CourseFormProps {
+  course?: Course;
+}
 
-const CourseForm: React.FC<CourseFormProps> = () => {
+const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
+  const router = useRouter();
   const [availableTeachers, setAvailableTeachers] = useState<
     ListTeachersResponse[]
   >([]);
 
   // FORM VALUES
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [level, setLevel] = useState<number>(0);
-  const [maxStudents, setMaxStudents] = useState<number>(0);
-  const [price, setPrice] = useState<number>(0);
+  const [name, setName] = useState<string>(course?.name || "");
+  const [description, setDescription] = useState<string>(
+    course?.description || ""
+  );
+  const [level, setLevel] = useState<number>(course?.difficulty || 0);
+  const [maxStudents, setMaxStudents] = useState<number>(
+    course?.max_students || 0
+  );
+  const [price, setPrice] = useState<number>(course?.price || 0);
   const [selectedTeachers, setSelectedTeachers] = useState<
     ListTeachersResponse[]
   >([]);
 
   const onSubmitCourse = async () => {
-    const submittedCourse = await ApiAdaptor.postCourse({
+    const newCourse = await ApiAdaptor.postCourse({
       name,
       description,
       difficulty: level,
@@ -38,9 +47,10 @@ const CourseForm: React.FC<CourseFormProps> = () => {
       price,
       max_students: maxStudents,
     });
-    debugger;
 
-    console.log(submittedCourse);
+    if (!course) {
+      router.push(`/admin/course/${newCourse.id}`);
+    }
   };
   useEffect(() => {
     ApiAdaptor.listTeachers().then((teachers) =>
@@ -49,7 +59,6 @@ const CourseForm: React.FC<CourseFormProps> = () => {
   }, []);
 
   const selectTeacher = (val: string | number) => {
-    console.log({ selectTeacher: val });
     const selectedTeacher = availableTeachers.find((t) => t.user_id == val);
     if (!selectedTeacher) return;
     setSelectedTeachers([...selectedTeachers, selectedTeacher]);
@@ -61,9 +70,6 @@ const CourseForm: React.FC<CourseFormProps> = () => {
 
   return (
     <StandardForm>
-      <div className="mb-4 w-full">
-        <h2 className="font-bold uppercase">Create a course</h2>
-      </div>
       <StandardFormBody>
         <FormSection>
           <div className="p-2">
@@ -158,13 +164,13 @@ const CourseForm: React.FC<CourseFormProps> = () => {
 
       <div className="flex items-center justify-center p-4">
         <StandardButton
-          className="bg-primary border-none drop-shadow-md btn-wide hover:bg-secondary"
+          className="bg-primary border-none drop-shadow-md btn-wide text-white hover:bg-secondary"
           onClick={(e: React.SyntheticEvent) => {
             e.preventDefault();
             onSubmitCourse();
           }}
         >
-          Create Course
+          {course ? "Update Course" : "Create Course"}
         </StandardButton>
       </div>
     </StandardForm>

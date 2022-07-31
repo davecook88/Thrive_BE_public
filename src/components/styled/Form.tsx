@@ -1,7 +1,6 @@
 import tw from "tailwind-styled-components";
 
 export const StandardForm = tw.form`
-    bg-white
     shadow-md
     rounded
     p-10

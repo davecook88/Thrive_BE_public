@@ -21,15 +21,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [pageProps]);
 
   return (
-    <ThemeProvider defaultTheme="lemonade">
+    <ThemeProvider defaultTheme="cupcake">
       <Provider store={store}>
         <Header />
 
-        <section
-          className={
-            loading === true ? "dark:animate-none animate-Loading " : ""
-          }
-        >
+        <section className={"bg-base-100"}>
           <Component {...pageProps} />
         </section>
 
