@@ -1,7 +1,6 @@
 import tw from "tailwind-styled-components";
 
 export const StandardForm = tw.form`
-    shadow-md
     rounded
     p-10
     w-full
@@ -16,6 +15,7 @@ export const StandardFormBody = tw.div`
 `;
 
 export const FormSection = tw.div`
+    shadow
     border
     border-secondary
     p-4

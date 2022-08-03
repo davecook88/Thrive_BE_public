@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import ApiAdaptor from "../../../backend/apiAdaptor";
+import { CourseClassForm } from "../../../components/admin/course/CourseClassForm";
 import CourseForm from "../../../components/admin/course/CourseForm";
 import { Course } from "../../../components/types/course/responses";
 
@@ -22,6 +23,9 @@ const EditCoursePage = () => {
         <h1 className="font-bold uppercase text-3xl">Edit course</h1>
       </div>
       <CourseForm course={course} />
+      <CourseClassForm
+        classNumber={course?.live_classes ? course.live_classes.length + 1 : 1}
+      />
     </div>
   );
 };
