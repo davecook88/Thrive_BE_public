@@ -1,5 +1,7 @@
-export interface ListTeachersResponse {
+import { User } from "../user/responses";
+
+export interface ListTeachersResponse extends User {
   id: number;
-  user_id: number;
-  user_name: string;
+  course_id: number;
+  email: string;
 }

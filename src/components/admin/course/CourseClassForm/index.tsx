@@ -4,25 +4,56 @@ import {
   StandardForm,
   StandardFormBody,
 } from "../../../styled/Form";
-import { CourseClass } from "../../../types/course/responses";
+import { Course, CourseClass } from "../../../types/course/responses";
+import { ListTeachersResponse } from "../../../types/teacher/responses";
+import Dropdown from "../CourseForm/Dropdown";
 
 interface CourseClassFormProps {
   courseClass?: CourseClass;
   classNumber: number;
+  course: Course;
 }
 
 export const CourseClassForm: React.FC<CourseClassFormProps> = ({
+  course,
   classNumber,
 }) => {
   const [name, setName] = useState(`Live Class ${classNumber}`);
   const [description, setDescription] = useState("");
+  const [selectedTeacher, setSelectedTeacher] =
+    useState<ListTeachersResponse | null>(null);
+
+  const courseTeachers: ListTeachersResponse[] = course.course_teachers;
+  const selectTeacher = (val: string | number) => {
+    const selectedTeacher = courseTeachers.find((t) => t.user_id == val);
+    if (!selectedTeacher) return;
+    setSelectedTeacher(selectedTeacher);
+  };
+
+  const teacherComponent = () => {
+    if (!selectTeacher && !courseTeachers?.length)
+      return <div>No teachers assigned to this course yet</div>;
+    if (!selectedTeacher)
+      return (
+        <Dropdown
+          options={courseTeachers.map((t) => ({
+            name: t.user_name,
+            id: t.user_id,
+          }))}
+          onChange={selectTeacher}
+          defaultOption="Select  teacher"
+          value={0}
+        />
+      );
+  };
+
   return (
     <StandardForm>
       <StandardFormBody>
         <FormSection>
           <div className="p-2">
             <label className="input-group">
-              <span className="text-xs bg-secondary">Course Name</span>
+              <span className="text-xs bg-secondary">Class Name</span>
               <input
                 type="text"
                 value={name}
@@ -44,6 +75,9 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
               />
             </label>
           </div>
+        </FormSection>
+        <FormSection>
+          <div className="p-2">{teacherComponent()}</div>
         </FormSection>
       </StandardFormBody>
     </StandardForm>

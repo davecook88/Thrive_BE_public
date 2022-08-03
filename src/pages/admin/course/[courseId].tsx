@@ -24,6 +24,7 @@ const EditCoursePage = () => {
       </div>
       <CourseForm course={course} />
       <CourseClassForm
+        course={course}
         classNumber={course?.live_classes ? course.live_classes.length + 1 : 1}
       />
     </div>
