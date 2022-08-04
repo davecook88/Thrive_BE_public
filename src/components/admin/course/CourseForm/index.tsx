@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import ApiAdaptor from "../../../../backend/apiAdaptor";
+import { showToast } from "../../../common/alerts/toastSlice";
 import { StandardButton } from "../../../styled/Buttons";
 import {
   FormSection,
@@ -9,10 +10,10 @@ import {
 } from "../../../styled/Form";
 import { Course } from "../../../types/course/responses";
 import { ListTeachersResponse } from "../../../types/teacher/responses";
-import DatePicker from "./DatePicker";
 import Dropdown from "./Dropdown";
 import InputSlider from "./InputSlider";
 import SelectedList from "./SelectedList";
+import { useAppDispatch } from "../../../redux/hooks";
 
 interface CourseFormProps {
   course?: Course;
@@ -38,7 +39,21 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
     ListTeachersResponse[]
   >([]);
 
-  const onSubmitCourse = async () => {
+  const dispatch = useAppDispatch();
+
+  const displayToast = (message: string) => {
+    dispatch(
+      showToast({
+        message,
+      })
+    );
+  };
+
+  const onSubmitCourse = () => {
+    if (!course) createCourse();
+  };
+
+  const createCourse = async () => {
     const newCourse = await ApiAdaptor.postCourse({
       name,
       description,
@@ -47,11 +62,12 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
       price,
       max_students: maxStudents,
     });
-
-    if (!course) {
+    displayToast("Course created!");
+    setTimeout(() => {
       router.push(`/admin/course/${newCourse.id}`);
-    }
+    }, 300);
   };
+
   useEffect(() => {
     ApiAdaptor.listTeachers().then((teachers) =>
       setAvailableTeachers(teachers)
@@ -162,7 +178,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
         </FormSection>
       </StandardFormBody>
 
-      <div className="flex items-center justify-center p-4">
+      <div className="flex items-center justify-center p-2">
         <StandardButton
           className="bg-primary border-none drop-shadow-md btn-wide text-white hover:bg-secondary"
           onClick={(e: React.SyntheticEvent) => {

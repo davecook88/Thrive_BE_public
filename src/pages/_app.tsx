@@ -6,23 +6,13 @@ import Footer from "../components/layouts/Footer/footer";
 import { store } from "../components/redux/store";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "next-themes";
+import { Toast } from "../components/common/alerts/toast";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    setTimeout(function () {
-      setLoading(false);
-    }, 250);
-
-    return () => {
-      setLoading(true);
-    };
-  }, [pageProps]);
-
+function Thrive({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider defaultTheme="cupcake">
       <Provider store={store}>
+        <Toast message={""} />
         <Header />
 
         <section className={"bg-base-100"}>
@@ -34,4 +24,4 @@ function MyApp({ Component, pageProps }: AppProps) {
     </ThemeProvider>
   );
 }
-export default MyApp;
+export default Thrive;

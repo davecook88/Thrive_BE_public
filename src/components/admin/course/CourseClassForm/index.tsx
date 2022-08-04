@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FormSection,
   StandardForm,
@@ -6,7 +6,18 @@ import {
 } from "../../../styled/Form";
 import { Course, CourseClass } from "../../../types/course/responses";
 import { ListTeachersResponse } from "../../../types/teacher/responses";
+import DateTimePicker from "./DateTimePicker";
 import Dropdown from "../CourseForm/Dropdown";
+import SelectedList from "../CourseForm/SelectedList";
+import { StandardButton } from "../../../styled/Buttons";
+import {
+  CreateCourseClassPayload,
+  UpdateCourseClassPayload,
+} from "../../../types/course/payloads";
+import ApiAdaptor from "../../../../backend/apiAdaptor";
+import { Toast } from "../../../common/alerts/toast";
+import { useAppDispatch } from "../../../redux/hooks";
+import { showToast } from "../../../common/alerts/toastSlice";
 
 interface CourseClassFormProps {
   courseClass?: CourseClass;
@@ -17,11 +28,25 @@ interface CourseClassFormProps {
 export const CourseClassForm: React.FC<CourseClassFormProps> = ({
   course,
   classNumber,
+  courseClass,
 }) => {
   const [name, setName] = useState(`Live Class ${classNumber}`);
   const [description, setDescription] = useState("");
   const [selectedTeacher, setSelectedTeacher] =
     useState<ListTeachersResponse | null>(null);
+  const [startTime, setStartTime] = useState(new Date());
+  const [duration, setDuration] = useState(60);
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const dispatch = useAppDispatch();
+
+  const displayToast = (message: string) => {
+    dispatch(
+      showToast({
+        message,
+      })
+    );
+  };
 
   const courseTeachers: ListTeachersResponse[] = course.course_teachers;
   const selectTeacher = (val: string | number) => {
@@ -30,10 +55,53 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
     setSelectedTeacher(selectedTeacher);
   };
 
+  const validateInput = () => {
+    const _errors = [];
+    if (!selectedTeacher) _errors.push("No class teacher selected");
+    if (!duration) _errors.push("Class duration is not set");
+    if (startTime.getTime() < new Date().getTime())
+      _errors.push("Start time is in the past");
+    setErrors(_errors);
+    return _errors.length > 0;
+  };
+
+  const onSubmitCourseClass = () => {
+    const invalidInput = validateInput();
+    if (invalidInput) return;
+    if (!selectedTeacher) throw new Error("Teacher not selected");
+    if (!courseClass) {
+      createClass({
+        class_teachers: [selectedTeacher.id],
+        course_id: course.id,
+        minutes_duration: duration,
+        name: name,
+        description,
+        start_time: startTime,
+      });
+    } else {
+      updateClass({
+        id: courseClass.id,
+        class_teachers: [selectedTeacher.id],
+        course_id: course.id,
+        minutes_duration: duration,
+        name: name,
+        description,
+        start_time: startTime,
+      });
+    }
+  };
+
+  const createClass = async (payload: CreateCourseClassPayload) => {
+    await ApiAdaptor.postCourseClass(payload);
+    displayToast("Class created!");
+  };
+
+  const updateClass = (payload: UpdateCourseClassPayload) => {};
+
   const teacherComponent = () => {
     if (!selectTeacher && !courseTeachers?.length)
       return <div>No teachers assigned to this course yet</div>;
-    if (!selectedTeacher)
+    else if (!selectedTeacher)
       return (
         <Dropdown
           options={courseTeachers.map((t) => ({
@@ -45,6 +113,23 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
           value={0}
         />
       );
+    else if (selectedTeacher)
+      return (
+        <SelectedList
+          onRemove={() => setSelectedTeacher(null)}
+          items={[{ id: selectedTeacher.id, name: selectedTeacher.user_name }]}
+        />
+      );
+  };
+
+  const displayErrors = () => {
+    return (
+      <div className="text-center text-error">
+        {errors.map((err) => (
+          <div>{err}</div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -77,9 +162,54 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
           </div>
         </FormSection>
         <FormSection>
-          <div className="p-2">{teacherComponent()}</div>
+          <div className="p-2">
+            <label className="label">
+              <span className="label-text uppercase text-sm ">
+                Class Teacher
+              </span>
+            </label>
+            {teacherComponent()}
+          </div>
         </FormSection>
-      </StandardFormBody>
+        <FormSection>
+          <label className="label">
+            <span className="label-text uppercase text-sm ">Start time</span>
+            {startTime.getTime() < new Date().getTime() && (
+              <span className="label-text-alt text-error text-xs ">
+                Time must be in the past
+              </span>
+            )}
+          </label>
+          <DateTimePicker onChange={setStartTime} value={startTime} />
+          <div className="p-4 flex align-center">
+            <label className="input-group w-min m-auto ">
+              <span className="text-xs bg-secondary">Duration minutes</span>
+              <input
+                value={duration}
+                onChange={(e) => {
+                  const durationVal = Number(e.target.value);
+                  if (isNaN(durationVal)) return;
+                  setDuration(durationVal);
+                }}
+                placeholder="Set duration in minutes"
+                className="input input-bordered "
+              />
+            </label>
+          </div>
+        </FormSection>
+      </StandardFormBody>{" "}
+      <div className="flex items-center w-full justify-center p-2">
+        <StandardButton
+          className="bg-primary border-none drop-shadow-md btn-wide text-white hover:bg-secondary"
+          onClick={(e: React.SyntheticEvent) => {
+            e.preventDefault();
+            onSubmitCourseClass();
+          }}
+        >
+          {courseClass ? "Update Class" : "Create Class"}
+        </StandardButton>
+      </div>
+      {displayErrors()}
     </StandardForm>
   );
 };

@@ -12,9 +12,9 @@ const AdminCourseSection = () => {
     ApiAdaptor.listCourses({ page: 0 }).then(setCourses);
   }, []);
 
-  const editCourse = (id: string) => {};
+  const editCourse = (id: number) => {};
 
-  const deleteCourse = (id: string) => {};
+  const deleteCourse = (id: number) => {};
 
   const listCourses = () =>
     courses.map((course) => (

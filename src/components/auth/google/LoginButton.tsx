@@ -1,6 +1,5 @@
 import React from "react";
 import GoogleLogin, {
-  GoogleLogout,
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";

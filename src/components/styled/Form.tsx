@@ -2,7 +2,8 @@ import tw from "tailwind-styled-components";
 
 export const StandardForm = tw.form`
     rounded
-    p-10
+    p-5
+    pb-1
     w-full
     text-center`;
 

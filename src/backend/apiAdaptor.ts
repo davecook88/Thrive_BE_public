@@ -5,7 +5,10 @@ import { getTokenFromLocalStorage } from "../auth/utils";
 import { ThriveUser } from "../auth/types";
 import moment from "moment";
 import { CreatePaymentIntentPayload } from "../components/payment/stripe/types";
-import { CreateCoursePayload } from "../components/types/course/payloads";
+import {
+  CreateCourseClassPayload,
+  CreateCoursePayload,
+} from "../components/types/course/payloads";
 import { ListTeachersResponse } from "../components/types/teacher/responses";
 
 export interface PaginationParams {
@@ -23,6 +26,7 @@ enum ApiEndpoints {
   teacherAvailability = "/bookings/teacher-availability",
   paymentCreateIntent = "/payment/create-payment-intent",
   course = "/course",
+  courseClass = "/course/class",
   teacher = "/teacher",
 }
 
@@ -167,6 +171,24 @@ class ApiAdaptor {
     return await this.callApi(ApiEndpoints.course, "POST", {
       payload,
     });
+  }
+
+  static async postCourseClass(payload: CreateCourseClassPayload) {
+    return await this.callApi(ApiEndpoints.courseClass, "POST", {
+      payload,
+    });
+  }
+  static async putCourseClass(
+    courseClassId: number,
+    payload: CreateCourseClassPayload
+  ) {
+    return await this.callApi(
+      `${ApiEndpoints.courseClass}/${courseClassId}`,
+      "POST",
+      {
+        payload,
+      }
+    );
   }
 
   static async listTeachers() {
