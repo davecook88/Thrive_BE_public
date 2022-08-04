@@ -12,7 +12,7 @@ function Thrive({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider defaultTheme="cupcake">
       <Provider store={store}>
-        <Toast message={""} />
+        <Toast />
         <Header />
 
         <section className={"bg-base-100"}>
