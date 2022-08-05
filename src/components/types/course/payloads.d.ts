@@ -1,3 +1,5 @@
+import { CourseClassBase } from "./responses";
+
 export interface CourseBase {
   name: string;
   description: string;
@@ -12,10 +14,8 @@ export interface CreateCoursePayload extends CourseBase {
   student_ids?: number[];
 }
 
-export interface CourseClassBase {
-  name: string;
-  description?: string;
-  start_time: Date;
+export interface UpdateCoursePayload extends CreateCoursePayload {
+  student_ids: number[];
 }
 
 export interface CreateCourseClassPayload extends CourseClassBase {
@@ -25,6 +25,4 @@ export interface CreateCourseClassPayload extends CourseClassBase {
   class_students?: number[];
 }
 
-export interface UpdateCourseClassPayload extends CreateCourseClassPayload {
-  id: number;
-}
+export interface UpdateCourseClassPayload extends CreateCourseClassPayload {}

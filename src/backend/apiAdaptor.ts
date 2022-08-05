@@ -173,6 +173,12 @@ class ApiAdaptor {
     });
   }
 
+  static async putCourse(courseId: number, payload: CreateCoursePayload) {
+    return await this.callApi(`${ApiEndpoints.course}/${courseId}`, "PUT", {
+      payload,
+    });
+  }
+
   static async postCourseClass(payload: CreateCourseClassPayload) {
     return await this.callApi(ApiEndpoints.courseClass, "POST", {
       payload,

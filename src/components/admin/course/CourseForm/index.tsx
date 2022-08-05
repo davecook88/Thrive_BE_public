@@ -14,6 +14,7 @@ import Dropdown from "./Dropdown";
 import InputSlider from "./InputSlider";
 import SelectedList from "./SelectedList";
 import { useAppDispatch } from "../../../redux/hooks";
+import { setSelectedCourse } from "../../adminSlice";
 
 interface CourseFormProps {
   course?: Course;
@@ -51,6 +52,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
 
   const onSubmitCourse = () => {
     if (!course) createCourse();
+    else updateCourse(course);
   };
 
   const createCourse = async () => {
@@ -68,11 +70,34 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
     }, 300);
   };
 
+  const updateCourse = async (course: Course) => {
+    const updatedCourse = await ApiAdaptor.putCourse(course.id, {
+      name,
+      description,
+      difficulty: level,
+      teacher_ids: selectedTeachers.map((t) => t.id),
+      student_ids: course.course_students?.map((s) => s.id) || [],
+      price,
+      max_students: maxStudents,
+    });
+    displayToast("Course updated!");
+    dispatch(setSelectedCourse({ selectedCourse: updatedCourse }));
+  };
+
   useEffect(() => {
+    if (availableTeachers.length) return;
     ApiAdaptor.listTeachers().then((teachers) =>
       setAvailableTeachers(teachers)
     );
   }, []);
+
+  useEffect(() => {
+    if (!course) return;
+    const selectedTeacherIds = course.course_teachers.map((t) => t.teacher_id);
+    setSelectedTeachers(
+      availableTeachers.filter((t) => selectedTeacherIds.includes(t.id))
+    );
+  }, [course, availableTeachers]);
 
   const selectTeacher = (val: string | number) => {
     const selectedTeacher = availableTeachers.find((t) => t.user_id == val);

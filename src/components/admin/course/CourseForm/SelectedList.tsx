@@ -8,7 +8,10 @@ const SelectedList: React.FC<SelectedListProps> = ({ items, onRemove }) => {
   return (
     <div>
       {items.map((item) => (
-        <div className="flex justify-between m-4/6 p-1 border-b-2">
+        <div
+          key={item.id}
+          className="flex justify-between m-4/6 p-1 border-b-2"
+        >
           <div>{item.name}</div>
           <div>
             <DeleteButton

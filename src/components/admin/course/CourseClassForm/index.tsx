@@ -4,8 +4,12 @@ import {
   StandardForm,
   StandardFormBody,
 } from "../../../styled/Form";
-import { Course, CourseClass } from "../../../types/course/responses";
-import { ListTeachersResponse } from "../../../types/teacher/responses";
+import { Course, CourseClassResponse } from "../../../types/course/responses";
+import {
+  ListClassTeachersResponse,
+  ListCourseTeachersResponse,
+  ListTeachersResponse,
+} from "../../../types/teacher/responses";
 import DateTimePicker from "./DateTimePicker";
 import Dropdown from "../CourseForm/Dropdown";
 import SelectedList from "../CourseForm/SelectedList";
@@ -20,7 +24,7 @@ import { useAppDispatch } from "../../../redux/hooks";
 import { showToast } from "../../../common/alerts/toastSlice";
 
 interface CourseClassFormProps {
-  courseClass?: CourseClass;
+  courseClass?: CourseClassResponse;
   classNumber: number;
   course: Course;
 }
@@ -31,12 +35,39 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
   courseClass,
 }) => {
   const [name, setName] = useState(`Live Class ${classNumber}`);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState<string | undefined>();
   const [selectedTeacher, setSelectedTeacher] =
-    useState<ListTeachersResponse | null>(null);
-  const [startTime, setStartTime] = useState(new Date());
-  const [duration, setDuration] = useState(60);
+    useState<ListCourseTeachersResponse | null>(null);
+  const [startTime, setStartTime] = useState(
+    courseClass?.start_time ? new Date(courseClass?.start_time) : new Date()
+  );
+  const calculateDuration = (courseClass: CourseClassResponse) => {
+    const millisecondsDuration =
+      new Date(courseClass.end_time).getTime() -
+      new Date(courseClass.start_time).getTime();
+    return millisecondsDuration / (60 * 1000);
+  };
+  const [duration, setDuration] = useState<number>(30);
   const [errors, setErrors] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Update states with selected courseClass if it exists
+    const _name = courseClass ? courseClass.name : `Live Class ${classNumber}`;
+    setName(_name);
+    const _description = courseClass?.description;
+    if (_description) setDescription(_description);
+    const _start = courseClass?.start_time
+      ? new Date(courseClass?.start_time)
+      : new Date();
+    setStartTime(_start);
+    const _duration = courseClass ? calculateDuration(courseClass) : 60;
+    setDuration(_duration);
+    if (courseClass?.class_teachers.length) {
+      setSelectedTeacher(courseClass.class_teachers[0]);
+    } else {
+      setSelectedTeacher(null);
+    }
+  }, [courseClass]);
 
   const dispatch = useAppDispatch();
 
@@ -48,9 +79,9 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
     );
   };
 
-  const courseTeachers: ListTeachersResponse[] = course.course_teachers;
+  const courseTeachers: ListCourseTeachersResponse[] = course.course_teachers;
   const selectTeacher = (val: string | number) => {
-    const selectedTeacher = courseTeachers.find((t) => t.user_id == val);
+    const selectedTeacher = courseTeachers.find((t) => t.teacher_id == val);
     if (!selectedTeacher) return;
     setSelectedTeacher(selectedTeacher);
   };
@@ -71,7 +102,7 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
     if (!selectedTeacher) throw new Error("Teacher not selected");
     if (!courseClass) {
       createClass({
-        class_teachers: [selectedTeacher.id],
+        class_teachers: [selectedTeacher.teacher_id],
         course_id: course.id,
         minutes_duration: duration,
         name: name,
@@ -79,9 +110,8 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
         start_time: startTime,
       });
     } else {
-      updateClass({
-        id: courseClass.id,
-        class_teachers: [selectedTeacher.id],
+      updateClass(courseClass.id, {
+        class_teachers: [selectedTeacher.teacher_id],
         course_id: course.id,
         minutes_duration: duration,
         name: name,
@@ -96,7 +126,13 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
     displayToast("Class created!");
   };
 
-  const updateClass = (payload: UpdateCourseClassPayload) => {};
+  const updateClass = async (
+    courseClassId: number,
+    payload: UpdateCourseClassPayload
+  ) => {
+    await ApiAdaptor.putCourseClass(courseClassId, payload);
+    displayToast("Class updated!");
+  };
 
   const teacherComponent = () => {
     if (!selectTeacher && !courseTeachers?.length)
@@ -117,7 +153,9 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
       return (
         <SelectedList
           onRemove={() => setSelectedTeacher(null)}
-          items={[{ id: selectedTeacher.id, name: selectedTeacher.user_name }]}
+          items={[
+            { id: selectedTeacher.teacher_id, name: selectedTeacher.user_name },
+          ]}
         />
       );
   };
@@ -176,7 +214,7 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
             <span className="label-text uppercase text-sm ">Start time</span>
             {startTime.getTime() < new Date().getTime() && (
               <span className="label-text-alt text-error text-xs ">
-                Time must be in the past
+                Time must be in the future
               </span>
             )}
           </label>
