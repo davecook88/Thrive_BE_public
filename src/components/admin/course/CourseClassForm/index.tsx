@@ -27,12 +27,14 @@ interface CourseClassFormProps {
   courseClass?: CourseClassResponse;
   classNumber: number;
   course: Course;
+  refresh: () => void;
 }
 
 export const CourseClassForm: React.FC<CourseClassFormProps> = ({
   course,
   classNumber,
   courseClass,
+  refresh,
 }) => {
   const [name, setName] = useState(`Live Class ${classNumber}`);
   const [description, setDescription] = useState<string | undefined>();
@@ -119,6 +121,17 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
         start_time: startTime,
       });
     }
+    refresh();
+  };
+
+  const deleteCourseClass = async (
+    courseClassId: number,
+    courseClassName: string
+  ) => {
+    await ApiAdaptor.deleteCourseClass(courseClassId);
+    displayToast(`Class ${courseClassName} deleted`);
+
+    refresh();
   };
 
   const createClass = async (payload: CreateCourseClassPayload) => {
@@ -235,10 +248,21 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
             </label>
           </div>
         </FormSection>
-      </StandardFormBody>{" "}
+      </StandardFormBody>
       <div className="flex items-center w-full justify-center p-2">
+        {courseClass && (
+          <StandardButton
+            className="bg-error border-none drop-shadow-md btn-wide mx-2 text-white"
+            onClick={(e: React.SyntheticEvent) => {
+              e.preventDefault();
+              deleteCourseClass(courseClass.id, courseClass.name);
+            }}
+          >
+            Delete Class
+          </StandardButton>
+        )}
         <StandardButton
-          className="bg-primary border-none drop-shadow-md btn-wide text-white hover:bg-secondary"
+          className="bg-primary border-none drop-shadow-md btn-wide mx-2 text-white hover:bg-secondary"
           onClick={(e: React.SyntheticEvent) => {
             e.preventDefault();
             onSubmitCourseClass();

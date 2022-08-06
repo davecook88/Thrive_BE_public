@@ -24,13 +24,13 @@ export const CourseClassDetails: React.FC<CourseClassDetailsProps> = ({
     >
       <div
         className={clsx(
-          futureCourse ? "bg-primary text-white" : "bg-neutral ",
+          futureCourse ? "bg-primary " : "bg-neutral ",
           "rounded",
           "shadow",
           "p-3",
           "m-1",
           "text-left",
-
+          "text-white",
           "cursor-pointer"
         )}
       >

@@ -179,11 +179,16 @@ class ApiAdaptor {
     });
   }
 
+  static async deleteCourse(courseId: number) {
+    return await this.callApi(`${ApiEndpoints.course}/${courseId}`, "DELETE");
+  }
+
   static async postCourseClass(payload: CreateCourseClassPayload) {
     return await this.callApi(ApiEndpoints.courseClass, "POST", {
       payload,
     });
   }
+
   static async putCourseClass(
     courseClassId: number,
     payload: CreateCourseClassPayload
@@ -194,6 +199,13 @@ class ApiAdaptor {
       {
         payload,
       }
+    );
+  }
+
+  static async deleteCourseClass(courseClassId: number) {
+    return await this.callApi(
+      `${ApiEndpoints.courseClass}/${courseClassId}`,
+      "DELETE"
     );
   }
 

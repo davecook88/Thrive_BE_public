@@ -18,9 +18,10 @@ import { setSelectedCourse } from "../../adminSlice";
 
 interface CourseFormProps {
   course?: Course;
+  refresh: () => void;
 }
 
-const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
+const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   const router = useRouter();
   const [availableTeachers, setAvailableTeachers] = useState<
     ListTeachersResponse[]
@@ -53,6 +54,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
   const onSubmitCourse = () => {
     if (!course) createCourse();
     else updateCourse(course);
+    refresh();
   };
 
   const createCourse = async () => {
@@ -108,6 +110,12 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
   const unselectedTeachers = availableTeachers.filter(
     (t) => !selectedTeacherIds.includes(t.user_id)
   );
+
+  const deleteCourse = async (courseId: number, courseName: string) => {
+    await ApiAdaptor.deleteCourse(courseId);
+    displayToast(`Course ${courseName} deleted`);
+    router.push("/admin");
+  };
 
   return (
     <StandardForm>
@@ -204,8 +212,19 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
       </StandardFormBody>
 
       <div className="flex items-center justify-center p-2">
+        {course && (
+          <StandardButton
+            className="bg-error border-none drop-shadow-md btn-wide text-white mx-2"
+            onClick={(e: React.SyntheticEvent) => {
+              e.preventDefault();
+              deleteCourse(course.id, course.name);
+            }}
+          >
+            Delete Course
+          </StandardButton>
+        )}
         <StandardButton
-          className="bg-primary border-none drop-shadow-md btn-wide text-white hover:bg-secondary"
+          className="bg-primary border-none drop-shadow-md btn-wide text-white hover:bg-secondary mx-2"
           onClick={(e: React.SyntheticEvent) => {
             e.preventDefault();
             onSubmitCourse();

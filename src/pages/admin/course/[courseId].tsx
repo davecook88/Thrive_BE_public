@@ -31,12 +31,18 @@ const EditCoursePage = () => {
 
   const setSelectedClass = (couseClass: CourseClassResponse) =>
     dispatch(setSelectedCourseClass({ selectedCourseClass: couseClass }));
+
   const setCourse = (course: Course) =>
     dispatch(setSelectedCourse({ selectedCourse: course }));
+
   useEffect(() => {
+    refresh();
+  }, [query]);
+
+  const refresh = () => {
     if (!_courseId) return;
     ApiAdaptor.getCourseById(_courseId).then(setCourse);
-  }, [query]);
+  };
 
   useEffect(() => {
     const courseClassId = query.class;
@@ -55,12 +61,13 @@ const EditCoursePage = () => {
       <div className="mb-4 w-full flex justify-center pt-4">
         <h1 className="font-bold uppercase text-3xl">Edit course</h1>
       </div>
-      <CourseForm course={course} />
+      <CourseForm course={course} refresh={refresh} />
       <DisplayClassList courseClasses={course.live_classes} />
       <CourseClassForm
         course={course}
         classNumber={course?.live_classes ? course.live_classes.length + 1 : 1}
         courseClass={selectedCourseClass}
+        refresh={refresh}
       />
     </div>
   );
