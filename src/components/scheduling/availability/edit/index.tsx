@@ -164,7 +164,6 @@ Until: ${entry.end}`);
       return;
     }
     const allWeekEvents = multiplyEvents(filteredEntries, new Date(weekEnd));
-    debugger;
     updateAvailability(allWeekEvents);
   };
 

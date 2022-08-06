@@ -1,15 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import themeModeReducer from "./reducers/darkMode";
 import availabilityReducer from "./reducers/calendar/availabilitySlice";
 import editAvailabilityConfigReducer from "./reducers/calendar/editAvailabilitySlice";
 import userReducer from "../../auth/userSlice";
+import toastReducer from "../common/alerts/toastSlice";
+import adminReducer from "../admin/adminSlice";
 
 export const store = configureStore({
   reducer: {
-    themeMode: themeModeReducer,
     availability: availabilityReducer,
     editAvailabilityConfig: editAvailabilityConfigReducer,
     user: userReducer,
+    toast: toastReducer,
+    admin: adminReducer,
   },
 });
 

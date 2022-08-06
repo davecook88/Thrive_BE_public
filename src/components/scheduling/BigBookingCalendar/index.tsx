@@ -41,6 +41,13 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
   height,
   defaultView = "week",
 }) => {
+  const [displayedDates, setDisplayedDates] = useState<{
+    start: Date;
+    end: Date;
+  }>({
+    start: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000),
+    end: new Date(new Date().getTime() + 28 * 24 * 60 * 60 * 1000),
+  });
   const [view, setView] = useState<View>(defaultView);
   const [displayAvailabilityForm, setDisplayAvailabilityForm] =
     useState<boolean>(false);
@@ -51,8 +58,8 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
   const availability = useAppSelector(selectAvailability);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(fetchAvailabilityAsync());
-  }, []);
+    dispatch(fetchAvailabilityAsync(displayedDates));
+  }, [displayedDates]);
 
   const checkOverlap = (
     type: BookingStatus,
@@ -91,6 +98,22 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
   const displayBackgroundEvents = () => {
     if (view === "month") return [];
     return availability.available.map(formatEvents("available"));
+  };
+
+  const calendarRangeChangeHandler = (
+    e:
+      | Date[]
+      | {
+          start: Date;
+          end: Date;
+        }
+  ) => {
+    const start = Array.isArray(e) ? e[0] : e.start;
+    const end = Array.isArray(e) ? e[e.length - 1] : e.end;
+    setDisplayedDates({
+      start,
+      end,
+    });
   };
 
   const displayEvents = () => {
@@ -138,6 +161,7 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
             setSelectedEvent(event);
             setEditModalOpen(true);
           }}
+          onRangeChange={(dateRange) => calendarRangeChangeHandler(dateRange)}
         />
       </div>
       <Modal
@@ -149,6 +173,10 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
           <EditAvailabilityEventModal
             eventDetails={selectedEvent}
             checkOverlap={checkOverlap}
+            refreshAvailability={() =>
+              dispatch(fetchAvailabilityAsync(displayedDates))
+            }
+            close={() => setEditModalOpen(false)}
           />
         }
       </Modal>

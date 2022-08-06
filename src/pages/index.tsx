@@ -8,24 +8,15 @@ export default function Home() {
     <div className="bg-skin-fill">
       <div className="bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
-          <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          <h2 className="text-3xl  tracking-tight text-gray-900 sm:text-4xl">
             <span className="block dark:text-skin-white">
-              Ready to dive in?
+              Don't just survive in Spanish
             </span>
-            <span className="block text-skin-base">
-              Start your free trial today.
+            <span className="block text-skin-base font-extrabold">
+              Thrive in Spanish
             </span>
-            <GoogleLoginButton />
           </h2>
           <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
-            <div className="inline-flex rounded-md shadow">
-              <a
-                href="#"
-                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-skin-fill hover:bg-skin-fill"
-              >
-                Get started
-              </a>
-            </div>
             <div className="ml-3 inline-flex rounded-md shadow">
               <a
                 href="#"

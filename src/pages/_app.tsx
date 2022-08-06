@@ -1,40 +1,27 @@
-import { useState, useEffect, useContext, createContext } from "react";
+import { useState, useEffect } from "react";
 import "../../styles/globals.css";
 import type { AppProps } from "next/app";
 import Header from "../components/layouts/header/header";
 import Footer from "../components/layouts/Footer/footer";
 import { store } from "../components/redux/store";
 import { Provider } from "react-redux";
+import { ThemeProvider } from "next-themes";
+import { Toast } from "../components/common/alerts/toast";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    setTimeout(function () {
-      setLoading(false);
-    }, 250);
-
-    return () => {
-      setLoading(true);
-    };
-  }, [pageProps]);
-
+function Thrive({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <ThemeProvider defaultTheme="cupcake">
       <Provider store={store}>
+        <Toast />
         <Header />
 
-        <section
-          className={
-            loading === true ? "dark:animate-none animate-Loading " : ""
-          }
-        >
+        <section className={"bg-base-100"}>
           <Component {...pageProps} />
         </section>
 
         <Footer />
       </Provider>
-    </>
+    </ThemeProvider>
   );
 }
-export default MyApp;
+export default Thrive;
