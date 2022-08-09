@@ -2,8 +2,11 @@ import { ListCourseStudentsResponse } from "../student/response";
 import { ListCourseTeachersResponse } from "../teacher/responses";
 import { CourseBase } from "./payloads";
 
-export interface Course extends CourseBase {
+export interface CourseMinimal extends CourseBase {
   id: number;
+}
+
+export interface Course extends CourseMinimal {
   live_classes: CourseClassResponse[];
   course_teachers: ListCourseTeachersResponse[];
   course_students: ListCourseStudentsResponse[];

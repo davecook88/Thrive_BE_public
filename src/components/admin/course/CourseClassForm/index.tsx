@@ -5,11 +5,7 @@ import {
   StandardFormBody,
 } from "../../../styled/Form";
 import { Course, CourseClassResponse } from "../../../types/course/responses";
-import {
-  ListClassTeachersResponse,
-  ListCourseTeachersResponse,
-  ListTeachersResponse,
-} from "../../../types/teacher/responses";
+import { ListCourseTeachersResponse } from "../../../types/teacher/responses";
 import DateTimePicker from "./DateTimePicker";
 import Dropdown from "../CourseForm/Dropdown";
 import SelectedList from "../CourseForm/SelectedList";
