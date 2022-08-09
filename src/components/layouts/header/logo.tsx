@@ -1,9 +1,12 @@
+import Link from "next/link";
 import React from "react";
 
 const Logo = () => {
   return (
     <div className="">
-      <h3 className="text-white">Thrive In Spanish</h3>
+      <Link href="/">
+        <h3 className="text-white cursor-pointer">Thrive In Spanish</h3>
+      </Link>
     </div>
   );
 };

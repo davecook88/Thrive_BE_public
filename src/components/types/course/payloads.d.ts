@@ -22,7 +22,6 @@ export interface UpdateCoursePayload extends CreateCoursePayload {
 }
 
 export interface CreateCourseClassPayload extends CourseClassBase {
-  unit_id: number;
   minutes_duration: number;
   class_teachers: number[];
   class_students?: number[];
