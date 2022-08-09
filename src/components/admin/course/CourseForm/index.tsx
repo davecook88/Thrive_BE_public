@@ -15,6 +15,7 @@ import InputSlider from "./InputSlider";
 import SelectedList from "./SelectedList";
 import { useAppDispatch } from "../../../redux/hooks";
 import { setSelectedCourse } from "../../adminSlice";
+import { LevelResponse } from "../../../types/level/response";
 
 interface CourseFormProps {
   course?: Course;
@@ -41,6 +42,12 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
     ListTeachersResponse[]
   >([]);
 
+  const [levels, setLevels] = useState<LevelResponse[]>([]);
+  const [unit, setUnit] = useState<number>();
+
+  const selectedLevel = levels.find((l) => l.id == level);
+  const selectedUnit = selectedLevel?.units.find((l) => l.id == level);
+
   const dispatch = useAppDispatch();
 
   const displayToast = (message: string) => {
@@ -58,6 +65,10 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   };
 
   const createCourse = async () => {
+    if (!selectedUnit) {
+      displayToast("No unit selected");
+      return;
+    }
     const newCourse = await ApiAdaptor.postCourse({
       name,
       description,
@@ -65,6 +76,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
       teacher_ids: selectedTeachers.map((t) => t.id),
       price,
       max_students: maxStudents,
+      unit_id: selectedUnit.id,
     });
     displayToast("Course created!");
     setTimeout(() => {
@@ -73,6 +85,10 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   };
 
   const updateCourse = async (course: Course) => {
+    if (!selectedUnit) {
+      displayToast("No unit selected");
+      return;
+    }
     const updatedCourse = await ApiAdaptor.putCourse(course.id, {
       name,
       description,
@@ -81,6 +97,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
       student_ids: course.course_students?.map((s) => s.id) || [],
       price,
       max_students: maxStudents,
+      unit_id: selectedUnit.id,
     });
     displayToast("Course updated!");
     dispatch(setSelectedCourse({ selectedCourse: updatedCourse }));
@@ -91,6 +108,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
     ApiAdaptor.listTeachers().then((teachers) =>
       setAvailableTeachers(teachers)
     );
+    ApiAdaptor.listLevels().then(setLevels);
   }, []);
 
   useEffect(() => {
@@ -116,6 +134,11 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
     displayToast(`Course ${courseName} deleted`);
     router.push("/admin");
   };
+
+  useEffect(() => {
+    if (!selectedLevel?.units.length) return;
+    setUnit(selectedLevel.units[0].id);
+  }, [selectedLevel]);
 
   return (
     <StandardForm>
@@ -152,8 +175,29 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
               onChange={(val) => setLevel(val)}
               value={level}
               title="Course Level"
+              valueNames={levels.reduce((acc, l) => {
+                acc[l.id] = l.name;
+                return acc;
+              }, {} as { [key: string]: string })}
+              max={Math.max(...levels.map((l) => l.id))}
+              min={1}
             />
           </div>
+          {selectedLevel?.units && unit && (
+            <div>
+              <InputSlider
+                onChange={(val) => setUnit(val)}
+                value={unit}
+                title="Unit"
+                min={Math.min(...selectedLevel.units.map((l) => l.id))}
+                valueNames={selectedLevel.units.reduce((acc, l) => {
+                  acc[l.id] = l.name;
+                  return acc;
+                }, {} as { [key: string]: string })}
+                max={Math.max(...selectedLevel.units.map((l) => l.id))}
+              />
+            </div>
+          )}
           <div>
             <InputSlider
               onChange={(val) => setMaxStudents(val)}

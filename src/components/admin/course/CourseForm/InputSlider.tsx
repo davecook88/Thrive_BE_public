@@ -6,19 +6,21 @@ interface InputSliderProps {
   value: number;
   onChange: (val: number) => void;
   title: string;
+  valueNames?: { [key: string]: string };
 }
 const InputSlider: React.FC<InputSliderProps> = ({
   min = 0,
   max = 10,
   value,
   title,
+  valueNames = {},
   onChange,
 }) => {
   return (
     <div>
       <label className="label">
         <span className="label-text uppercase text-sm ">{title}</span>
-        <span className="label-text-alt">{value}</span>
+        <span className="label-text-alt">{valueNames[value] || value}</span>
       </label>
       <input
         type="range"
