@@ -4,9 +4,11 @@ import { StandardButton } from "../../../styled/Buttons";
 import { Course } from "../../../types/course/responses";
 import { LevelResponse } from "../../../types/level/response";
 import { LandingPageSection, LandingPageSectionInner } from "../styled";
+import LevelDisplayCard from "./LevelDisplayCard";
 
 const CoursesSection = () => {
   const [levels, setLevels] = useState<LevelResponse[]>([]);
+  const [selectedLevelId, setSelectedLevelId] = useState<number | null>(null);
 
   useEffect(() => {
     ApiAdaptor.listLevels({ page: 0 }).then(setLevels);
@@ -22,15 +24,13 @@ const CoursesSection = () => {
         </div>
         <div className="flex justify-between">
           {levels.map((level) => (
-            <div className="card w-96 bg-base-100 shadow-xl" key={level.id}>
-              <div className="card-body">
-                <h2 className="card-title">{level.title}</h2>
-                <p>{level.subtitle}</p>
-                <div className="card-actions justify-end">
-                  <button className="btn btn-primary">Find out more</button>
-                </div>
-              </div>
-            </div>
+            <LevelDisplayCard
+              level={level}
+              hidden={selectedLevelId ? selectedLevelId !== level.id : false}
+              focused={selectedLevelId === level.id}
+              selectLevel={() => setSelectedLevelId(level.id)}
+              showAllLevels={() => setSelectedLevelId(null)}
+            />
           ))}
         </div>
       </div>
