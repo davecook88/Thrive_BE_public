@@ -2,6 +2,7 @@ import clsx from "clsx";
 import React from "react";
 import { useAppDispatch } from "../../../redux/hooks";
 import { CourseClassResponse } from "../../../types/course/responses";
+import { parseDbTime } from "../../../utils/dateMethods";
 import { setSelectedCourseClass } from "../../adminSlice";
 
 interface CourseClassDetailsProps {
@@ -12,8 +13,8 @@ export const CourseClassDetails: React.FC<CourseClassDetailsProps> = ({
   courseClass,
 }) => {
   const dispatch = useAppDispatch();
-  const startTime = new Date(courseClass.start_time);
-  const endTime = new Date(courseClass.end_time);
+  const startTime = parseDbTime(courseClass.start_time);
+  const endTime = parseDbTime(courseClass.end_time);
   const futureCourse = new Date().getTime() < startTime.getTime();
   return (
     <div

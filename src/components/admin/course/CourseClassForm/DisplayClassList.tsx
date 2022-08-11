@@ -17,7 +17,7 @@ export const DisplayClassList: React.FC<DisplayClassListProps> = ({
     <div className="p-4 w-full">
       <BorderedSection>
         <h2 className="uppercase text-lg font-bold">Live Classes</h2>
-        <div className="flex">
+        <div className="flex flex-wrap">
           {courseClasses.length ? (
             courseClasses.map((c) => (
               <CourseClassDetails key={c.id} courseClass={c} />

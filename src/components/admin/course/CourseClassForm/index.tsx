@@ -21,6 +21,7 @@ import { showToast } from "../../../common/alerts/toastSlice";
 import AdminFormErrors from "../../AdminFormErrors";
 import { addError, clearErrors } from "../../adminSlice";
 import { RepeatMenu } from "./RepeatMenu";
+import moment from "moment";
 
 interface CourseClassFormProps {
   courseClass?: CourseClassResponse;
@@ -30,6 +31,7 @@ interface CourseClassFormProps {
 }
 
 export enum RepeatOption {
+  day = "day",
   week = "week",
 }
 
@@ -130,8 +132,8 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
         description,
         start_time: startTime,
       });
+      refresh();
     }
-    refresh();
   };
 
   const deleteCourseClass = async (
@@ -145,8 +147,22 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
   };
 
   const createClass = async (payload: CreateCourseClassPayload) => {
-    await ApiAdaptor.postCourseClass(payload);
-    displayToast("Class created!");
+    debugger;
+    const _repeatTimes = repeatClass ? repeatTimes : 1;
+    for (let i = 1; i <= _repeatTimes; i++) {
+      const _payload =
+        i === 1
+          ? payload
+          : {
+              ...payload,
+              start_time: moment(payload.start_time)
+                .add(i, repeatEvery)
+                .toDate(),
+            };
+      await ApiAdaptor.postCourseClass(_payload);
+    }
+    refresh();
+    displayToast(_repeatTimes === 1 ? "Class created!" : "Classes created!");
   };
 
   const updateClass = async (
@@ -232,20 +248,22 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
             )}
           </label>
           <DateTimePicker onChange={setStartTime} value={startTime} />
-          <div className="p-4 flex align-center">
-            <label className="input-group w-min m-auto ">
-              <span className="text-xs bg-secondary">Duration minutes</span>
-              <input
-                value={duration}
-                onChange={(e) => {
-                  const durationVal = Number(e.target.value);
-                  if (isNaN(durationVal)) return;
-                  setDuration(durationVal);
-                }}
-                placeholder="Set duration in minutes"
-                className="input input-bordered "
-              />
-            </label>
+          <div className="p-6 flex align-center flex justify-center">
+            <div>
+              <label className="input-group w-min m-auto ">
+                <span className="text-xs bg-secondary">Duration minutes</span>
+                <input
+                  value={duration}
+                  onChange={(e) => {
+                    const durationVal = Number(e.target.value);
+                    if (isNaN(durationVal)) return;
+                    setDuration(durationVal);
+                  }}
+                  placeholder="Set duration in minutes"
+                  className="input input-bordered p-1"
+                />
+              </label>
+            </div>
           </div>
           {!courseClass && (
             <RepeatMenu
