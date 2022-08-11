@@ -6,6 +6,8 @@ import { CourseBase } from "./payloads";
 export interface CourseMinimal extends CourseBase {
   id: number;
   level_id: number;
+  start_time: string;
+  end_time: string;
 }
 
 export interface Course extends CourseMinimal {
