@@ -5,11 +5,7 @@ import {
   StandardFormBody,
 } from "../../../styled/Form";
 import { Course, CourseClassResponse } from "../../../types/course/responses";
-import {
-  ListClassTeachersResponse,
-  ListCourseTeachersResponse,
-  ListTeachersResponse,
-} from "../../../types/teacher/responses";
+import { ListCourseTeachersResponse } from "../../../types/teacher/responses";
 import DateTimePicker from "./DateTimePicker";
 import Dropdown from "../CourseForm/Dropdown";
 import SelectedList from "../CourseForm/SelectedList";
@@ -20,14 +16,23 @@ import {
 } from "../../../types/course/payloads";
 import ApiAdaptor from "../../../../backend/apiAdaptor";
 import { Toast } from "../../../common/alerts/toast";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { showToast } from "../../../common/alerts/toastSlice";
+import AdminFormErrors from "../../AdminFormErrors";
+import { addError, clearErrors } from "../../adminSlice";
+import { RepeatMenu } from "./RepeatMenu";
+import moment from "moment";
 
 interface CourseClassFormProps {
   courseClass?: CourseClassResponse;
   classNumber: number;
   course: Course;
   refresh: () => void;
+}
+
+export enum RepeatOption {
+  day = "day",
+  week = "week",
 }
 
 export const CourseClassForm: React.FC<CourseClassFormProps> = ({
@@ -43,6 +48,11 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
   const [startTime, setStartTime] = useState(
     courseClass?.start_time ? new Date(courseClass?.start_time) : new Date()
   );
+  const [repeatClass, setRepeatClass] = useState(false);
+  const [repeatEvery, setRepeatEvery] = useState<RepeatOption>(
+    RepeatOption.week
+  );
+  const [repeatTimes, setRepeatTimes] = useState(1);
   const calculateDuration = (courseClass: CourseClassResponse) => {
     const millisecondsDuration =
       new Date(courseClass.end_time).getTime() -
@@ -50,9 +60,9 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
     return millisecondsDuration / (60 * 1000);
   };
   const [duration, setDuration] = useState<number>(30);
-  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
+    dispatch(clearErrors());
     // Update states with selected courseClass if it exists
     const _name = courseClass ? courseClass.name : `Live Class ${classNumber}`;
     setName(_name);
@@ -88,13 +98,15 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
     setSelectedTeacher(selectedTeacher);
   };
 
+  const setError = (error: string) => dispatch(addError({ error }));
+
   const validateInput = () => {
     const _errors = [];
     if (!selectedTeacher) _errors.push("No class teacher selected");
     if (!duration) _errors.push("Class duration is not set");
     if (startTime.getTime() < new Date().getTime())
       _errors.push("Start time is in the past");
-    setErrors(_errors);
+    _errors.forEach(setError);
     return _errors.length > 0;
   };
 
@@ -120,8 +132,8 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
         description,
         start_time: startTime,
       });
+      refresh();
     }
-    refresh();
   };
 
   const deleteCourseClass = async (
@@ -135,8 +147,22 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
   };
 
   const createClass = async (payload: CreateCourseClassPayload) => {
-    await ApiAdaptor.postCourseClass(payload);
-    displayToast("Class created!");
+    debugger;
+    const _repeatTimes = repeatClass ? repeatTimes : 1;
+    for (let i = 1; i <= _repeatTimes; i++) {
+      const _payload =
+        i === 1
+          ? payload
+          : {
+              ...payload,
+              start_time: moment(payload.start_time)
+                .add(i, repeatEvery)
+                .toDate(),
+            };
+      await ApiAdaptor.postCourseClass(_payload);
+    }
+    refresh();
+    displayToast(_repeatTimes === 1 ? "Class created!" : "Classes created!");
   };
 
   const updateClass = async (
@@ -171,16 +197,6 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
           ]}
         />
       );
-  };
-
-  const displayErrors = () => {
-    return (
-      <div className="text-center text-error">
-        {errors.map((err) => (
-          <div>{err}</div>
-        ))}
-      </div>
-    );
   };
 
   return (
@@ -232,21 +248,33 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
             )}
           </label>
           <DateTimePicker onChange={setStartTime} value={startTime} />
-          <div className="p-4 flex align-center">
-            <label className="input-group w-min m-auto ">
-              <span className="text-xs bg-secondary">Duration minutes</span>
-              <input
-                value={duration}
-                onChange={(e) => {
-                  const durationVal = Number(e.target.value);
-                  if (isNaN(durationVal)) return;
-                  setDuration(durationVal);
-                }}
-                placeholder="Set duration in minutes"
-                className="input input-bordered "
-              />
-            </label>
+          <div className="p-6 flex align-center flex justify-center">
+            <div>
+              <label className="input-group w-min m-auto ">
+                <span className="text-xs bg-secondary">Duration minutes</span>
+                <input
+                  value={duration}
+                  onChange={(e) => {
+                    const durationVal = Number(e.target.value);
+                    if (isNaN(durationVal)) return;
+                    setDuration(durationVal);
+                  }}
+                  placeholder="Set duration in minutes"
+                  className="input input-bordered p-1"
+                />
+              </label>
+            </div>
           </div>
+          {!courseClass && (
+            <RepeatMenu
+              repeatClass={repeatClass}
+              setRepeatClass={setRepeatClass}
+              repeatEvery={repeatEvery}
+              setRepeatEvery={setRepeatEvery}
+              repeatTimes={repeatTimes}
+              setRepeatTimes={setRepeatTimes}
+            />
+          )}
         </FormSection>
       </StandardFormBody>
       <div className="flex items-center w-full justify-center p-2">
@@ -271,7 +299,7 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
           {courseClass ? "Update Class" : "Create Class"}
         </StandardButton>
       </div>
-      {displayErrors()}
+      <AdminFormErrors />
     </StandardForm>
   );
 };

@@ -1,9 +1,16 @@
+import { LevelResponse } from "../level/response";
 import { ListCourseStudentsResponse } from "../student/response";
 import { ListCourseTeachersResponse } from "../teacher/responses";
 import { CourseBase } from "./payloads";
 
-export interface Course extends CourseBase {
+export interface CourseMinimal extends CourseBase {
   id: number;
+  level_id: number;
+  start_time: string;
+  end_time: string;
+}
+
+export interface Course extends CourseMinimal {
   live_classes: CourseClassResponse[];
   course_teachers: ListCourseTeachersResponse[];
   course_students: ListCourseStudentsResponse[];
@@ -25,6 +32,7 @@ export interface CourseClassResponse extends CourseClass {
   description?: string;
   start_time: string;
   end_time: string;
+
   class_students: ListClassStudentsResponse[];
   class_teachers: ListClassTeachersResponse[];
 }

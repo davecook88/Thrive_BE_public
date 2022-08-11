@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ApiAdaptor from "../../../../backend/apiAdaptor";
 import { showToast } from "../../../common/alerts/toastSlice";
 import { StandardButton } from "../../../styled/Buttons";
@@ -14,7 +14,9 @@ import Dropdown from "./Dropdown";
 import InputSlider from "./InputSlider";
 import SelectedList from "./SelectedList";
 import { useAppDispatch } from "../../../redux/hooks";
-import { setSelectedCourse } from "../../adminSlice";
+import { setSelectedCourse, setSelectedLevel } from "../../adminSlice";
+import { LevelResponse } from "../../../types/level/response";
+import Link from "next/link";
 
 interface CourseFormProps {
   course?: Course;
@@ -32,7 +34,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   const [description, setDescription] = useState<string>(
     course?.description || ""
   );
-  const [level, setLevel] = useState<number>(course?.difficulty || 0);
+  const [level, setLevel] = useState<number>(course?.level_id || 0);
   const [maxStudents, setMaxStudents] = useState<number>(
     course?.max_students || 0
   );
@@ -40,6 +42,19 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   const [selectedTeachers, setSelectedTeachers] = useState<
     ListTeachersResponse[]
   >([]);
+
+  const [levels, setLevels] = useState<LevelResponse[]>([]);
+  const [unit, setUnit] = useState<number>();
+
+  const selectedLevel = useMemo(
+    () => levels.find((l) => l.id == level),
+    [levels, level]
+  );
+
+  useEffect(() => {
+    if (selectedLevel || !levels?.length) return;
+    setLevel(levels[0].id);
+  }, [selectedLevel]);
 
   const dispatch = useAppDispatch();
 
@@ -58,6 +73,11 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   };
 
   const createCourse = async () => {
+    const selectedUnit = selectedLevel?.units.find((l) => l.id == level);
+    if (!selectedUnit) {
+      displayToast("No unit selected");
+      return;
+    }
     const newCourse = await ApiAdaptor.postCourse({
       name,
       description,
@@ -65,6 +85,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
       teacher_ids: selectedTeachers.map((t) => t.id),
       price,
       max_students: maxStudents,
+      unit_id: selectedUnit.id,
     });
     displayToast("Course created!");
     setTimeout(() => {
@@ -73,6 +94,12 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   };
 
   const updateCourse = async (course: Course) => {
+    const selectedUnit = selectedLevel?.units.find((l) => l.id == unit);
+
+    if (!selectedUnit) {
+      displayToast("No unit selected");
+      return;
+    }
     const updatedCourse = await ApiAdaptor.putCourse(course.id, {
       name,
       description,
@@ -81,6 +108,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
       student_ids: course.course_students?.map((s) => s.id) || [],
       price,
       max_students: maxStudents,
+      unit_id: selectedUnit.id,
     });
     displayToast("Course updated!");
     dispatch(setSelectedCourse({ selectedCourse: updatedCourse }));
@@ -91,6 +119,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
     ApiAdaptor.listTeachers().then((teachers) =>
       setAvailableTeachers(teachers)
     );
+    ApiAdaptor.listLevels().then(setLevels);
   }, []);
 
   useEffect(() => {
@@ -115,6 +144,44 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
     await ApiAdaptor.deleteCourse(courseId);
     displayToast(`Course ${courseName} deleted`);
     router.push("/admin");
+  };
+
+  useEffect(() => {
+    if (!selectedLevel?.units.length) return;
+    setUnit(selectedLevel.units[0].id);
+  }, [selectedLevel]);
+
+  const displayUnitDropdown = () => {
+    if (!selectedLevel) return null;
+    if (selectedLevel?.units.length)
+      return (
+        <div>
+          <Dropdown
+            options={selectedLevel?.units.map((l) => ({
+              name: l.name,
+              id: l.id,
+            }))}
+            onChange={(id) => setUnit(Number(id))}
+            defaultOption="Select a unit"
+            value={Math.min(...selectedLevel.units.map((l) => l.id))}
+          />
+        </div>
+      );
+    else
+      return (
+        <div className="p-2 text-center">
+          <div>
+            It looks like there aren't any units for the {selectedLevel.name}{" "}
+            course yet.
+          </div>
+          <StandardButton
+            className="btn-secondary"
+            id="create-missing-unit-btn"
+          >
+            <Link href={`/admin/level/${selectedLevel.id}`}>Create a Unit</Link>
+          </StandardButton>
+        </div>
+      );
   };
 
   return (
@@ -148,12 +215,17 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
         </FormSection>
         <FormSection>
           <div>
-            <InputSlider
-              onChange={(val) => setLevel(val)}
-              value={level}
-              title="Course Level"
+            <Dropdown
+              options={levels.map((l) => ({
+                name: l.name,
+                id: l.id,
+              }))}
+              onChange={(id) => setLevel(Number(id))}
+              defaultOption="Select a course"
+              value={selectedLevel?.id}
             />
           </div>
+          {displayUnitDropdown()}
           <div>
             <InputSlider
               onChange={(val) => setMaxStudents(val)}

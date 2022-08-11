@@ -10,7 +10,7 @@ import { Toast } from "../components/common/alerts/toast";
 
 function Thrive({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider defaultTheme="cupcake">
+    <ThemeProvider defaultTheme="acid">
       <Provider store={store}>
         <Toast />
         <Header />

@@ -10,6 +10,10 @@ import {
   CreateCoursePayload,
 } from "../components/types/course/payloads";
 import { ListTeachersResponse } from "../components/types/teacher/responses";
+import {
+  CreateLevelPayload,
+  CreateUnitPayload,
+} from "../components/types/level/payloads";
 
 export interface PaginationParams {
   limit?: number;
@@ -28,6 +32,8 @@ enum ApiEndpoints {
   course = "/course",
   courseClass = "/course/class",
   teacher = "/teacher",
+  level = "/level",
+  unit = "/level/unit",
 }
 
 export class MissingTokenError extends Error {}
@@ -155,6 +161,52 @@ class ApiAdaptor {
     return (await this.callApi(`${ApiEndpoints.paymentCreateIntent}`, "POST", {
       payload,
     })) as { secret: string };
+  }
+
+  static async listLevels(params?: PaginationParams) {
+    return await this.callApi(`${ApiEndpoints.level}`, "GET", {
+      params,
+    });
+  }
+
+  static async getLevelById(levelId: number) {
+    return await this.callApi(`${ApiEndpoints.level}/${levelId}`, "GET");
+  }
+
+  static async postLevel(payload?: CreateLevelPayload) {
+    return await this.callApi(`${ApiEndpoints.level}`, "POST", {
+      payload,
+    });
+  }
+
+  static async putLevel(levelId: number, payload?: CreateLevelPayload) {
+    return await this.callApi(`${ApiEndpoints.level}/${levelId}`, "PUT", {
+      payload,
+    });
+  }
+
+  static async deleteLevel(levelId: number) {
+    return await this.callApi(`${ApiEndpoints.level}/${levelId}`, "DELETE");
+  }
+
+  static async listUnits(levelId: number) {
+    return await this.callApi(`${ApiEndpoints.level}/${levelId}/units`, "GET");
+  }
+
+  static async postUnit(payload?: CreateUnitPayload) {
+    return await this.callApi(`${ApiEndpoints.unit}`, "POST", {
+      payload,
+    });
+  }
+
+  static async putUnit(unitId: number, payload?: CreateUnitPayload) {
+    return await this.callApi(`${ApiEndpoints.unit}/${unitId}`, "PUT", {
+      payload,
+    });
+  }
+
+  static async deleteUnit(unitId: number) {
+    return await this.callApi(`${ApiEndpoints.unit}/${unitId}`, "DELETE");
   }
 
   static async getCourseById(id: string) {

@@ -17,6 +17,8 @@ import {
   setSelectedCourse,
   setSelectedCourseClass,
 } from "../../../components/admin/adminSlice";
+import { selectUser } from "../../../auth/userSlice";
+import UnauthorizedAccessPage from "../../../auth/UnauthorizedPage";
 
 const EditCoursePage = () => {
   const dispatch = useAppDispatch();
@@ -55,6 +57,9 @@ const EditCoursePage = () => {
     if (!courseClass) return;
     setSelectedClass(courseClass);
   }, [course]);
+
+  const auth = useAppSelector(selectUser);
+  if (!auth.user?.is_teacher) return <UnauthorizedAccessPage />;
   if (!course) return "loading";
   return (
     <div className="artboard-demo">

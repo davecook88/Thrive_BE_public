@@ -19,6 +19,13 @@ const Navigation = () => {
             <a>Home</a>
           </Link>
         </div>
+        {auth.user?.is_teacher && (
+          <div className="py-2 border-b-2 border-opacity-10 border-gray-100	lg:border-0">
+            <Link href="/admin">
+              <a>Admin</a>
+            </Link>
+          </div>
+        )}
 
         <div className="py-2 border-b-2 border-opacity-10 border-gray-100	lg:border-0">
           {auth.user ? <GoogleLogoutButton /> : <GoogleLoginButton />}

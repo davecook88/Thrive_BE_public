@@ -12,14 +12,16 @@ export interface CourseBase {
 export interface CreateCoursePayload extends CourseBase {
   teacher_ids: number[];
   student_ids?: number[];
+
+  unit_id: number;
 }
 
 export interface UpdateCoursePayload extends CreateCoursePayload {
   student_ids: number[];
+  unit_id: number;
 }
 
 export interface CreateCourseClassPayload extends CourseClassBase {
-  course_id: number;
   minutes_duration: number;
   class_teachers: number[];
   class_students?: number[];
