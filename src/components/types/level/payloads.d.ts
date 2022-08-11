@@ -2,6 +2,8 @@ export interface LevelBase {
   name: string;
   description: string;
   difficulty: number;
+  title: string;
+  subtitle: string;
 }
 
 export interface CreateLevelPayload extends LevelBase {}

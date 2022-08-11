@@ -7,7 +7,7 @@ const ReviewDetails: React.FC<{ review: Review }> = ({ review }) => {
       <div className="card-body">
         <div className="font-bold">
           {review.body.split("\n").map((p) => (
-            <p key={p}>{p}</p>
+            <p key={p} id="">{p}</p>
           ))}
         </div>
         <div className="text-right">

@@ -16,8 +16,10 @@ import {
 } from "../../../types/course/payloads";
 import ApiAdaptor from "../../../../backend/apiAdaptor";
 import { Toast } from "../../../common/alerts/toast";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { showToast } from "../../../common/alerts/toastSlice";
+import AdminFormErrors from "../../AdminFormErrors";
+import { addError, clearErrors } from "../../adminSlice";
 
 interface CourseClassFormProps {
   courseClass?: CourseClassResponse;
@@ -46,9 +48,9 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
     return millisecondsDuration / (60 * 1000);
   };
   const [duration, setDuration] = useState<number>(30);
-  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
+    dispatch(clearErrors());
     // Update states with selected courseClass if it exists
     const _name = courseClass ? courseClass.name : `Live Class ${classNumber}`;
     setName(_name);
@@ -84,13 +86,15 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
     setSelectedTeacher(selectedTeacher);
   };
 
+  const setError = (error: string) => dispatch(addError({ error }));
+
   const validateInput = () => {
     const _errors = [];
     if (!selectedTeacher) _errors.push("No class teacher selected");
     if (!duration) _errors.push("Class duration is not set");
     if (startTime.getTime() < new Date().getTime())
       _errors.push("Start time is in the past");
-    setErrors(_errors);
+    _errors.forEach(setError);
     return _errors.length > 0;
   };
 
@@ -167,16 +171,6 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
           ]}
         />
       );
-  };
-
-  const displayErrors = () => {
-    return (
-      <div className="text-center text-error">
-        {errors.map((err) => (
-          <div>{err}</div>
-        ))}
-      </div>
-    );
   };
 
   return (
@@ -267,7 +261,7 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
           {courseClass ? "Update Class" : "Create Class"}
         </StandardButton>
       </div>
-      {displayErrors()}
+      <AdminFormErrors />
     </StandardForm>
   );
 };

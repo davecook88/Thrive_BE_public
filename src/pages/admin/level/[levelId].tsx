@@ -18,6 +18,8 @@ import {
 } from "../../../components/types/level/response";
 import { DisplayUnitList } from "../../../components/admin/level/LevelForm/DisplayUnitsList";
 import { UnitForm } from "../../../components/admin/level/LevelForm/UnitForm";
+import { selectUser } from "../../../auth/userSlice";
+import UnauthorizedAccessPage from "../../../auth/UnauthorizedPage";
 
 const EditCoursePage = () => {
   const dispatch = useAppDispatch();
@@ -44,6 +46,9 @@ const EditCoursePage = () => {
     setLevel(level);
     ApiAdaptor.listUnits(level.id).then(setUnits);
   };
+
+  const auth = useAppSelector(selectUser);
+  if (!auth.user?.is_teacher) return <UnauthorizedAccessPage />;
 
   if (!selectedLevel) return "loading";
   return (

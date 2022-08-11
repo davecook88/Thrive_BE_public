@@ -150,7 +150,7 @@ export const UnitForm: React.FC<UnitFormProps> = ({
               deleteUnit(unit.id, unit.name);
             }}
           >
-            Delete Class
+            Delete Unit
           </StandardButton>
         )}
         <StandardButton

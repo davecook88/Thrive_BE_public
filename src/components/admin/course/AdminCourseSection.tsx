@@ -1,8 +1,6 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import ApiAdaptor from "../../../backend/apiAdaptor";
-import { DeleteButton } from "../../common/buttons/DeleteButton";
-import { EditButton } from "../../common/buttons/EditButton";
 import { Course } from "../../types/course/responses";
 import { AdminSectionContainer, AdminSectionTitle } from "../styled";
 

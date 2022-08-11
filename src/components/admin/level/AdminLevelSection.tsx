@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useStore } from "react-redux";
 import ApiAdaptor from "../../../backend/apiAdaptor";
 import { LevelResponse } from "../../types/level/response";
+import AdminFormErrors from "../AdminFormErrors";
 import { AdminSectionContainer, AdminSectionTitle } from "../styled";
 
 export const AdminLevelSection = () => {
@@ -39,6 +40,7 @@ export const AdminLevelSection = () => {
           <div className="btn btn-accent">Create a Level</div>
         </Link>
       </div>
+      <AdminFormErrors />
     </AdminSectionContainer>
   );
 };

@@ -56,6 +56,9 @@ const EditCoursePage = () => {
     setSelectedClass(courseClass);
   }, [course]);
   if (!course) return "loading";
+
+  const auth = useAppSelector(selectUser);
+  if (!auth.user?.is_teacher) return <UnauthorizedAccessPage />;
   return (
     <div className="artboard-demo">
       <div className="mb-4 w-full flex justify-center pt-4">

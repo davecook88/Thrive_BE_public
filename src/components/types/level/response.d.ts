@@ -1,5 +1,5 @@
 import { CourseMinimal } from "../course/responses";
-import { UnitBase } from "./payloads";
+import { UnitBase, LevelBase } from "./payloads";
 
 export interface Level extends LevelBase {
   id: number;
