@@ -20,12 +20,17 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { showToast } from "../../../common/alerts/toastSlice";
 import AdminFormErrors from "../../AdminFormErrors";
 import { addError, clearErrors } from "../../adminSlice";
+import { RepeatMenu } from "./RepeatMenu";
 
 interface CourseClassFormProps {
   courseClass?: CourseClassResponse;
   classNumber: number;
   course: Course;
   refresh: () => void;
+}
+
+export enum RepeatOption {
+  week = "week",
 }
 
 export const CourseClassForm: React.FC<CourseClassFormProps> = ({
@@ -41,6 +46,11 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
   const [startTime, setStartTime] = useState(
     courseClass?.start_time ? new Date(courseClass?.start_time) : new Date()
   );
+  const [repeatClass, setRepeatClass] = useState(false);
+  const [repeatEvery, setRepeatEvery] = useState<RepeatOption>(
+    RepeatOption.week
+  );
+  const [repeatTimes, setRepeatTimes] = useState(1);
   const calculateDuration = (courseClass: CourseClassResponse) => {
     const millisecondsDuration =
       new Date(courseClass.end_time).getTime() -
@@ -237,6 +247,16 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
               />
             </label>
           </div>
+          {!courseClass && (
+            <RepeatMenu
+              repeatClass={repeatClass}
+              setRepeatClass={setRepeatClass}
+              repeatEvery={repeatEvery}
+              setRepeatEvery={setRepeatEvery}
+              repeatTimes={repeatTimes}
+              setRepeatTimes={setRepeatTimes}
+            />
+          )}
         </FormSection>
       </StandardFormBody>
       <div className="flex items-center w-full justify-center p-2">

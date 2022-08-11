@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ApiAdaptor from "../../../../backend/apiAdaptor";
 import { showToast } from "../../../common/alerts/toastSlice";
 import { StandardButton } from "../../../styled/Buttons";
@@ -34,7 +34,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   const [description, setDescription] = useState<string>(
     course?.description || ""
   );
-  const [level, setLevel] = useState<number>(course?.id || 0);
+  const [level, setLevel] = useState<number>(course?.level_id || 0);
   const [maxStudents, setMaxStudents] = useState<number>(
     course?.max_students || 0
   );
@@ -46,12 +46,15 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   const [levels, setLevels] = useState<LevelResponse[]>([]);
   const [unit, setUnit] = useState<number>();
 
-  const selectedLevel = levels.find((l) => l.id == level);
+  const selectedLevel = useMemo(
+    () => levels.find((l) => l.id == level),
+    [levels, level]
+  );
 
   useEffect(() => {
     if (selectedLevel || !levels?.length) return;
-    setLevel(levels[0].difficulty);
-  }, [levels]);
+    setLevel(levels[0].id);
+  }, [selectedLevel]);
 
   const dispatch = useAppDispatch();
 
@@ -91,7 +94,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   };
 
   const updateCourse = async (course: Course) => {
-    const selectedUnit = selectedLevel?.units.find((l) => l.id == level);
+    const selectedUnit = selectedLevel?.units.find((l) => l.id == unit);
 
     if (!selectedUnit) {
       displayToast("No unit selected");
@@ -150,7 +153,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
 
   const displayUnitDropdown = () => {
     if (!selectedLevel) return null;
-    if (selectedLevel?.units.length && unit)
+    if (selectedLevel?.units.length)
       return (
         <div>
           <Dropdown
