@@ -14,8 +14,9 @@ import Dropdown from "./Dropdown";
 import InputSlider from "./InputSlider";
 import SelectedList from "./SelectedList";
 import { useAppDispatch } from "../../../redux/hooks";
-import { setSelectedCourse } from "../../adminSlice";
+import { setSelectedCourse, setSelectedLevel } from "../../adminSlice";
 import { LevelResponse } from "../../../types/level/response";
+import Link from "next/link";
 
 interface CourseFormProps {
   course?: Course;
@@ -33,7 +34,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   const [description, setDescription] = useState<string>(
     course?.description || ""
   );
-  const [level, setLevel] = useState<number>(course?.difficulty || 0);
+  const [level, setLevel] = useState<number>(course?.id || 0);
   const [maxStudents, setMaxStudents] = useState<number>(
     course?.max_students || 0
   );
@@ -147,6 +148,39 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
     setUnit(selectedLevel.units[0].id);
   }, [selectedLevel]);
 
+  const displayUnitDropdown = () => {
+    if (!selectedLevel) return null;
+    if (selectedLevel?.units.length && unit)
+      return (
+        <div>
+          <Dropdown
+            options={selectedLevel?.units.map((l) => ({
+              name: l.name,
+              id: l.id,
+            }))}
+            onChange={(id) => setUnit(Number(id))}
+            defaultOption="Select a unit"
+            value={Math.min(...selectedLevel.units.map((l) => l.id))}
+          />
+        </div>
+      );
+    else
+      return (
+        <div className="p-2 text-center">
+          <div>
+            It looks like there aren't any units for the {selectedLevel.name}{" "}
+            course yet.
+          </div>
+          <StandardButton
+            className="btn-secondary"
+            id="create-missing-unit-btn"
+          >
+            <Link href={`/admin/level/${selectedLevel.id}`}>Create a Unit</Link>
+          </StandardButton>
+        </div>
+      );
+  };
+
   return (
     <StandardForm>
       <StandardFormBody>
@@ -178,33 +212,17 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
         </FormSection>
         <FormSection>
           <div>
-            <InputSlider
-              onChange={(val) => setLevel(val)}
-              value={level}
-              title="Course Level"
-              valueNames={levels.reduce((acc, l) => {
-                acc[l.id] = l.name;
-                return acc;
-              }, {} as { [key: string]: string })}
-              max={Math.max(...levels.map((l) => l.id))}
-              min={1}
+            <Dropdown
+              options={levels.map((l) => ({
+                name: l.name,
+                id: l.id,
+              }))}
+              onChange={(id) => setLevel(Number(id))}
+              defaultOption="Select a course"
+              value={selectedLevel?.id}
             />
           </div>
-          {selectedLevel?.units && unit && (
-            <div>
-              <InputSlider
-                onChange={(val) => setUnit(val)}
-                value={unit}
-                title="Unit"
-                min={Math.min(...selectedLevel.units.map((l) => l.id))}
-                valueNames={selectedLevel.units.reduce((acc, l) => {
-                  acc[l.id] = l.name;
-                  return acc;
-                }, {} as { [key: string]: string })}
-                max={Math.max(...selectedLevel.units.map((l) => l.id))}
-              />
-            </div>
-          )}
+          {displayUnitDropdown()}
           <div>
             <InputSlider
               onChange={(val) => setMaxStudents(val)}
