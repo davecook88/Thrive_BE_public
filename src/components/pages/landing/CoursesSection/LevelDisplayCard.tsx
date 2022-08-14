@@ -32,18 +32,19 @@ const LevelDisplayCard: React.FC<LevelDisplayCardProps> = ({
     <div
       className={clsx(
         "card",
-        "m-1",
+        "md:m-1",
         "border",
         "border-info",
         "bg-base-100",
         "shadow-xl",
+        "mx-auto",
+        "md:mx-none",
+        "my-2",
+        focused ? "w-5/6 h-max flex-grow" : "w-0 flex-shrink",
+        hidden ? "w-1 h-2 opacity-0 border-0" : "h-min w-4/6 md:w-2/6",
 
-        "w-2/6",
-
-        hidden ? "w-1 h-2 opacity-0 border-0" : "h-min ",
-        focused ? "w-5/6 h-max" : "w-max",
-        "duration-300",
-        "transition-width"
+        "duration-500",
+        "transition-all"
       )}
       key={level.id}
     >
@@ -53,20 +54,21 @@ const LevelDisplayCard: React.FC<LevelDisplayCardProps> = ({
           {focused && (
             <StandardButton
               onClick={showAllLevels}
-              className="btn btn-info p-2 py-1 text-xs"
+              className="btn btn-info text-base-100 hover:text-info hover:bg-base-100 py-0.5 text-xs"
             >
               Show all levels
             </StandardButton>
           )}
         </div>
 
-        <p>{level.subtitle}</p>
+        {!focused && <p>{level.subtitle}</p>}
 
         {focused && (
           <div>
             <hr className="border-t-info" />
             <p className="text-sm p-2">{level.description}</p>
-            <h3 className="p-2 font-extrabold">Upcoming Courses</h3>
+            <h3 className="p-1 font-extrabold text-xl m-4">Upcoming Courses</h3>
+
             {allCourses.map((c) => (
               <CourseCollapse course={c} />
             ))}
@@ -74,10 +76,10 @@ const LevelDisplayCard: React.FC<LevelDisplayCardProps> = ({
         )}
 
         {!hidden && !focused && (
-          <div className="card-actions justify-start">
+          <div className="card-actions justify-start mt-4">
             <StandardButton
               onClick={selectLevel}
-              className="btn btn-primary p-2"
+              className="btn btn-info text-base-100 hover:text-info hover:bg-base-100 p-2"
             >
               Find out more
             </StandardButton>

@@ -43,7 +43,7 @@ const EditCoursePage = () => {
 
   const refresh = () => {
     if (!_courseId) return;
-    ApiAdaptor.getCourseById(_courseId).then(setCourse);
+    ApiAdaptor.getCourseById(Number(_courseId)).then(setCourse);
   };
 
   useEffect(() => {

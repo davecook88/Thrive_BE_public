@@ -22,7 +22,7 @@ const CoursesSection = () => {
             I want to...{" "}
           </h2>
         </div>
-        <div className="flex justify-between">
+        <div className="md:flex md:justify-between">
           {levels.map((level) => (
             <LevelDisplayCard
               level={level}

@@ -9,12 +9,6 @@ export const DescriptionSection = () => {
       <LandingPageSectionInner>
         <div className="flex ">
           <article className="md:w-3/6">
-            <h2 className="text-2xl text-center uppercase font-bold text-skin-base tracking-tight text-gray-900 my-4">
-              What my students say
-            </h2>
-            <ReviewCarousel />
-          </article>
-          <article className="md:w-3/6">
             <h2 className="text-2xl text-center md:text-right uppercase font-bold text-skin-base tracking-tight text-gray-900 my-4">
               Speak Spanish from the first class!
             </h2>
