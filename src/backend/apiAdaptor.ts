@@ -25,7 +25,7 @@ export interface PostAvailabilityPayload {
   events: CreateAvailabilityCalendarEvent[];
 }
 
-enum ApiEndpoints {
+export enum ApiEndpoints {
   verifyGoogleToken = "/auth/google",
   teacherAvailability = "/bookings/teacher-availability",
   paymentCreateIntent = "/payment/create-payment-intent",
@@ -34,6 +34,7 @@ enum ApiEndpoints {
   teacher = "/teacher",
   level = "/level",
   unit = "/level/unit",
+  bookCourse = "/book/course",
 }
 
 export class MissingTokenError extends Error {}
@@ -209,7 +210,7 @@ class ApiAdaptor {
     return await this.callApi(`${ApiEndpoints.unit}/${unitId}`, "DELETE");
   }
 
-  static async getCourseById(id: string) {
+  static async getCourseById(id: number) {
     return await this.callApi(`${ApiEndpoints.course}/${id}`, "GET");
   }
 

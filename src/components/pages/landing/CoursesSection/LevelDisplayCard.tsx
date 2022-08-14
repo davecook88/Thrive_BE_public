@@ -67,7 +67,8 @@ const LevelDisplayCard: React.FC<LevelDisplayCardProps> = ({
           <div>
             <hr className="border-t-info" />
             <p className="text-sm p-2">{level.description}</p>
-            <h3 className="p-2 font-extrabold">Upcoming Courses</h3>
+            <h3 className="p-1 font-extrabold text-xl m-4">Upcoming Courses</h3>
+
             {allCourses.map((c) => (
               <CourseCollapse course={c} />
             ))}
