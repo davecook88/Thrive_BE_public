@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import moment from "moment";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ApiAdaptor from "../../../../../backend/apiAdaptor";
 import {
   Course,
@@ -10,7 +10,7 @@ import {
 } from "../../../../types/course/responses";
 import { parseDbTime } from "../../../../utils/dateMethods";
 import { BookCourseButton } from "./BookCourseButton";
-import { ClassScheduleTable } from "./ClassScheduleTable";
+import { ClassScheduleTable } from "../../../../course/ClassScheduleTable";
 import { CourseInfoEntry } from "./CourseInfoEntry";
 
 export const formatCourseDate = (val: string | Date) => {

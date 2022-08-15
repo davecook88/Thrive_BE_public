@@ -9,7 +9,6 @@ const Logo = () => {
         <Image
           src="/karen1.webp"
           layout={"fill"}
-          objectFit={"cover"}
           className="cursor-pointer"
           style={{ objectFit: "contain" }}
         />

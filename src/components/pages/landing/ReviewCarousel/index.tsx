@@ -9,7 +9,7 @@ const ReviewCarousel: React.FC<ReviewCarouselProps> = ({
   reviews = defaultReviews,
 }) => {
   return (
-    <Carousel autoPlay showStatus={false} infiniteLoop>
+    <Carousel autoPlay showStatus={false} infiniteLoop showThumbs={false}>
       {reviews.map((review) => (
         <div
           className="flex justify-center p-8 pb-12"

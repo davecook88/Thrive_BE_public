@@ -14,6 +14,7 @@ import {
   CreateLevelPayload,
   CreateUnitPayload,
 } from "../components/types/level/payloads";
+import { RouteCreator } from "../components/utils/routeConstants";
 
 export interface PaginationParams {
   limit?: number;
@@ -207,6 +208,13 @@ class ApiAdaptor {
 
   static async listUnits(levelId: number) {
     return await this.callApi(`${ApiEndpoints.level}/${levelId}/units`, "GET");
+  }
+
+  static async listLevelCourses(levelId: number) {
+    return await this.callApi(
+      RouteCreator.listLevelCoursesRoute(levelId),
+      "GET"
+    );
   }
 
   static async postUnit(payload?: CreateUnitPayload) {

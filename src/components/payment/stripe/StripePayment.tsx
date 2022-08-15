@@ -17,7 +17,7 @@ const StripePayment: React.FC<StipePaymentProps> = ({
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
-    createPaymentIntent({ amount, coursePackage });
+    // createPaymentIntent({ amount, coursePackage });
   }, []);
 
   const createPaymentIntent = async ({
