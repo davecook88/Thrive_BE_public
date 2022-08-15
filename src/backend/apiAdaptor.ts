@@ -51,10 +51,14 @@ class ApiAdaptor {
       payload?: object;
       token?: string;
       params?: object;
+      serverSide?: boolean;
+      noAuth?: boolean;
     }
   ) {
-    const token = options?.token || getTokenFromLocalStorage();
-    if (!token) {
+    const token = options?.noAuth
+      ? null
+      : options?.token || ApiAdaptor.getToken(options?.serverSide);
+    if (!token && !options?.noAuth) {
       throw new MissingTokenError();
     }
     const res = await ApiAdaptor.client.request({
@@ -68,6 +72,16 @@ class ApiAdaptor {
       params: options?.params,
     });
     return res.data;
+  }
+
+  private static getToken(serverSide?: boolean) {
+    const token = serverSide
+      ? getTokenFromLocalStorage()
+      : process.env.SERVER_SIDE_TOKEN;
+    if (!token) {
+      throw new MissingTokenError();
+    }
+    return token;
   }
 
   static async verifyGoogleToken(
@@ -167,6 +181,7 @@ class ApiAdaptor {
   static async listLevels(params?: PaginationParams) {
     return await this.callApi(`${ApiEndpoints.level}`, "GET", {
       params,
+      noAuth: true,
     });
   }
 
@@ -210,8 +225,11 @@ class ApiAdaptor {
     return await this.callApi(`${ApiEndpoints.unit}/${unitId}`, "DELETE");
   }
 
-  static async getCourseById(id: number) {
-    return await this.callApi(`${ApiEndpoints.course}/${id}`, "GET");
+  static async getCourseById(id: number, options?: { serverSide?: boolean }) {
+    return await this.callApi(`${ApiEndpoints.course}/${id}`, "GET", {
+      serverSide: options?.serverSide || false,
+      noAuth: true,
+    });
   }
 
   static async listCourses(params?: PaginationParams) {
