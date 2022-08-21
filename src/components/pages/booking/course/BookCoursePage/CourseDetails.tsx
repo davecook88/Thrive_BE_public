@@ -1,7 +1,7 @@
 import moment from "moment";
 import React from "react";
-import { Course } from "../../../types/course/responses";
-import { parseDbTime } from "../../../utils/dateMethods";
+import { Course } from "../../../../types/course/responses";
+import { parseDbTime } from "../../../../utils/dateMethods";
 
 interface CourseDetailsProps {
   course: Course;

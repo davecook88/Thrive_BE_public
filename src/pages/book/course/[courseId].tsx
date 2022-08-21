@@ -1,9 +1,8 @@
 import React from "react";
-import StripePayment from "../../../components/payment/stripe/StripePayment";
-import BookCoursePage from "../../../components/pages/booking/course/BookCoursePage";
 import { GetServerSideProps, GetStaticProps } from "next";
 import ApiAdaptor from "../../../backend/apiAdaptor";
 import { Course } from "../../../components/types/course/responses";
+import BookCoursePage from "../../../components/pages/booking/course/BookCoursePage";
 
 interface BookCourseLandingPageProps {
   course: Course;

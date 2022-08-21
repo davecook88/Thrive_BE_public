@@ -1,6 +1,6 @@
 import React from "react";
-import { Course } from "../../../types/course/responses";
-import { CourseCollapse } from "../../landing/CoursesSection/CourseCollapse";
+import { Course } from "../../../../types/course/responses";
+import { CourseCollapse } from "../../../landing/CoursesSection/CourseCollapse";
 
 interface AlternativeCoursesSectionProps {
   levelCourses: Course[];
