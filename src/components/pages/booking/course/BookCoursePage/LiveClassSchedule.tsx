@@ -1,6 +1,10 @@
 import React from "react";
-import { ClassScheduleTable } from "../../../course/ClassScheduleTable";
-import { Course, CourseClassResponse } from "../../../types/course/responses";
+import { ClassScheduleTable } from "../../../../course/ClassScheduleTable";
+import {
+  Course,
+  CourseClassResponse,
+} from "../../../../types/course/responses";
+
 import { AlternativeCoursesSection } from "./AlternativeCoursesSection";
 
 interface LiveClassScheduleSectionProps {

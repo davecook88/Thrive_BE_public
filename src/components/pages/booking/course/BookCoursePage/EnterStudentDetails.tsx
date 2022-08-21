@@ -4,9 +4,10 @@ import GoogleLogin, {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";
-import { useAppDispatch } from "../../../redux/hooks";
-import { GoogleSuccessfulAuthOnlineCallback } from "../../../../auth/utils";
-import { setUser } from "../../../../auth/userSlice";
+import { GoogleSuccessfulAuthOnlineCallback } from "../../../../../auth/utils";
+import { useAppDispatch } from "../../../../redux/hooks";
+import { setUser } from "../../../../../auth/userSlice";
+
 export const EnterStudentDetails = () => {
   const dispatch = useAppDispatch();
 

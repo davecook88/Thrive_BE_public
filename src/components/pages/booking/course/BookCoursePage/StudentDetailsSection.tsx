@@ -1,10 +1,10 @@
 import React from "react";
 import { GoogleLogout } from "react-google-login";
-import { ThriveUser } from "../../../../auth/types";
-import { clearUser } from "../../../../auth/userSlice";
-import { deleteTokenFromLocalStorage } from "../../../../auth/utils";
-import { useAppDispatch } from "../../../redux/hooks";
-import { StandardButton } from "../../../styled/Buttons";
+import { ThriveUser } from "../../../../../auth/types";
+import { clearUser } from "../../../../../auth/userSlice";
+import { deleteTokenFromLocalStorage } from "../../../../../auth/utils";
+import { useAppDispatch } from "../../../../redux/hooks";
+import { StandardButton } from "../../../../styled/Buttons";
 
 interface StudentDetailsSection {
   user: ThriveUser;

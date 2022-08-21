@@ -1,11 +1,12 @@
 import { GetServerSideProps } from "next";
-import React, { useMemo } from "react";
-import { selectUser } from "../../../../auth/userSlice";
-import ApiAdaptor from "../../../../backend/apiAdaptor";
-import { ClassScheduleTable } from "../../../course/ClassScheduleTable";
-import StripePayment from "../../../payment/stripe/StripePayment";
-import { useAppSelector } from "../../../redux/hooks";
-import { Course } from "../../../types/course/responses";
+import React, { useMemo, useState } from "react";
+import { selectUser } from "../../../../../auth/userSlice";
+import ApiAdaptor from "../../../../../backend/apiAdaptor";
+import { ClassScheduleTable } from "../../../../course/ClassScheduleTable";
+import StripePayment from "../../../../payment/stripe/StripePayment";
+import { useAppSelector } from "../../../../redux/hooks";
+import { StandardButton } from "../../../../styled/Buttons";
+import { Course } from "../../../../types/course/responses";
 import { AlternativeCoursesSection } from "./AlternativeCoursesSection";
 import { CourseDetails } from "./CourseDetails";
 import { EnterStudentDetails } from "./EnterStudentDetails";
@@ -22,6 +23,7 @@ const BookCoursePage: React.FC<BookCoursePage> = ({ course, levelCourses }) => {
     () => levelCourses.filter((l) => l.id !== course.id),
     [course.id, levelCourses]
   );
+  const [showPaymentForm, setShowPaymentForm] = useState<boolean>(false);
 
   const { user, googleProfile } = useAppSelector(selectUser);
 
@@ -44,7 +46,14 @@ const BookCoursePage: React.FC<BookCoursePage> = ({ course, levelCourses }) => {
           </div>
         </div>
       </div>
-      {user?.details.email && (
+      {!showPaymentForm && (
+        <div className="w-full flex justify-center">
+          <StandardButton onClick={() => setShowPaymentForm(true)}>
+            Book Now
+          </StandardButton>
+        </div>
+      )}
+      {user?.details.email && showPaymentForm && (
         <StripePayment
           amount={course.price * 100}
           course_id={course.id}
