@@ -77,8 +77,8 @@ class ApiAdaptor {
 
   private static getToken(serverSide?: boolean) {
     const token = serverSide
-      ? getTokenFromLocalStorage()
-      : process.env.SERVER_SIDE_TOKEN;
+      ? process.env.SERVER_SIDE_TOKEN
+      : getTokenFromLocalStorage();
     if (!token) {
       throw new MissingTokenError();
     }
@@ -176,6 +176,7 @@ class ApiAdaptor {
   static async createStripePaymentIntent(payload: CreatePaymentIntentPayload) {
     return (await this.callApi(`${ApiEndpoints.paymentCreateIntent}`, "POST", {
       payload,
+      noAuth: true,
     })) as { secret: string };
   }
 
@@ -213,7 +214,8 @@ class ApiAdaptor {
   static async listLevelCourses(levelId: number) {
     return await this.callApi(
       RouteCreator.listLevelCoursesRoute(levelId),
-      "GET"
+      "GET",
+      { noAuth: true }
     );
   }
 
