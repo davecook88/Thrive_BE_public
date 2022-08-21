@@ -14,6 +14,7 @@ import {
   CreateLevelPayload,
   CreateUnitPayload,
 } from "../components/types/level/payloads";
+import { RouteCreator } from "../components/utils/routeConstants";
 
 export interface PaginationParams {
   limit?: number;
@@ -51,10 +52,14 @@ class ApiAdaptor {
       payload?: object;
       token?: string;
       params?: object;
+      serverSide?: boolean;
+      noAuth?: boolean;
     }
   ) {
-    const token = options?.token || getTokenFromLocalStorage();
-    if (!token) {
+    const token = options?.noAuth
+      ? null
+      : options?.token || ApiAdaptor.getToken(options?.serverSide);
+    if (!token && !options?.noAuth) {
       throw new MissingTokenError();
     }
     const res = await ApiAdaptor.client.request({
@@ -68,6 +73,16 @@ class ApiAdaptor {
       params: options?.params,
     });
     return res.data;
+  }
+
+  private static getToken(serverSide?: boolean) {
+    const token = serverSide
+      ? process.env.SERVER_SIDE_TOKEN
+      : getTokenFromLocalStorage();
+    if (!token) {
+      throw new MissingTokenError();
+    }
+    return token;
   }
 
   static async verifyGoogleToken(
@@ -161,12 +176,14 @@ class ApiAdaptor {
   static async createStripePaymentIntent(payload: CreatePaymentIntentPayload) {
     return (await this.callApi(`${ApiEndpoints.paymentCreateIntent}`, "POST", {
       payload,
+      noAuth: true,
     })) as { secret: string };
   }
 
   static async listLevels(params?: PaginationParams) {
     return await this.callApi(`${ApiEndpoints.level}`, "GET", {
       params,
+      noAuth: true,
     });
   }
 
@@ -194,6 +211,14 @@ class ApiAdaptor {
     return await this.callApi(`${ApiEndpoints.level}/${levelId}/units`, "GET");
   }
 
+  static async listLevelCourses(levelId: number) {
+    return await this.callApi(
+      RouteCreator.listLevelCoursesRoute(levelId),
+      "GET",
+      { noAuth: true }
+    );
+  }
+
   static async postUnit(payload?: CreateUnitPayload) {
     return await this.callApi(`${ApiEndpoints.unit}`, "POST", {
       payload,
@@ -210,8 +235,11 @@ class ApiAdaptor {
     return await this.callApi(`${ApiEndpoints.unit}/${unitId}`, "DELETE");
   }
 
-  static async getCourseById(id: number) {
-    return await this.callApi(`${ApiEndpoints.course}/${id}`, "GET");
+  static async getCourseById(id: number, options?: { serverSide?: boolean }) {
+    return await this.callApi(`${ApiEndpoints.course}/${id}`, "GET", {
+      serverSide: options?.serverSide || false,
+      noAuth: true,
+    });
   }
 
   static async listCourses(params?: PaginationParams) {

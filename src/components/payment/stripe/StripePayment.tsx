@@ -6,31 +6,33 @@ import ApiAdaptor from "../../../backend/apiAdaptor";
 import CheckoutForm from "./CheckoutForm";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API as string);
-interface StipePaymentProps {
+interface StripePaymentProps extends CreatePaymentIntentPayload {
   amount: number;
-  coursePackage: string;
 }
-const StripePayment: React.FC<StipePaymentProps> = ({
-  amount,
-  coursePackage,
-}) => {
+
+const StripePayment: React.FC<StripePaymentProps> = (props) => {
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
-    createPaymentIntent({ amount, coursePackage });
+    createPaymentIntent(props);
   }, []);
 
   const createPaymentIntent = async ({
     amount,
-    coursePackage,
-  }: {
-    amount: number;
-    coursePackage: string;
-  }) => {
+    course_id,
+    course_name,
+    user_email,
+    user_google_id,
+    user_id,
+  }: StripePaymentProps) => {
     const payload: CreatePaymentIntentPayload = {
-      amount,
-      course_package: coursePackage,
       currency: "usd",
+      amount,
+      course_id,
+      course_name,
+      user_email,
+      user_google_id,
+      user_id,
     };
     const response = await ApiAdaptor.createStripePaymentIntent(payload);
     setClientSecret(response.secret);
@@ -45,13 +47,8 @@ const StripePayment: React.FC<StipePaymentProps> = ({
     appearance,
   };
 
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-    createPaymentIntent({ amount: 100, coursePackage: "test_payment" });
-  };
-
   return (
-    <div className="w-full">
+    <div className="w-full flex justify-center ">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm />
