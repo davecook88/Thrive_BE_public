@@ -30,6 +30,18 @@ const Navigation = () => {
         <div className="py-2 border-b-2 border-opacity-10 border-gray-100	lg:border-0">
           {auth.user ? <GoogleLogoutButton /> : <GoogleLoginButton />}
         </div>
+        <div className="avatar">
+          {auth.googleProfile?.imageUrl && (
+            <Link href="/user/me">
+              <div className="w-8 mask mask-circle">
+                <img
+                  src={auth.googleProfile?.imageUrl}
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            </Link>
+          )}
+        </div>
 
         <div className="place-self-center py-2 border-gray-100 lg:border-0">
           <Toggle />

@@ -9,6 +9,7 @@ export interface ThriveUser {
     google_id?: string;
     id: string;
     email: string;
+    image_url: string;
   };
   is_teacher: bool;
 }
