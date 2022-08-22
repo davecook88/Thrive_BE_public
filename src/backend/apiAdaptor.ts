@@ -36,6 +36,7 @@ export enum ApiEndpoints {
   level = "/level",
   unit = "/level/unit",
   bookCourse = "/book/course",
+  user = "/user",
 }
 
 export class MissingTokenError extends Error {}
@@ -296,6 +297,10 @@ class ApiAdaptor {
       "GET",
       {}
     )) as ListTeachersResponse[];
+  }
+
+  static async getUserMe() {
+    return await this.callApi(RouteCreator.userMeRoute(), "GET", {});
   }
 }
 

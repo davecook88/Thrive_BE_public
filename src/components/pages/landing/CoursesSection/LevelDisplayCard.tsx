@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { StandardButton } from "../../../styled/Buttons";
 import { CourseMinimal } from "../../../types/course/responses";
 import { LevelResponse } from "../../../types/level/response";
-import { CourseCollapse } from "./CourseCollapse";
+import { CourseCollapse } from "../../../course/CourseCollapse";
 
 interface LevelDisplayCardProps {
   level: LevelResponse;
@@ -70,7 +70,7 @@ const LevelDisplayCard: React.FC<LevelDisplayCardProps> = ({
             <h3 className="p-1 font-extrabold text-xl m-4">Upcoming Courses</h3>
 
             {allCourses.map((c) => (
-              <CourseCollapse course={c} />
+              <CourseCollapse course={c} showBookNowButton={true} />
             ))}
           </div>
         )}

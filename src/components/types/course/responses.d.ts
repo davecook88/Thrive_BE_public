@@ -36,3 +36,21 @@ export interface CourseClassResponse extends CourseClass {
   class_students: ListClassStudentsResponse[];
   class_teachers: ListClassTeachersResponse[];
 }
+
+export interface CourseClassMinimal extends CourseClass {
+  name: string;
+  description?: any;
+  course_id: number;
+  start_time: Date;
+  class_teachers: number[];
+  class_students: number[];
+}
+
+export interface ProfileCourseEntry extends CourseMinimal {
+  description: string;
+  difficulty: number;
+  max_students: number;
+  price: number;
+  unit_id: number;
+  live_classes: LiveClass[];
+}
