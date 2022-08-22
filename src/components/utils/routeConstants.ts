@@ -8,4 +8,8 @@ export class RouteCreator {
   static listLevelCoursesRoute(levelId: number) {
     return `${ApiEndpoints.level}/${levelId}/courses`;
   }
+
+  static userMeRoute() {
+    return `${ApiEndpoints.user}/me`;
+  }
 }

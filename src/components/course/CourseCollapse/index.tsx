@@ -1,26 +1,28 @@
 import clsx from "clsx";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import ApiAdaptor from "../../../../../backend/apiAdaptor";
+import ApiAdaptor from "../../../backend/apiAdaptor";
 import {
   Course,
   CourseClass,
   CourseClassResponse,
   CourseMinimal,
-} from "../../../../types/course/responses";
-import { parseDbTime } from "../../../../utils/dateMethods";
+} from "../../types/course/responses";
+import { parseDbTime } from "../../utils/dateMethods";
 import { BookCourseButton } from "./BookCourseButton";
-import { ClassScheduleTable } from "../../../../course/ClassScheduleTable";
+import { ClassScheduleTable } from "../ClassScheduleTable";
 import { CourseInfoEntry } from "./CourseInfoEntry";
+import { CourseCollapseProps } from "./types";
 
 export const formatCourseDate = (val: string | Date) => {
   const d = val instanceof Date ? val : parseDbTime(val);
   return moment(d).format("dddd d MMMM");
 };
-interface CourseCollapseProps {
-  course: CourseMinimal;
-}
-export const CourseCollapse: React.FC<CourseCollapseProps> = ({ course }) => {
+
+export const CourseCollapse: React.FC<CourseCollapseProps> = ({
+  course,
+  showBookNowButton,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [classes, setClasses] = useState<CourseClassResponse[]>([]);
 
@@ -56,7 +58,7 @@ export const CourseCollapse: React.FC<CourseCollapseProps> = ({ course }) => {
             title="Ends "
             value={formatCourseDate(course.end_time)}
           />
-          <BookCourseButton courseId={course.id} />
+          {showBookNowButton && <BookCourseButton courseId={course.id} />}
         </div>
       </div>
       <div className="collapse-content">

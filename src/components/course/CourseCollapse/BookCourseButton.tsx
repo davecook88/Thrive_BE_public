@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
-import { StandardButton } from "../../../../styled/Buttons";
-import { RouteCreator } from "../../../../utils/routeConstants";
+import { StandardButton } from "../../styled/Buttons";
+import { RouteCreator } from "../../utils/routeConstants";
 
 export const BookCourseButton: React.FC<{ courseId: number }> = ({
   courseId,
@@ -11,7 +11,7 @@ export const BookCourseButton: React.FC<{ courseId: number }> = ({
       className="btn btn-primary p-0.5 min-h-1 text-xs"
       onClick={(e) => {
         e.preventDefault();
-        e.bubbles = false;
+        e.stopPropagation();
       }}
     >
       <Link href={RouteCreator.getBookCourseRoute(courseId)}>
