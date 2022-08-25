@@ -1,4 +1,4 @@
-import { AvailabilityStateEntry } from "./types";
+import { AvailabilityStateEntry } from "../types/calendar/types";
 
 export class DateUtils {
   static isSameDay = (date1: Date, date2: Date) => {
@@ -11,6 +11,6 @@ export class DateUtils {
     compareDate: Date,
     availabilityEntry: AvailabilityStateEntry
   ) =>
-    compareDate.getTime() > availabilityEntry.from.getTime() &&
-    compareDate.getTime() < availabilityEntry.until.getTime();
+    compareDate.getTime() > availabilityEntry.start &&
+    compareDate.getTime() < availabilityEntry.end;
 }

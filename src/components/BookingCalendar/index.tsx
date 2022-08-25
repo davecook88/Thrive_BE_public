@@ -49,9 +49,10 @@ const BookingCalendar = () => {
         status: "unavailable",
         entries: [
           {
+            id: "",
             status: "unavailable",
-            from: toDisableDate,
-            until: disableUntil,
+            start: toDisableDate.getTime(),
+            end: disableUntil.getTime(),
           },
         ],
       })
