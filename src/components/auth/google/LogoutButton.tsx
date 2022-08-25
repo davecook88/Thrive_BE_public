@@ -14,7 +14,7 @@ import { useAppDispatch } from "../../redux/hooks";
 
 const responseIsGoogleLoginResponse = (
   response: GoogleLoginResponse | GoogleLoginResponseOffline
-): response is GoogleLoginResponse => Object.hasOwn(response, "googleId");
+): response is GoogleLoginResponse => "googleId" in response;
 const onSuccessCallback = (
   response: GoogleLoginResponse | GoogleLoginResponseOffline
 ) => {
