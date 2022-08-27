@@ -54,7 +54,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   useEffect(() => {
     if (selectedLevel || !levels?.length) return;
     setLevel(levels[0].id);
-  }, [selectedLevel]);
+  }, [selectedLevel, levels]);
 
   const dispatch = useAppDispatch();
 
@@ -74,7 +74,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
 
   const createCourse = async () => {
     const selectedUnit = selectedLevel?.units.find((l) => l.id == level);
-    if (!selectedUnit) {
+    if (selectedUnit === undefined) {
       displayToast("No unit selected");
       return;
     }
@@ -96,7 +96,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   const updateCourse = async (course: Course) => {
     const selectedUnit = selectedLevel?.units.find((l) => l.id == unit);
 
-    if (!selectedUnit) {
+    if (selectedUnit === undefined) {
       displayToast("No unit selected");
       return;
     }
