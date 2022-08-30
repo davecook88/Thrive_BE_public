@@ -33,6 +33,7 @@ export enum ApiEndpoints {
   course = "/course",
   courseClass = "/course/class",
   teacher = "/teacher",
+  teacherAdmin = "/admin/teacher",
   level = "/level",
   unit = "/level/unit",
   bookCourse = "/book/course",
@@ -71,6 +72,7 @@ class ApiAdaptor {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
+      validateStatus: (status) => true,
       params: options?.params,
     });
     return res.data;
@@ -297,6 +299,12 @@ class ApiAdaptor {
       "GET",
       {}
     )) as ListTeachersResponse[];
+  }
+
+  static async createTeacher(email: string) {
+    return await this.callApi(`${ApiEndpoints.teacherAdmin}/add`, "POST", {
+      payload: { email },
+    });
   }
 
   static async getUserMe() {

@@ -72,13 +72,7 @@ module.exports = {
     },
   },
   variants: {
-    extend: {
-      filter: ["dark"],
-      sepia: ["dark"],
-      grayscale: ["dark"],
-      opacity: ["dark"],
-      "animate-none": ["dark"],
-    },
+    extend: {},
   },
   plugins: [require("daisyui")],
   daisyui: {

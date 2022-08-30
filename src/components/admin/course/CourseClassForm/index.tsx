@@ -93,7 +93,7 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
 
   const courseTeachers: ListCourseTeachersResponse[] = course.course_teachers;
   const selectTeacher = (val: string | number) => {
-    const selectedTeacher = courseTeachers.find((t) => t.teacher_id == val);
+    const selectedTeacher = courseTeachers.find((t) => t.user_id == val);
     if (!selectedTeacher) return;
     setSelectedTeacher(selectedTeacher);
   };
@@ -147,7 +147,6 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
   };
 
   const createClass = async (payload: CreateCourseClassPayload) => {
-    debugger;
     const _repeatTimes = repeatClass ? repeatTimes : 1;
     for (let i = 1; i <= _repeatTimes; i++) {
       const _payload =
