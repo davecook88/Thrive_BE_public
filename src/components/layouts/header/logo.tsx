@@ -6,16 +6,11 @@ const Logo = () => {
   return (
     <div className="flex justify-between align-middle w-max">
       <div className="h-10 w-1/6 relative" id="logo-holder">
-        <Image
-          src="/karen1.webp"
-          layout={"fill"}
-          className="cursor-pointer"
-          style={{ objectFit: "contain" }}
-        />
+        <img className="h-10" src="/svg/thrive_circle.svg" alt="edit" />
       </div>
 
       <Link href="/">
-        <h3 className="text-primary cursor-pointer md:text-2xl font-extrabold self-center w-72 md:w-96 ">
+        <h3 className="text-primary cursor-pointer md:text-2xl self-center w-max whitespace-nowrap	px-2 ">
           Thrive In Spanish
         </h3>
       </Link>
