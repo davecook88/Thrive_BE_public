@@ -7,7 +7,7 @@ const Header = () => {
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState<boolean>(false);
 
   return (
-    <section className="header bg-base-100 fixed w-full shadow z-50 top-0">
+    <section className="header bg-base-100 fixed w-full shadow-sm z-50 top-0">
       <div className="container mx-auto ">
         <div className="flex flex-wrap items-center justify-between py-4 mx-auto gap-4">
           <div className="flex-none z-10	">
@@ -18,7 +18,7 @@ const Header = () => {
             className="flex-none  gap-4 lg:hidden"
             onClick={() => setMobileMenuIsOpen(!mobileMenuIsOpen)}
           >
-            <NavIcon />
+            <NavIcon color="#ff4b00" />
           </div>
 
           <div

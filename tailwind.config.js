@@ -72,20 +72,14 @@ module.exports = {
     },
   },
   variants: {
-    extend: {
-      filter: ["dark"],
-      sepia: ["dark"],
-      grayscale: ["dark"],
-      opacity: ["dark"],
-      "animate-none": ["dark"],
-    },
+    extend: {},
   },
   plugins: [require("daisyui")],
   daisyui: {
     themes: [
       {
         lakarencita: {
-          primary: "#c1531b",
+          primary: "#ff4b00",
           secondary: "#d8ae2d",
           accent: "#0283cb",
           neutral: "#1E2529",

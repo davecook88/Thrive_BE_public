@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import "../../styles/globals.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+config.autoAddCss = false;
 import type { AppProps } from "next/app";
 import Header from "../components/layouts/header/header";
 import Footer from "../components/layouts/Footer/footer";
