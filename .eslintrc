@@ -1,6 +1,3 @@
-// 20220616121813
-// https://raw.githubusercontent.com/turnhq/ready_landing/development/.eslintrc.json?token=GHSAT0AAAAAABU7TKIEVQC2PQGO47H4RUY6YVLOPSA
-
 {
   "env": {
     "browser": true,
@@ -11,8 +8,7 @@
   "extends": [
     "eslint:recommended",
     "next/core-web-vitals",
-    "plugin:react/recommended",
-    "@turnai/turn-frontend"
+    "plugin:react/recommended"
   ],
   "plugins": ["react"],
   "rules": {},
