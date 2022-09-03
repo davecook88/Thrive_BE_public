@@ -1,8 +1,6 @@
 import React from "react";
-import BookingCalendar from "../../../BookingCalendar";
 import { useAppSelector } from "../../../redux/hooks";
 import { selectAvailability } from "../../../redux/reducers/calendar/availabilitySlice";
-import BigBookingCalendar from "../../../scheduling/BigBookingCalendar";
 import { TeacherCard } from "../../../user/teacher/TeacherCard";
 import { TeacherBookingCalendar } from "./TeacherBookingCalendar";
 import { TeacherProfilePageProps } from "./types";

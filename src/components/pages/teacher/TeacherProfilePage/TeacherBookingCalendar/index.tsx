@@ -24,6 +24,7 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
 
   const onSelectEvent = (event: AvailabilityCalendarEvent) => {
     console.log(event);
+    setModalOpen(true);
   };
 
   const onDisplayedDatesUpdate = (displayedDates: DisplayDatesType) => {
@@ -47,6 +48,7 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
         className="w-max h-max p-4 bg-white m-auto mt-24 border-4 border-solid border-slate-400"
       >
         <div>BOOK A CLASS</div>
+        <div></div>
       </Modal>
     </div>
   );
