@@ -2,8 +2,12 @@ import { User } from "../user/responses";
 
 export interface ListTeachersResponse extends User {
   id: number;
+  name: string;
   course_id: number;
   email: string;
+  subtitle?: string;
+  photo_url?: string;
+  description?: string;
 }
 
 export interface ListCourseTeachersResponse extends ListTeachersResponse {
