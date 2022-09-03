@@ -1,4 +1,4 @@
 export type TeacherBookingCalendarProps = {
-  availability: AvailabilityState;
+  availabilityEntries: AvailabilityStateEntry[];
   teacherId: number;
 };

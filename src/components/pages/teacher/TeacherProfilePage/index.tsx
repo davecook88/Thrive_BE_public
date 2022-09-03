@@ -9,7 +9,7 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
   teacher,
 }) => {
   const availability = useAppSelector(selectAvailability);
-
+  if (!availability) return null;
   return (
     <section className="container">
       <div>
@@ -17,7 +17,7 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
       </div>
       <section>
         <TeacherBookingCalendar
-          availability={availability}
+          availabilityEntries={availability.available}
           teacherId={teacher.id}
         />
       </section>

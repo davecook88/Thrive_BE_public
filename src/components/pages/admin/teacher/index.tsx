@@ -1,27 +1,28 @@
 import React, { useState } from "react";
 import { View } from "react-big-calendar";
-import CalendarMenu from "../../../../calendar/CalendarMenu";
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import CalendarMenu from "../../../calendar/CalendarMenu";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import {
   fetchAvailabilityAsync,
   selectAvailability,
-} from "../../../../redux/reducers/calendar/availabilitySlice";
-import EditAvailabilityForm from "../../../../scheduling/availability/edit";
-import { AvailabilityAsEvent } from "../../../../scheduling/BigBookingCalendar/events/eventPropGetters";
-import { StandardButton } from "../../../../styled/Buttons";
+} from "../../../redux/reducers/calendar/availabilitySlice";
+import EditAvailabilityForm from "../../../scheduling/availability/edit";
+import { AvailabilityAsEvent } from "../../../scheduling/BigBookingCalendar/events/eventPropGetters";
+import { StandardButton } from "../../../styled/Buttons";
 import {
   AvailabilityStateEntry,
   BookingStatus,
-} from "../../../../types/calendar/types";
+} from "../../../types/calendar/types";
 import Modal from "react-modal";
 
 import {
   AvailabilityCalendarEvent,
   DisplayDatesType,
-} from "../../../../scheduling/BigBookingCalendar/types";
-import BigBookingCalendar from "../../../../scheduling/BigBookingCalendar";
-import { getDefaultDisplayDates } from "../../../../scheduling/BigBookingCalendar/utils";
-import EditAvailabilityEventModal from "./EditAvailabilityEventModel";
+} from "../../../scheduling/BigBookingCalendar/types";
+import BigBookingCalendar from "../../../scheduling/BigBookingCalendar";
+import { getDefaultDisplayDates } from "../../../scheduling/BigBookingCalendar/utils";
+import EditAvailabilityEventModal from "./TeacherAvailabilitySettings/EditAvailabilityEventModel";
+import { SelectCalendarEventTypeDropdown } from "./SelectCalendarEventTypeDropdown";
 
 interface TeacherAvailabilitySettingsProps {
   height?: string;
@@ -38,6 +39,8 @@ export const TeacherAvailabilitySettings: React.FC<
   const [selectedEvent, setSelectedEvent] = useState<
     AvailabilityCalendarEvent | undefined
   >();
+  const [displayEventType, setDisplayEventType] =
+    useState<BookingStatus>("available");
   const availability = useAppSelector(selectAvailability);
   const dispatch = useAppDispatch();
   const onDisplayedDatesUpdate = (displayedDates: DisplayDatesType) => {
@@ -71,11 +74,6 @@ export const TeacherAvailabilitySettings: React.FC<
       id: entry.id,
     });
 
-  const displayBackgroundEvents = () => {
-    if (view === "month") return [];
-    return availability.available.map(formatEvents("available"));
-  };
-
   const addAvailability = () => {
     // setSelectedEvent(undefined);
     setEditModalOpen(true);
@@ -89,6 +87,10 @@ export const TeacherAvailabilitySettings: React.FC<
     <div>
       {displayAvailabilityForm && <EditAvailabilityForm />}
       <CalendarMenu>
+        <SelectCalendarEventTypeDropdown
+          onEventTypeChange={setDisplayEventType}
+          selectedEventType={displayEventType}
+        />
         <StandardButton onClick={addAvailability}>
           Add Availability
         </StandardButton>
@@ -101,7 +103,7 @@ export const TeacherAvailabilitySettings: React.FC<
         </StandardButton>
       </CalendarMenu>
       <BigBookingCalendar
-        availability={availability}
+        availabilityEntries={availability[displayEventType]}
         onDisplayedDatesUpdate={onDisplayedDatesUpdate}
         onSelectEvent={onSelectEvent}
         height={height}

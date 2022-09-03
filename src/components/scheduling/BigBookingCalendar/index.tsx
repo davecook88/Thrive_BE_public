@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer, View } from "react-big-calendar";
 import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import { AvailabilityStateEntry } from "../../types/calendar/types";
-import { AvailabilityAsEvent } from "./events/eventPropGetters";
 
-import {
-  AvailabilityCalendarEvent,
-  BigBookingCalendarProps,
-  DisplayDatesType,
-} from "./types";
-import { getDefaultDisplayDates } from "./utils";
+import { AvailabilityCalendarEvent, BigBookingCalendarProps } from "./types";
+import { CustomToolbar } from "./CustomToolbar";
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
 const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
   height,
   defaultView = "week",
-  availability,
+  availabilityEntries,
   onDisplayedDatesUpdate,
   onSelectEvent,
   displayedDates,
   setDisplayedDates,
+  eventPropGetter,
 }) => {
   const [view, setView] = useState<View>(defaultView);
 
@@ -28,15 +23,15 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
     onDisplayedDatesUpdate(displayedDates);
   }, [displayedDates]);
 
-  const formatEvents =
-    (title?: string) =>
-    (entry: AvailabilityStateEntry): AvailabilityCalendarEvent => ({
-      title: entry?.title || title || "",
-      start: new Date(entry.start),
-      end: new Date(entry.end),
-      status: entry.status,
-      id: entry.id,
-    });
+  const formatEvents = (
+    entry: AvailabilityStateEntry
+  ): AvailabilityCalendarEvent => ({
+    title: entry?.title || "",
+    start: new Date(entry.start),
+    end: new Date(entry.end),
+    status: entry.status,
+    id: entry.id,
+  });
 
   const createStyleMap = () => {
     const styleObj: { [statusName: string]: React.CSSProperties } = {
@@ -53,7 +48,7 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
 
   const displayBackgroundEvents = () => {
     if (view === "month") return [];
-    return availability.available.map(formatEvents("available"));
+    return availabilityEntries.map(formatEvents);
   };
 
   const calendarRangeChangeHandler = (
@@ -73,17 +68,15 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
   };
 
   const displayEvents = () => {
-    const availabileSlots = availability.available.map(
-      formatEvents("available")
-    );
-    const bookedSlots = availability.booked.map(formatEvents());
-    if (view !== "month") return bookedSlots;
-    return [...bookedSlots, ...availabileSlots];
+    return availabilityEntries.map(formatEvents);
   };
 
   return (
     <div style={{ height }}>
       <Calendar
+        components={{
+          toolbar: CustomToolbar,
+        }}
         backgroundEvents={displayBackgroundEvents()}
         scrollToTime={new Date()}
         showMultiDayTimes
@@ -91,7 +84,7 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
         localizer={localizer}
         onView={onViewChange}
         events={displayEvents()}
-        eventPropGetter={AvailabilityAsEvent.getStyle(createStyleMap())}
+        eventPropGetter={eventPropGetter}
         startAccessor="start"
         endAccessor="end"
         onSelectEvent={onSelectEvent}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-big-calendar";
+import { EventPropGetter, View } from "react-big-calendar";
 import { useAppDispatch } from "../../../../redux/hooks";
 import BigBookingCalendar from "../../../../scheduling/BigBookingCalendar";
 import {
@@ -12,7 +12,7 @@ import { fetchAvailabilityAsync } from "../../../../redux/reducers/calendar/avai
 import { TeacherBookingCalendarProps } from "./types";
 
 export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
-  availability,
+  availabilityEntries,
   teacherId,
 }) => {
   const [view, setView] = useState<View>("month");
@@ -31,16 +31,28 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
     dispatch(fetchAvailabilityAsync({ teacherId, ...displayedDates }));
   };
 
+  const eventPropGetter: EventPropGetter<AvailabilityCalendarEvent> = (
+    event
+  ) => {
+    return {
+      className: "bg-primary",
+      style: {
+        border: "none",
+      },
+    };
+  };
+
   return (
     <div>
       <BigBookingCalendar
-        availability={availability}
+        availabilityEntries={availabilityEntries}
         onDisplayedDatesUpdate={onDisplayedDatesUpdate}
         onSelectEvent={onSelectEvent}
         height="600px"
         defaultView="month"
         displayedDates={displayedDates}
         setDisplayedDates={setDisplayedDates}
+        eventPropGetter={eventPropGetter}
       />
       <Modal
         isOpen={modalOpen}
