@@ -293,12 +293,10 @@ class ApiAdaptor {
     );
   }
 
-  static async listTeachers() {
-    return (await this.callApi(
-      ApiEndpoints.teacher,
-      "GET",
-      {}
-    )) as ListTeachersResponse[];
+  static async listTeachers(options?: { serverSide?: boolean }) {
+    return (await this.callApi(ApiEndpoints.teacher, "GET", {
+      serverSide: options?.serverSide,
+    })) as ListTeachersResponse[];
   }
 
   static async createTeacher(email: string) {
