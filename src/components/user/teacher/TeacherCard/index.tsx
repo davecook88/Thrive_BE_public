@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React from "react";
 import tw from "tailwind-styled-components";
 import { StandardButton } from "../../../styled/Buttons";
@@ -11,6 +12,12 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
   teacher,
   showScheduleButton = true,
 }) => {
+  const router = useRouter();
+
+  const redirectToTeacherPage = () => {
+    router.push(`/teacher/${teacher.id}`);
+  };
+
   return (
     <article className="rounded-sm shadow-sm p-6 border border-primary m-2 text-left relative flex flex-col justify-between">
       <div>
@@ -37,7 +44,13 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
       </div>
       {showScheduleButton && (
         <div className="flex p-4 justify-center">
-          <StandardButton className="p-1 px-2 btn-primary">
+          <StandardButton
+            onClick={(e: { preventDefault: () => void }) => {
+              e.preventDefault();
+              redirectToTeacherPage();
+            }}
+            className="p-1 px-2 btn-primary"
+          >
             See my schedule
           </StandardButton>
         </div>

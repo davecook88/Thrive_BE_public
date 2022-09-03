@@ -299,6 +299,15 @@ class ApiAdaptor {
     })) as ListTeachersResponse[];
   }
 
+  static async getTeacherById(
+    teacherId: number,
+    options?: { serverSide?: boolean }
+  ) {
+    return (await this.callApi(`${ApiEndpoints.teacher}/${teacherId}`, "GET", {
+      serverSide: options?.serverSide,
+    })) as ListTeachersResponse[];
+  }
+
   static async createTeacher(email: string) {
     return await this.callApi(`${ApiEndpoints.teacherAdmin}/add`, "POST", {
       payload: { email },

@@ -18,7 +18,7 @@ function Thrive({ Component, pageProps }: AppProps) {
         <Toast />
         <Header />
 
-        <section className={"bg-base-100 mt-20"}>
+        <section className={"bg-base-100 mt-20 min-h-screen"}>
           <Component {...pageProps} />
         </section>
 
