@@ -1,42 +1,15 @@
 import moment from "moment";
 import React, { useState } from "react";
-
-import { AvailabilityCalendarEvent, CreateAvailabilityCalendarEvent } from "..";
-import { StandardButton } from "../../../styled/Buttons";
+import ApiAdaptor from "../../../../../../backend/apiAdaptor";
+import { useAppDispatch } from "../../../../../redux/hooks";
+import { resetEditAvailabilityState } from "../../../../../redux/reducers/calendar/editAvailabilitySlice";
 import {
-  AvailabilityStateEntry,
-  BookingStatus,
-} from "../../../types/calendar/types";
-import { v4 as uuidv4 } from "uuid";
-import { useAppDispatch } from "../../../redux/hooks";
-import { fetchAvailabilityAsync } from "../../../redux/reducers/calendar/availabilitySlice";
-import ApiAdaptor from "../../../../backend/apiAdaptor";
-import { resetEditAvailabilityState } from "../../../redux/reducers/calendar/editAvailabilitySlice";
-
-interface EditAvailabilityEventModalProps {
-  eventDetails?: AvailabilityCalendarEvent;
-  checkOverlap: (
-    type: BookingStatus,
-    details: {
-      start: Date;
-      end: Date;
-    }
-  ) => AvailabilityStateEntry[];
-  refreshAvailability: () => void;
-  close: () => void;
-}
-
-export const eventHasAllDetails = (
-  event: AvailabilityCalendarEvent
-): event is CreateAvailabilityCalendarEvent => {
-  if (!event.start) {
-    return false;
-  }
-  if (!event.end) {
-    return false;
-  }
-  return true;
-};
+  AvailabilityCalendarEvent,
+  CreateAvailabilityCalendarEvent,
+} from "../../../../../scheduling/BigBookingCalendar/types";
+import { StandardButton } from "../../../../../styled/Buttons";
+import { EditAvailabilityEventModalProps } from "./types";
+import { eventHasAllDetails } from "./utils";
 
 const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
   checkOverlap,
@@ -208,3 +181,6 @@ const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
   );
 };
 export default EditAvailabilityEventModal;
+function uuidv4(): string {
+  throw new Error("Function not implemented.");
+}

@@ -62,7 +62,6 @@ const BookingCalendar = () => {
   return (
     <div>
       <h2>Booking Calendar</h2>
-      <button onClick={disableDate}>Test</button>
       <Calendar tileDisabled={tileDisabled} tileClassName={tileClassNames} />
     </div>
   );
