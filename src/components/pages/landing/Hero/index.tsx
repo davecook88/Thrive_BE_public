@@ -1,6 +1,6 @@
-import React from 'react';
-import Image from 'next/image';
-import tw from 'tailwind-styled-components';
+import React from "react";
+import Image from "next/image";
+import tw from "tailwind-styled-components";
 
 const HeroContainer = tw.div`
     flex
