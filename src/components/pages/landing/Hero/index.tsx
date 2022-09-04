@@ -1,10 +1,11 @@
-import React from "react";
-import Image from "next/image";
-import tw from "tailwind-styled-components";
+import React from 'react';
+import Image from 'next/image';
+import tw from 'tailwind-styled-components';
 
 const HeroContainer = tw.div`
     flex
     md:justify-around
+    p-5
 `;
 
 const ImageContainer = tw.div`
@@ -24,12 +25,14 @@ const HeroText = tw.div`
 `;
 
 const HeroTitle = tw.h1`
-text-3xl
 whitespace-nowrap
+text-2xl
+md:text-3xl
 `;
 
 const HeroTitleUpper = tw(HeroTitle)`
-
+text-xl
+md:text-3xl
 `;
 const HeroTitleLower = tw(HeroTitle)`
     text-primary
