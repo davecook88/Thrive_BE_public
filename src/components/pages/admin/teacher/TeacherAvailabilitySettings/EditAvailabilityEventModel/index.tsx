@@ -10,6 +10,7 @@ import {
 import { StandardButton } from "../../../../../styled/Buttons";
 import { EditAvailabilityEventModalProps } from "./types";
 import { eventHasAllDetails } from "./utils";
+import { v4 as uuidv4 } from "uuid";
 
 const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
   checkOverlap,
@@ -181,6 +182,3 @@ const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
   );
 };
 export default EditAvailabilityEventModal;
-function uuidv4(): string {
-  throw new Error("Function not implemented.");
-}

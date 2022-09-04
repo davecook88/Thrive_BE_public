@@ -10,10 +10,13 @@ import { getDefaultDisplayDates } from "../../../../scheduling/BigBookingCalenda
 import Modal from "react-modal";
 import { fetchAvailabilityAsync } from "../../../../redux/reducers/calendar/availabilitySlice";
 import { TeacherBookingCalendarProps } from "./types";
+import { AvailabilityStateEntry } from "../../../../types/calendar/types";
+import { splitAvailabilitySlots } from "./utils";
 
 export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
   availabilityEntries,
   teacherId,
+  classLength,
 }) => {
   const [view, setView] = useState<View>("month");
   const dispatch = useAppDispatch();
@@ -45,7 +48,10 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
   return (
     <div>
       <BigBookingCalendar
-        availabilityEntries={availabilityEntries}
+        availabilityEntries={splitAvailabilitySlots(
+          availabilityEntries,
+          classLength
+        )}
         onDisplayedDatesUpdate={onDisplayedDatesUpdate}
         onSelectEvent={onSelectEvent}
         height="600px"
