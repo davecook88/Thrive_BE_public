@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { EventPropGetter, View } from "react-big-calendar";
-import { useAppDispatch } from "../../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import BigBookingCalendar from "../../../../scheduling/BigBookingCalendar";
 import {
   AvailabilityCalendarEvent,
@@ -12,21 +12,27 @@ import { fetchAvailabilityAsync } from "../../../../redux/reducers/calendar/avai
 import { TeacherBookingCalendarProps } from "./types";
 import { AvailabilityStateEntry } from "../../../../types/calendar/types";
 import { splitAvailabilitySlots } from "./utils";
+import { TeacherBookClassModal } from "../TeacherBookClassModal";
+import { selectTeacherProfilePageState } from "../TeacherProfilePageSlice/slice";
 
 export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
   availabilityEntries,
   teacherId,
   classLength,
 }) => {
+  const teacherProfileState = useAppSelector(selectTeacherProfilePageState);
   const [view, setView] = useState<View>("month");
   const dispatch = useAppDispatch();
   const [displayedDates, setDisplayedDates] = useState<DisplayDatesType>(
     getDefaultDisplayDates()
   );
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [selectedAvailabilitySlot, setSelectedAvailabilitySlot] = useState<
+    AvailabilityCalendarEvent | undefined
+  >();
 
   const onSelectEvent = (event: AvailabilityCalendarEvent) => {
-    console.log(event);
+    setSelectedAvailabilitySlot(event);
     setModalOpen(true);
   };
 
@@ -44,7 +50,7 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
       },
     };
   };
-
+  if (!teacherProfileState.teacher) return <div>No teacher selected</div>;
   return (
     <div>
       <BigBookingCalendar
@@ -65,8 +71,10 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
         onRequestClose={() => setModalOpen(false)}
         className="w-max h-max p-4 bg-white m-auto mt-24 border-4 border-solid border-slate-400"
       >
-        <div>BOOK A CLASS</div>
-        <div></div>
+        <TeacherBookClassModal
+          teacher={teacherProfileState.teacher}
+          availabilitySlot={selectedAvailabilitySlot}
+        />
       </Modal>
     </div>
   );

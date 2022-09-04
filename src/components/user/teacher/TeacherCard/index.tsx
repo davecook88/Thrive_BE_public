@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import tw from "tailwind-styled-components";
 import { StandardButton } from "../../../styled/Buttons";
+import { TeacherAvatar } from "../TeacherAvatar";
 import { TeacherCardProps } from "./types";
 
 const TeacherHeader = tw.header`
@@ -22,11 +23,7 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
     <article className="rounded-sm shadow-sm p-6 border border-primary m-2 text-left relative flex flex-col justify-between">
       <div>
         <TeacherHeader>
-          <div className="avatar">
-            <div className="w-24 h-24 rounded">
-              <img src={teacher.photo_url} />
-            </div>
-          </div>
+          <TeacherAvatar imageUrl={teacher.photo_url} />
           <div className="p-4 w-full">
             <div className="my-1">
               <h5 className="font-extrabold text-2xl">

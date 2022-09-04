@@ -4,6 +4,7 @@ import editAvailabilityConfigReducer from "./reducers/calendar/editAvailabilityS
 import userReducer from "../../auth/userSlice";
 import toastReducer from "../common/alerts/toastSlice";
 import adminReducer from "../admin/adminSlice";
+import teacherProfilePageReducer from "../pages/teacher/TeacherProfilePage/TeacherProfilePageSlice/slice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     user: userReducer,
     toast: toastReducer,
     admin: adminReducer,
+    teacherProfilePage: teacherProfilePageReducer,
   },
 });
 
