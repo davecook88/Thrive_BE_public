@@ -1,6 +1,6 @@
 import React from "react";
 import { EventPropGetter, Event } from "react-big-calendar";
-import { AvailabilityCalendarEvent } from "..";
+import { AvailabilityCalendarEvent } from "../types";
 
 type StyleMap = Map<string, React.CSSProperties>;
 

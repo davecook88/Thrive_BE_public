@@ -10,13 +10,13 @@ import {
 } from "../../../styled/Form";
 import { Course } from "../../../types/course/responses";
 import { ListTeachersResponse } from "../../../types/teacher/responses";
-import Dropdown from "./Dropdown";
 import InputSlider from "./InputSlider";
 import SelectedList from "./SelectedList";
 import { useAppDispatch } from "../../../redux/hooks";
 import { setSelectedCourse, setSelectedLevel } from "../../adminSlice";
 import { LevelResponse } from "../../../types/level/response";
 import Link from "next/link";
+import Dropdown from "../../../common/forms/Dropdown";
 
 interface CourseFormProps {
   course?: Course;

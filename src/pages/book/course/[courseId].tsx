@@ -1,5 +1,5 @@
 import React from "react";
-import { GetServerSideProps, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import ApiAdaptor from "../../../backend/apiAdaptor";
 import { Course } from "../../../components/types/course/responses";
 import BookCoursePage from "../../../components/pages/booking/course/BookCoursePage";

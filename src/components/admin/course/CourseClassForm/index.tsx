@@ -7,7 +7,6 @@ import {
 import { Course, CourseClassResponse } from "../../../types/course/responses";
 import { ListCourseTeachersResponse } from "../../../types/teacher/responses";
 import DateTimePicker from "./DateTimePicker";
-import Dropdown from "../CourseForm/Dropdown";
 import SelectedList from "../CourseForm/SelectedList";
 import { StandardButton } from "../../../styled/Buttons";
 import {
@@ -15,13 +14,13 @@ import {
   UpdateCourseClassPayload,
 } from "../../../types/course/payloads";
 import ApiAdaptor from "../../../../backend/apiAdaptor";
-import { Toast } from "../../../common/alerts/toast";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch } from "../../../redux/hooks";
 import { showToast } from "../../../common/alerts/toastSlice";
 import AdminFormErrors from "../../AdminFormErrors";
 import { addError, clearErrors } from "../../adminSlice";
 import { RepeatMenu } from "./RepeatMenu";
 import moment from "moment";
+import Dropdown from "../../../common/forms/Dropdown";
 
 interface CourseClassFormProps {
   courseClass?: CourseClassResponse;

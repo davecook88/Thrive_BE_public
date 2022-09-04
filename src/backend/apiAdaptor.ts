@@ -1,4 +1,3 @@
-import { CreateAvailabilityCalendarEvent } from "../components/scheduling/BigBookingCalendar";
 import { AvailabilityState } from "../components/types/calendar/types";
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../auth/utils";
@@ -15,6 +14,7 @@ import {
   CreateUnitPayload,
 } from "../components/types/level/payloads";
 import { RouteCreator } from "../components/utils/routeConstants";
+import { CreateAvailabilityCalendarEvent } from "../components/scheduling/BigBookingCalendar/types";
 
 export interface PaginationParams {
   limit?: number;
@@ -109,13 +109,14 @@ class ApiAdaptor {
   }
 
   static async getAvailability(
+    teacherId: number,
     fromDate: Date,
     untilDate: Date,
     limit: number = 100,
     page: number = 1
   ) {
     const response: BaseAPIAvailability[] = await this.callApi(
-      ApiEndpoints.teacherAvailability,
+      `${ApiEndpoints.teacherAvailability}/${teacherId}`,
       "GET",
       {
         params: {
@@ -293,12 +294,19 @@ class ApiAdaptor {
     );
   }
 
-  static async listTeachers() {
-    return (await this.callApi(
-      ApiEndpoints.teacher,
-      "GET",
-      {}
-    )) as ListTeachersResponse[];
+  static async listTeachers(options?: { serverSide?: boolean }) {
+    return (await this.callApi(ApiEndpoints.teacher, "GET", {
+      serverSide: options?.serverSide,
+    })) as ListTeachersResponse[];
+  }
+
+  static async getTeacherById(
+    teacherId: number,
+    options?: { serverSide?: boolean }
+  ) {
+    return (await this.callApi(`${ApiEndpoints.teacher}/${teacherId}`, "GET", {
+      serverSide: options?.serverSide,
+    })) as ListTeachersResponse[];
   }
 
   static async createTeacher(email: string) {

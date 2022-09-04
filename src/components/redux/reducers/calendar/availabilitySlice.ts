@@ -23,10 +23,11 @@ const initialState: AvailabilityState = {
 
 export const fetchAvailabilityAsync = createAsyncThunk(
   "availability/fetchAvailability",
-  async (dateRange: { start: Date; end: Date }) => {
+  async (action: { teacherId: number; start: Date; end: Date }) => {
     const response = await ApiAdaptor.getAvailability(
-      dateRange.start,
-      dateRange.end
+      action.teacherId,
+      action.start,
+      action.end
     );
     // The value we return becomes the `fulfilled` action payload
     return response;

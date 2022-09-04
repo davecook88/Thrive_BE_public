@@ -1,86 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  fetchAvailabilityAsync,
-  selectAvailability,
-} from "../../redux/reducers/calendar/availabilitySlice";
-
-import { Calendar, Event, momentLocalizer, View } from "react-big-calendar";
+import { Calendar, momentLocalizer, View } from "react-big-calendar";
 import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import {
-  AvailabilityStateEntry,
-  BookingStatus,
-} from "../../types/calendar/types";
-import { AvailabilityAsEvent } from "./events/eventPropGetters";
-import EditAvailabilityEventModal from "./events/EditAvailabilityEventModel";
-import Modal from "react-modal";
-import CalendarMenu from "../../calendar/CalendarMenu";
-import { StandardButton } from "../../styled/Buttons";
-import EditAvailabilityForm from "../availability/edit";
+import { AvailabilityStateEntry } from "../../types/calendar/types";
+
+import { AvailabilityCalendarEvent, BigBookingCalendarProps } from "./types";
+import { CustomToolbar } from "./CustomToolbar";
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
-
-interface BigBookingCalendarProps {
-  height: string;
-  defaultView: View;
-}
-
-export interface AvailabilityCalendarEvent extends Event {
-  id: string;
-  status: string;
-  title: string;
-}
-
-export interface CreateAvailabilityCalendarEvent
-  extends AvailabilityCalendarEvent {
-  start: Date;
-  end: Date;
-}
 
 const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
   height,
   defaultView = "week",
+  availabilityEntries,
+  onDisplayedDatesUpdate,
+  onSelectEvent,
+  displayedDates,
+  setDisplayedDates,
+  eventPropGetter,
 }) => {
-  const [displayedDates, setDisplayedDates] = useState<{
-    start: Date;
-    end: Date;
-  }>({
-    start: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000),
-    end: new Date(new Date().getTime() + 28 * 24 * 60 * 60 * 1000),
-  });
   const [view, setView] = useState<View>(defaultView);
-  const [displayAvailabilityForm, setDisplayAvailabilityForm] =
-    useState<boolean>(false);
-  const [editModelOpen, setEditModalOpen] = useState<boolean>(false);
-  const [selectedEvent, setSelectedEvent] = useState<
-    AvailabilityCalendarEvent | undefined
-  >();
-  const availability = useAppSelector(selectAvailability);
-  const dispatch = useAppDispatch();
+
   useEffect(() => {
-    dispatch(fetchAvailabilityAsync(displayedDates));
+    onDisplayedDatesUpdate(displayedDates);
   }, [displayedDates]);
 
-  const checkOverlap = (
-    type: BookingStatus,
-    details: { start: Date; end: Date }
-  ) => {
-    return availability[type].filter(
-      (event) =>
-        event.start > details.start.getTime() &&
-        event.end < details.end.getTime()
-    );
-  };
-
-  const formatEvents =
-    (title?: string) =>
-    (entry: AvailabilityStateEntry): AvailabilityCalendarEvent => ({
-      title: entry?.title || title || "",
-      start: new Date(entry.start),
-      end: new Date(entry.end),
-      status: entry.status,
-      id: entry.id,
-    });
+  const formatEvents = (
+    entry: AvailabilityStateEntry
+  ): AvailabilityCalendarEvent => ({
+    title: entry?.title || "",
+    start: new Date(entry.start),
+    end: new Date(entry.end),
+    status: entry.status,
+    id: entry.id,
+  });
 
   const createStyleMap = () => {
     const styleObj: { [statusName: string]: React.CSSProperties } = {
@@ -97,7 +48,7 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
 
   const displayBackgroundEvents = () => {
     if (view === "month") return [];
-    return availability.available.map(formatEvents("available"));
+    return availabilityEntries.map(formatEvents);
   };
 
   const calendarRangeChangeHandler = (
@@ -117,69 +68,28 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
   };
 
   const displayEvents = () => {
-    const availabileSlots = availability.available.map(
-      formatEvents("available")
-    );
-    const bookedSlots = availability.booked.map(formatEvents());
-    if (view !== "month") return bookedSlots;
-    return [...bookedSlots, ...availabileSlots];
-  };
-
-  const addAvailability = () => {
-    setSelectedEvent(undefined);
-    setEditModalOpen(true);
+    return availabilityEntries.map(formatEvents);
   };
 
   return (
-    <div>
-      {displayAvailabilityForm && <EditAvailabilityForm />}
-      <CalendarMenu>
-        <StandardButton onClick={addAvailability}>
-          Add Availability
-        </StandardButton>
-        <StandardButton
-          onClick={() => setDisplayAvailabilityForm(!displayAvailabilityForm)}
-        >
-          {displayAvailabilityForm
-            ? "Hide Availability Schedule"
-            : "Set Availability Schedule"}
-        </StandardButton>
-      </CalendarMenu>
-      <div style={{ height }}>
-        <Calendar
-          backgroundEvents={displayBackgroundEvents()}
-          scrollToTime={new Date()}
-          showMultiDayTimes
-          defaultView="week"
-          localizer={localizer}
-          onView={onViewChange}
-          events={displayEvents()}
-          eventPropGetter={AvailabilityAsEvent.getStyle(createStyleMap())}
-          startAccessor="start"
-          endAccessor="end"
-          onSelectEvent={(event) => {
-            setSelectedEvent(event);
-            setEditModalOpen(true);
-          }}
-          onRangeChange={(dateRange) => calendarRangeChangeHandler(dateRange)}
-        />
-      </div>
-      <Modal
-        isOpen={editModelOpen}
-        onRequestClose={() => setEditModalOpen(false)}
-        className="w-max h-max p-4 bg-white m-auto mt-6 border-4 border-solid border-slate-400"
-      >
-        {
-          <EditAvailabilityEventModal
-            eventDetails={selectedEvent}
-            checkOverlap={checkOverlap}
-            refreshAvailability={() =>
-              dispatch(fetchAvailabilityAsync(displayedDates))
-            }
-            close={() => setEditModalOpen(false)}
-          />
-        }
-      </Modal>
+    <div style={{ height }}>
+      <Calendar
+        components={{
+          toolbar: CustomToolbar,
+        }}
+        backgroundEvents={displayBackgroundEvents()}
+        scrollToTime={new Date()}
+        showMultiDayTimes
+        defaultView="week"
+        localizer={localizer}
+        onView={onViewChange}
+        events={displayEvents()}
+        eventPropGetter={eventPropGetter}
+        startAccessor="start"
+        endAccessor="end"
+        onSelectEvent={onSelectEvent}
+        onRangeChange={(dateRange) => calendarRangeChangeHandler(dateRange)}
+      />
     </div>
   );
 };

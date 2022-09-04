@@ -1,11 +1,5 @@
 import React from "react";
-
-interface DropdownOptions {
-  onChange: (val: string | number) => void;
-  options: { id: string | number; name: string }[];
-  defaultOption?: string;
-  value?: string | number;
-}
+import { DropdownOptions } from "./types";
 
 const Dropdown: React.FC<DropdownOptions> = ({
   onChange,

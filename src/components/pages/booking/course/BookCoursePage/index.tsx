@@ -1,13 +1,9 @@
-import { GetServerSideProps } from "next";
 import React, { useMemo, useState } from "react";
 import { selectUser } from "../../../../../auth/userSlice";
-import ApiAdaptor from "../../../../../backend/apiAdaptor";
-import { ClassScheduleTable } from "../../../../course/ClassScheduleTable";
 import StripePayment from "../../../../payment/stripe/StripePayment";
 import { useAppSelector } from "../../../../redux/hooks";
 import { StandardButton } from "../../../../styled/Buttons";
 import { Course } from "../../../../types/course/responses";
-import { AlternativeCoursesSection } from "./AlternativeCoursesSection";
 import { CourseDetails } from "./CourseDetails";
 import { EnterStudentDetails } from "./EnterStudentDetails";
 import { LiveClassScheduleSection } from "./LiveClassSchedule";

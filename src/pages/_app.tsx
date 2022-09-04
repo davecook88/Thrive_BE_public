@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+
+import "../../styles/calendar.scss";
 import "../../styles/globals.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
@@ -18,7 +20,7 @@ function Thrive({ Component, pageProps }: AppProps) {
         <Toast />
         <Header />
 
-        <section className={"bg-base-100 mt-20"}>
+        <section className={"bg-base-100 mt-20 min-h-screen"}>
           <Component {...pageProps} />
         </section>
 

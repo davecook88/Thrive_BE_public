@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ApiAdaptor from "../../../../backend/apiAdaptor";
 import { ListTeachersResponse } from "../../../types/teacher/responses";
+import { TeacherCard } from "../../../user/teacher/TeacherCard";
 import { AddTeacherSection } from "./AddTeacherSection";
 
 export const AdminTeacherPage = () => {
@@ -14,7 +15,11 @@ export const AdminTeacherPage = () => {
         <h1 className="font-extrabold text-4xl p-4">Teacher Admin</h1>
       </div>
       <AddTeacherSection />
-      <p>{JSON.stringify(teachers)}</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 ">
+        {teachers.map((teacher) => (
+          <TeacherCard teacher={teacher} />
+        ))}
+      </div>
     </div>
   );
 };
