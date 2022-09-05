@@ -4,35 +4,44 @@ import tw from "tailwind-styled-components";
 
 const HeroContainer = tw.div`
     flex
+    flex-col
+    items-center
+    md:flex-row
     md:justify-around
     p-5
 `;
 
 const ImageContainer = tw.div`
     relative
-    h-96
-    w-96
-    
+    h-80
+    w-80
+    -mt-10
+    -mb-16
+    md:my-0
 `;
 
 const HeroTextContainer = tw.div`
     flex
+    justify-center
     align-middle
 `;
 
 const HeroText = tw.div`
     self-center
+    text-center
+    md:text-left
 `;
 
 const HeroTitle = tw.h1`
-whitespace-nowrap
-text-2xl
-md:text-3xl
+    whitespace-nowrap
+    text-3xl
+    md:text-3xl
 `;
 
 const HeroTitleUpper = tw(HeroTitle)`
-text-xl
-md:text-3xl
+    text-2xl
+    md:text-3xl
+    mb-2
 `;
 const HeroTitleLower = tw(HeroTitle)`
     text-primary
@@ -40,9 +49,9 @@ const HeroTitleLower = tw(HeroTitle)`
 `;
 
 const SubtitleContainer = tw.div`
-    my-6
-    w-4/6
-
+    my-5
+    text-xl
+    md:w-4/6
 `;
 const HeroSection = () => {
   return (
