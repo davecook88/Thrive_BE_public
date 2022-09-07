@@ -23,6 +23,7 @@ import BigBookingCalendar from "../../../scheduling/BigBookingCalendar";
 import { getDefaultDisplayDates } from "../../../scheduling/BigBookingCalendar/utils";
 import EditAvailabilityEventModal from "./TeacherAvailabilitySettings/EditAvailabilityEventModel";
 import { SelectCalendarEventTypeDropdown } from "./SelectCalendarEventTypeDropdown";
+import { CreatePrivateClassOptionForm } from "../../../admin/privateClass/CreatePrivateClassOptionForm";
 
 interface TeacherAvailabilitySettingsProps {
   height?: string;
@@ -129,6 +130,8 @@ export const TeacherAvailabilitySettings: React.FC<
           />
         }
       </Modal>
+
+      <CreatePrivateClassOptionForm teacherId={teacherId} />
     </div>
   );
 };

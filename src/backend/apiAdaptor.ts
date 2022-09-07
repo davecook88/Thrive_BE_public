@@ -15,6 +15,7 @@ import {
 } from "../components/types/level/payloads";
 import { RouteCreator } from "../components/utils/routeConstants";
 import { CreateAvailabilityCalendarEvent } from "../components/scheduling/BigBookingCalendar/types";
+import { PrivateClassOptionBase } from "../components/types/privateClass/payloads";
 
 export interface PaginationParams {
   limit?: number;
@@ -38,6 +39,7 @@ export enum ApiEndpoints {
   unit = "/level/unit",
   bookCourse = "/book/course",
   user = "/user",
+  privateClass = "/private_class",
 }
 
 export class MissingTokenError extends Error {}
@@ -291,6 +293,21 @@ class ApiAdaptor {
     return await this.callApi(
       `${ApiEndpoints.courseClass}/${courseClassId}`,
       "DELETE"
+    );
+  }
+
+  static async postPrivateClassOption(payload: PrivateClassOptionBase) {
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/create_option`,
+      "POST",
+      { payload }
+    );
+  }
+
+  static async listPrivateClassesByTeacher(teacherId: number) {
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/teacher/${teacherId}`,
+      "GET"
     );
   }
 

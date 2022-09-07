@@ -18,7 +18,7 @@ export const StandardFormBody = tw.div`
 export const FormSection = tw.div`
     shadow
     border
-    border-secondary
+    border-primary
     p-4
     bg-base-100
     rounded-lg
