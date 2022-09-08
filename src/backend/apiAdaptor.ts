@@ -8,7 +8,10 @@ import {
   CreateCourseClassPayload,
   CreateCoursePayload,
 } from "../components/types/course/payloads";
-import { ListTeachersResponse } from "../components/types/teacher/responses";
+import {
+  ListTeachersResponse,
+  TeacherResponse,
+} from "../components/types/teacher/responses";
 import {
   CreateLevelPayload,
   CreateUnitPayload,
@@ -16,6 +19,7 @@ import {
 import { RouteCreator } from "../components/utils/routeConstants";
 import { CreateAvailabilityCalendarEvent } from "../components/scheduling/BigBookingCalendar/types";
 import { PrivateClassOptionBase } from "../components/types/privateClass/payloads";
+import { PrivateClassOption } from "../components/types/privateClass/responses";
 
 export interface PaginationParams {
   limit?: number;
@@ -297,18 +301,18 @@ class ApiAdaptor {
   }
 
   static async postPrivateClassOption(payload: PrivateClassOptionBase) {
-    return await this.callApi(
+    return (await this.callApi(
       `${ApiEndpoints.privateClass}/create_option`,
       "POST",
       { payload }
-    );
+    )) as PrivateClassOption;
   }
 
   static async listPrivateClassesByTeacher(teacherId: number) {
-    return await this.callApi(
+    return (await this.callApi(
       `${ApiEndpoints.privateClass}/teacher/${teacherId}`,
       "GET"
-    );
+    )) as PrivateClassOption[];
   }
 
   static async listTeachers(options?: { serverSide?: boolean }) {
@@ -323,7 +327,7 @@ class ApiAdaptor {
   ) {
     return (await this.callApi(`${ApiEndpoints.teacher}/${teacherId}`, "GET", {
       serverSide: options?.serverSide,
-    })) as ListTeachersResponse[];
+    })) as TeacherResponse;
   }
 
   static async createTeacher(email: string) {

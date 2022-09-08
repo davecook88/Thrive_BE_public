@@ -13,7 +13,7 @@ import { TeacherBookingCalendarProps } from "./types";
 import { AvailabilityStateEntry } from "../../../../types/calendar/types";
 import { splitAvailabilitySlots } from "./utils";
 import { TeacherBookClassModal } from "../TeacherBookClassModal";
-import { selectTeacherProfilePageState } from "../TeacherProfilePageSlice/slice";
+import { selectTeacherProfilePageState } from "../../../../redux/reducers/teachers/TeacherProfilePageSlice/slice";
 
 export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
   availabilityEntries,
