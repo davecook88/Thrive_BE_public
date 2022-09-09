@@ -13,7 +13,7 @@ export const splitAvailabilitySlots = (
   fullAvailability.forEach((availabilityEntry) => {
     let tempStartTime = availabilityEntry.start;
     let tempEndTime = availabilityEntry.start + slotLengthMilliseconds;
-    while (tempEndTime < availabilityEntry.end) {
+    while (tempEndTime <= availabilityEntry.end) {
       splitSlots.push({
         ...availabilityEntry,
         start: tempStartTime,

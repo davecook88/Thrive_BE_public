@@ -19,6 +19,7 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
   availabilityEntries,
   teacherId,
   classLength,
+  selectedPrivateClass,
 }) => {
   const teacherProfileState = useAppSelector(selectTeacherProfilePageState);
   const [view, setView] = useState<View>("month");
@@ -74,6 +75,7 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
         <TeacherBookClassModal
           teacher={teacherProfileState.teacher}
           availabilitySlot={selectedAvailabilitySlot}
+          privateClassOption={selectedPrivateClass}
         />
       </Modal>
     </div>

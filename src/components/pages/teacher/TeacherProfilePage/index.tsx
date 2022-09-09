@@ -71,6 +71,7 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
           availabilityEntries={availability.available}
           teacherId={teacher.id}
           classLength={classLengthMinutes}
+          selectedPrivateClass={selectedPrivateClassOption}
         />
       </section>
     </section>
