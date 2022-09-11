@@ -14,10 +14,10 @@ import {
 import WeekdayRow, { AvailabilityInputType } from "./WeekdayRow";
 import { v4 as uuidv4 } from "uuid";
 import { StandardButton } from "../../../styled/Buttons";
-import { CreateAvailabilityCalendarEvent } from "../../BigBookingCalendar";
 
 import ApiAdaptor from "../../../../backend/apiAdaptor";
 import { EditAvailabilityEntry } from "../../../types/availability/editAvailability";
+import { CreateAvailabilityCalendarEvent } from "../../BigBookingCalendar/types";
 export interface CompleteEditAvailabilityEntry extends EditAvailabilityEntry {
   start: number;
   end: number;

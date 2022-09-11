@@ -8,13 +8,22 @@ import {
   CreateCourseClassPayload,
   CreateCoursePayload,
 } from "../components/types/course/payloads";
-import { ListTeachersResponse } from "../components/types/teacher/responses";
+import {
+  ListTeachersResponse,
+  TeacherResponse,
+} from "../components/types/teacher/responses";
 import {
   CreateLevelPayload,
   CreateUnitPayload,
 } from "../components/types/level/payloads";
 import { RouteCreator } from "../components/utils/routeConstants";
 import { CreateAvailabilityCalendarEvent } from "../components/scheduling/BigBookingCalendar/types";
+import {
+  CreatePrivateClassCoursePayload,
+  PrivateClassOptionBase,
+} from "../components/types/privateClass/payloads";
+import { PrivateClassOption } from "../components/types/privateClass/responses";
+import { Course } from "../components/types/course/responses";
 
 export interface PaginationParams {
   limit?: number;
@@ -38,6 +47,7 @@ export enum ApiEndpoints {
   unit = "/level/unit",
   bookCourse = "/book/course",
   user = "/user",
+  privateClass = "/private_class",
 }
 
 export class MissingTokenError extends Error {}
@@ -64,14 +74,15 @@ class ApiAdaptor {
     if (!token && !options?.noAuth) {
       throw new MissingTokenError();
     }
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
     const res = await ApiAdaptor.client.request({
       method,
       url,
       data: options?.payload,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      headers,
       validateStatus: (status) => true,
       params: options?.params,
     });
@@ -115,7 +126,7 @@ class ApiAdaptor {
     limit: number = 100,
     page: number = 1
   ) {
-    const response: BaseAPIAvailability[] = await this.callApi(
+    const response = await this.callApi(
       `${ApiEndpoints.teacherAvailability}/${teacherId}`,
       "GET",
       {
@@ -127,23 +138,7 @@ class ApiAdaptor {
         },
       }
     );
-    response.forEach((entry) => {
-      console.log(new Date(entry.start), new Date(entry.end));
-    });
-
-    const result: AvailabilityState = {
-      loadStatus: "ready",
-      booked: [],
-      available: response.map((entry) => ({
-        end: moment.utc(entry.end).valueOf(),
-        start: moment.utc(entry.start).valueOf(),
-        status: entry.type,
-        id: entry.id,
-      })),
-      unavailable: [],
-    };
-
-    return result;
+    return response as GetAvailabilityResponse;
   }
 
   static async postAvailability(payload: PostAvailabilityPayload) {
@@ -180,7 +175,6 @@ class ApiAdaptor {
   static async createStripePaymentIntent(payload: CreatePaymentIntentPayload) {
     return (await this.callApi(`${ApiEndpoints.paymentCreateIntent}`, "POST", {
       payload,
-      noAuth: true,
     })) as { secret: string };
   }
 
@@ -294,6 +288,32 @@ class ApiAdaptor {
     );
   }
 
+  static async postPrivateClassOption(payload: PrivateClassOptionBase) {
+    return (await this.callApi(
+      `${ApiEndpoints.privateClass}/create_option`,
+      "POST",
+      { payload }
+    )) as PrivateClassOption;
+  }
+
+  static async listPrivateClassesByTeacher(teacherId: number) {
+    return (await this.callApi(
+      `${ApiEndpoints.privateClass}/teacher/${teacherId}`,
+      "GET"
+    )) as PrivateClassOption[];
+  }
+
+  static async createPrivateClassCourse(
+    privateClassOptionId: number,
+    payload: CreatePrivateClassCoursePayload
+  ) {
+    return (await this.callApi(
+      `${ApiEndpoints.privateClass}/create-course/${privateClassOptionId}`,
+      "POST",
+      { payload }
+    )) as Course;
+  }
+
   static async listTeachers(options?: { serverSide?: boolean }) {
     return (await this.callApi(ApiEndpoints.teacher, "GET", {
       serverSide: options?.serverSide,
@@ -306,7 +326,7 @@ class ApiAdaptor {
   ) {
     return (await this.callApi(`${ApiEndpoints.teacher}/${teacherId}`, "GET", {
       serverSide: options?.serverSide,
-    })) as ListTeachersResponse[];
+    })) as TeacherResponse;
   }
 
   static async createTeacher(email: string) {

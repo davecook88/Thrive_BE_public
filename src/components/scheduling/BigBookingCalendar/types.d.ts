@@ -19,9 +19,8 @@ export interface BigBookingCalendarProps {
   eventPropGetter?: EventPropGetter<AvailabilityCalendarEvent>;
 }
 export interface AvailabilityCalendarEvent extends Event {
-  id: string;
-  status: string;
-  title: string;
+  id?: string;
+  title?: string;
 }
 
 export interface CreateAvailabilityCalendarEvent

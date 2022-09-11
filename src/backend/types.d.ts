@@ -1,8 +1,10 @@
-interface BaseAPIAvailability {
+interface GetAvailabilityResponseEntry {
   end: string;
-  id: string;
+  id?: string;
   start: string;
-  teacher_id: number;
-  title: "available";
-  type: "available";
+}
+
+interface GetAvailabilityResponse {
+  booked: GetAvailabilityResponseEntry[];
+  available: GetAvailabilityResponseEntry[];
 }
