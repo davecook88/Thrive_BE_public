@@ -68,10 +68,9 @@ export const TeacherAvailabilitySettings: React.FC<
   const formatEvents =
     (title?: string) =>
     (entry: AvailabilityStateEntry): AvailabilityCalendarEvent => ({
-      title: entry?.title || title || "",
+      title: title || "",
       start: new Date(entry.start),
       end: new Date(entry.end),
-      status: entry.status,
       id: entry.id,
     });
 

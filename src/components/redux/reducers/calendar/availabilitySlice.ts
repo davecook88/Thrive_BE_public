@@ -4,6 +4,7 @@ import {
   AvailabilityState,
   SetAvailabilityAction,
 } from "../../../types/calendar/types";
+import { parseDbTime } from "../../../utils/dateMethods";
 import { RootState } from "../../store";
 
 /*
@@ -29,10 +30,19 @@ export const fetchAvailabilityAsync = createAsyncThunk(
       action.start,
       action.end
     );
+    console.log("fetchAvailabilityAsync", response);
     // The value we return becomes the `fulfilled` action payload
     return response;
   }
 );
+
+const formatAvailabilityEntryForStore = (
+  entry: GetAvailabilityResponseEntry
+) => ({
+  id: entry.id,
+  end: parseDbTime(entry.end).getTime(),
+  start: parseDbTime(entry.start).getTime(),
+});
 
 export const availabilitySlice = createSlice({
   name: "availability",
@@ -44,10 +54,12 @@ export const availabilitySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAvailabilityAsync.fulfilled, (state, action) => {
-      state.available = action.payload.available;
-      state.booked = action.payload.booked;
+      console.log("fetchAvailabilityAsync.fulfilled", action);
+      state.available = action.payload.available.map(
+        formatAvailabilityEntryForStore
+      );
+      state.booked = action.payload.booked.map(formatAvailabilityEntryForStore);
       state.loadStatus = "ready";
-      state.unavailable = action.payload.unavailable;
     });
   },
 });

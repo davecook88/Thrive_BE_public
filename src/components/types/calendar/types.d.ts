@@ -9,9 +9,7 @@ export interface AvailabilityState {
 }
 
 export interface AvailabilityStateEntry {
-  id: string;
-  title?: string;
-  status: BookingStatus;
+  id?: string;
   start: number;
   end: number;
 }

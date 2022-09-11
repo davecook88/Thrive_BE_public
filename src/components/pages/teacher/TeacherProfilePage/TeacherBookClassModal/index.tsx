@@ -1,14 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { TeacherBookClassModalProps } from "./types";
-import moment from "moment";
 import { TeacherAvatar } from "../../../../user/teacher/TeacherAvatar";
-import { StandardButton } from "../../../../styled/Buttons";
 import { BookClassModelCallToAction } from "./BookClassModelCallToAction";
+import { TeacherBookClassModalPaymentForm } from "./BookClassModalPaymentForm";
 export const TeacherBookClassModal: React.FC<TeacherBookClassModalProps> = ({
   teacher,
   availabilitySlot,
   privateClassOption,
 }) => {
+  const [showPaymentContents, setShowPaymentContents] = useState(false);
   const times = useMemo(
     () => ({
       start: new Date(availabilitySlot.start),
@@ -32,11 +32,19 @@ export const TeacherBookClassModal: React.FC<TeacherBookClassModalProps> = ({
               </h2>
             </div>
           </header>
-          <BookClassModelCallToAction
-            endTime={times.end}
-            startTime={times.start}
-            price={privateClassOption.cents_price}
-          />
+          {showPaymentContents ? (
+            <TeacherBookClassModalPaymentForm
+              privateClassOption={privateClassOption}
+              startTime={availabilitySlot.start}
+            />
+          ) : (
+            <BookClassModelCallToAction
+              endTime={times.end}
+              startTime={times.start}
+              price={privateClassOption.cents_price}
+              onBookNowClick={() => setShowPaymentContents(true)}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import ApiAdaptor from "../../../../backend/apiAdaptor";
 import { useAppSelector } from "../../../redux/hooks";
 import { selectAvailability } from "../../../redux/reducers/calendar/availabilitySlice";
 import { PrivateClassOption } from "../../../types/privateClass/responses";
@@ -23,15 +22,16 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
 
   if (!availability) return null;
   useEffect(() => {
-    const durationOptions = privateClassOptions.filter(
+    const durationOptions = privateClassOptions?.filter(
       (o) => o.length_minutes === classLengthMinutes
     );
+    if (!durationOptions) return;
     setSelectedPrivateClassOptionId(durationOptions[0].id);
   });
 
   const selectedPrivateClassOption = useMemo(
     () =>
-      privateClassOptions.find((o) => o.id === selectedPrivateClassOptionId),
+      privateClassOptions?.find((o) => o.id === selectedPrivateClassOptionId),
     [selectedPrivateClassOptionId]
   );
   return (
@@ -43,16 +43,18 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
         <ClassLengthSelect
           selectedClassLength={classLengthMinutes}
           onSelectClassLength={setClassLengthMinutes}
-          classLengthOptions={privateClassOptions
-            .map((o) => o.length_minutes)
-            .sort()}
+          classLengthOptions={
+            privateClassOptions?.map((o) => o.length_minutes).sort() || []
+          }
         />
       </section>
       <section id="teacher-profile-page-private-class-options">
         <PrivateClassOptionsMenu
-          privateClassOptions={privateClassOptions.filter(
-            (o) => o.length_minutes === classLengthMinutes
-          )}
+          privateClassOptions={
+            privateClassOptions?.filter(
+              (o) => o.length_minutes === classLengthMinutes
+            ) || []
+          }
           onSelectOption={setSelectedPrivateClassOptionId}
         />
       </section>

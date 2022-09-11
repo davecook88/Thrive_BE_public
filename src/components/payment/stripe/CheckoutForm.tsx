@@ -6,7 +6,11 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 
-export default function CheckoutForm() {
+interface CheckoutFormProps {
+  returnUrl: string;
+}
+
+export default function CheckoutForm({ returnUrl }: CheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -57,9 +61,10 @@ export default function CheckoutForm() {
 
     const { error } = await stripe.confirmPayment({
       elements,
+
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "/user/me",
+        return_url: returnUrl,
       },
     });
 

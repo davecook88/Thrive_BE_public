@@ -5,7 +5,7 @@ import { BookClassModelCallToActionProps } from "./types";
 
 export const BookClassModelCallToAction: React.FC<
   BookClassModelCallToActionProps
-> = ({ startTime, endTime, price }) => {
+> = ({ startTime, endTime, price, onBookNowClick }) => {
   return (
     <section>
       <div className="p-2">
@@ -29,7 +29,10 @@ export const BookClassModelCallToAction: React.FC<
         </table>
       </div>
       <div className="w-full flex justify-center">
-        <StandardButton className="btn-primary">
+        <StandardButton
+          className="btn-primary"
+          onClick={() => onBookNowClick()}
+        >
           Book now for {getFormattedPrice(price)}
         </StandardButton>
       </div>
