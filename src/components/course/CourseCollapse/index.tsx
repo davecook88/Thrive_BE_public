@@ -9,8 +9,8 @@ import {
   CourseMinimal,
 } from "../../types/course/responses";
 import { parseDbTime } from "../../utils/dateMethods";
+import { ClassScheduleTable } from "../ClassSheduleTable";
 import { BookCourseButton } from "./BookCourseButton";
-import { ClassScheduleTable } from "../ClassScheduleTable";
 import { CourseInfoEntry } from "./CourseInfoEntry";
 import { CourseCollapseProps } from "./types";
 

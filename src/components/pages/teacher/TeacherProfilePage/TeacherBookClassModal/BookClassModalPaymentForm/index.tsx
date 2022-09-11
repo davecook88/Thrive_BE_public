@@ -38,7 +38,9 @@ export const TeacherBookClassModalPaymentForm: React.FC<
         user_google_id={admin.user.details.google_id || ""}
         user_email={admin.user.details.email}
         user_id={Number(admin.user.details.id)}
-        returnUrl={process.env.NEXT_PUBLIC_APP_BASE_URL + "/users/me"}
+        returnUrl={
+          process.env.NEXT_PUBLIC_APP_BASE_URL + "/payment-confirmation"
+        }
       />
     </div>
   );

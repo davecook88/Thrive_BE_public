@@ -38,6 +38,7 @@ export interface PostAvailabilityPayload {
 export enum ApiEndpoints {
   verifyGoogleToken = "/auth/google",
   teacherAvailability = "/bookings/teacher-availability",
+  payment = "/payment",
   paymentCreateIntent = "/payment/create-payment-intent",
   course = "/course",
   courseClass = "/course/class",
@@ -337,6 +338,13 @@ class ApiAdaptor {
 
   static async getUserMe() {
     return await this.callApi(RouteCreator.userMeRoute(), "GET", {});
+  }
+
+  static async getPaymentConfirmation(paymentIntentId: string) {
+    return await this.callApi(
+      `${ApiEndpoints.payment}/confirmation?payment_intent_id=${paymentIntentId}`,
+      "GET"
+    );
   }
 }
 
