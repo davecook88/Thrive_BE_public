@@ -17,6 +17,7 @@ import { selectTeacherProfilePageState } from "../../../../redux/reducers/teache
 
 export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
   availabilityEntries,
+  bookedEntries,
   teacherId,
   classLength,
   selectedPrivateClass,
@@ -57,6 +58,7 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
       <BigBookingCalendar
         availabilityEntries={splitAvailabilitySlots(
           availabilityEntries,
+          bookedEntries,
           classLength
         )}
         onDisplayedDatesUpdate={onDisplayedDatesUpdate}

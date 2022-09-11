@@ -58,6 +58,7 @@ const EditAvailabilityEventModal: React.FC<EditAvailabilityEventModalProps> = ({
         timeframe: { start: event.start, end: event.end },
       });
     } else {
+      if (!event.id) throw new Error("Event has no ID");
       const updateResponse = await ApiAdaptor.updateAvailabilityEntry(
         event.id,
         event

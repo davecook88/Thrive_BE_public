@@ -71,6 +71,7 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
       <section>
         <TeacherBookingCalendar
           availabilityEntries={availability.available}
+          bookedEntries={availability.booked}
           teacherId={teacher.id}
           classLength={classLengthMinutes}
           selectedPrivateClass={selectedPrivateClassOption}

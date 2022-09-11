@@ -30,7 +30,6 @@ export const fetchAvailabilityAsync = createAsyncThunk(
       action.start,
       action.end
     );
-    console.log("fetchAvailabilityAsync", response);
     // The value we return becomes the `fulfilled` action payload
     return response;
   }
@@ -54,7 +53,6 @@ export const availabilitySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAvailabilityAsync.fulfilled, (state, action) => {
-      console.log("fetchAvailabilityAsync.fulfilled", action);
       state.available = action.payload.available.map(
         formatAvailabilityEntryForStore
       );
