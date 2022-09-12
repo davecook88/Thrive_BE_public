@@ -13,24 +13,31 @@ const ReviewCarousel: React.FC<ReviewCarouselProps> = ({
     height: undefined,
   });
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const handleResize = () => {
-        setWindowSize({
-          width: window.innerWidth,
-          height: window.innerHeight,
-        });
-      };
-      window.addEventListener("resize", handleResize);
-      console.log("window width:", window.innerWidth);
-      return () => window.removeEventListener("resize", handleResize);
-    }
+    if (typeof window === "undefined") return;
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   });
 
   const slicedReviews = useMemo(() => {
     const sliced = [];
     let sliceSize;
-    if (!windowSize) sliceSize = 3;
-    sliceSize = windowSize.width > 768 ? 3 : 1;
+    const REVIEWS_SHOWN_ON_MOBILE = 1;
+    const REVIEWS_SHOWN_ON_DESKTOP = 3;
+    const MOBILE_SCREEN_WIDTH_BREAKPOINT = 768;
+    sliceSize =
+      windowSize.width > MOBILE_SCREEN_WIDTH_BREAKPOINT
+        ? REVIEWS_SHOWN_ON_DESKTOP
+        : REVIEWS_SHOWN_ON_MOBILE;
     for (let i = 0; i < reviews.length; i += sliceSize) {
       sliced.push(reviews.slice(i, i + sliceSize));
     }
