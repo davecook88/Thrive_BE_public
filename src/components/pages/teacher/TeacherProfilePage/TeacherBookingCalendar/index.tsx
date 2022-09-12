@@ -13,12 +13,14 @@ import { TeacherBookingCalendarProps } from "./types";
 import { AvailabilityStateEntry } from "../../../../types/calendar/types";
 import { splitAvailabilitySlots } from "./utils";
 import { TeacherBookClassModal } from "../TeacherBookClassModal";
-import { selectTeacherProfilePageState } from "../TeacherProfilePageSlice/slice";
+import { selectTeacherProfilePageState } from "../../../../redux/reducers/teachers/TeacherProfilePageSlice/slice";
 
 export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
   availabilityEntries,
+  bookedEntries,
   teacherId,
   classLength,
+  selectedPrivateClass,
 }) => {
   const teacherProfileState = useAppSelector(selectTeacherProfilePageState);
   const [view, setView] = useState<View>("month");
@@ -56,6 +58,7 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
       <BigBookingCalendar
         availabilityEntries={splitAvailabilitySlots(
           availabilityEntries,
+          bookedEntries,
           classLength
         )}
         onDisplayedDatesUpdate={onDisplayedDatesUpdate}
@@ -74,6 +77,7 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
         <TeacherBookClassModal
           teacher={teacherProfileState.teacher}
           availabilitySlot={selectedAvailabilitySlot}
+          privateClassOption={selectedPrivateClass}
         />
       </Modal>
     </div>

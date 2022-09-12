@@ -1,4 +1,5 @@
 import { User } from "../user/responses";
+import { PrivateClassOption } from "../privateClass/responses";
 
 export interface ListTeachersResponse extends User {
   id: number;
@@ -15,4 +16,8 @@ export interface ListCourseTeachersResponse extends ListTeachersResponse {
 }
 export interface ListClassTeachersResponse extends ListTeachersResponse {
   course_teacher_id: number;
+}
+
+export interface TeacherResponse extends ListTeachersResponse {
+  private_class_options: PrivateClassOption[];
 }

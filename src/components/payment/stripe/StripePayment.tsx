@@ -8,6 +8,7 @@ import CheckoutForm from "./CheckoutForm";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API as string);
 interface StripePaymentProps extends CreatePaymentIntentPayload {
   amount: number;
+  returnUrl: string;
 }
 
 const StripePayment: React.FC<StripePaymentProps> = (props) => {
@@ -51,7 +52,7 @@ const StripePayment: React.FC<StripePaymentProps> = (props) => {
     <div className="w-full flex justify-center ">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm />
+          <CheckoutForm returnUrl={props.returnUrl} />
         </Elements>
       )}
     </div>

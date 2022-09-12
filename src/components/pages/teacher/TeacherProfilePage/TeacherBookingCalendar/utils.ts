@@ -1,7 +1,20 @@
 import { AvailabilityStateEntry } from "../../../../types/calendar/types";
 
+const createCheckAgainstBookedSlots =
+  (bookedSlots: AvailabilityStateEntry[]) => (start: number, end: number) => {
+    /*
+  Check one availability entry to see if it clashes with any booked slots
+  */
+
+    const clashingSlot = bookedSlots.find((slot) => {
+      return slot.start >= start && slot.end <= end;
+    });
+    return Boolean(clashingSlot);
+  };
+
 export const splitAvailabilitySlots = (
   fullAvailability: AvailabilityStateEntry[],
+  bookedSlots: AvailabilityStateEntry[],
   slotSizeMinutes: number = 60
 ) => {
   /*
@@ -10,15 +23,20 @@ export const splitAvailabilitySlots = (
     */
   const slotLengthMilliseconds = slotSizeMinutes * 60 * 1000;
   const splitSlots: AvailabilityStateEntry[] = [];
+  const checkClashingClasses = createCheckAgainstBookedSlots(bookedSlots);
   fullAvailability.forEach((availabilityEntry) => {
     let tempStartTime = availabilityEntry.start;
     let tempEndTime = availabilityEntry.start + slotLengthMilliseconds;
-    while (tempEndTime < availabilityEntry.end) {
-      splitSlots.push({
-        ...availabilityEntry,
-        start: tempStartTime,
-        end: tempEndTime,
-      });
+    while (tempEndTime <= availabilityEntry.end) {
+      if (!checkClashingClasses(tempStartTime, tempEndTime)) {
+        splitSlots.push({
+          ...availabilityEntry,
+          start: tempStartTime,
+          end: tempEndTime,
+        });
+      } else {
+        console.log("CLASH", new Date(tempStartTime), new Date(tempEndTime));
+      }
       tempStartTime = tempEndTime;
       tempEndTime = tempStartTime + slotLengthMilliseconds;
     }

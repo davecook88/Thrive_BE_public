@@ -51,13 +51,16 @@ const BookCoursePage: React.FC<BookCoursePage> = ({ course, levelCourses }) => {
       )}
       {user?.details.email && showPaymentForm && (
         <StripePayment
-          amount={course.price * 100}
+          amount={course.price}
           course_id={course.id}
           course_name={course.name}
           currency="usd"
           user_google_id={user.details.google_id || ""}
           user_email={user.details.email}
           user_id={Number(user.details.id)}
+          returnUrl={
+            process.env.NEXT_PUBLIC_APP_BASE_URL + "/payment-confirmation"
+          }
         />
       )}
       <LiveClassScheduleSection

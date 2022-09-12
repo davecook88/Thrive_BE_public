@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../../../redux/store";
-import { ListTeachersResponse } from "../../../../types/teacher/responses";
+import { RootState } from "../../../store";
+import { TeacherResponse } from "../../../../types/teacher/responses";
 
 interface TeacherProfilePageState {
-  teacher?: ListTeachersResponse;
+  teacher?: TeacherResponse;
 }
 
 const initialState: TeacherProfilePageState = {
@@ -11,7 +11,7 @@ const initialState: TeacherProfilePageState = {
 };
 
 export interface SetTeacherAction {
-  teacher: ListTeachersResponse;
+  teacher: TeacherResponse;
 }
 
 const teacherProfilePageSlice = createSlice({

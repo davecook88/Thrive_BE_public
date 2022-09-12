@@ -1,14 +1,17 @@
 import React, { useEffect } from "react";
 import { GetServerSideProps } from "next";
-import { ListTeachersResponse } from "../../components/types/teacher/responses";
+import {
+  ListTeachersResponse,
+  TeacherResponse,
+} from "../../components/types/teacher/responses";
 import ApiAdaptor from "../../backend/apiAdaptor";
 import { TeacherCard } from "../../components/user/teacher/TeacherCard";
 import { TeacherProfilePage } from "../../components/pages/teacher/TeacherProfilePage";
 import { useAppDispatch } from "../../components/redux/hooks";
-import { setSelectedProfilePageTeacher } from "../../components/pages/teacher/TeacherProfilePage/TeacherProfilePageSlice/slice";
+import { setSelectedProfilePageTeacher } from "../../components/redux/reducers/teachers/TeacherProfilePageSlice/slice";
 
 interface TeacherPageProps {
-  teacher: ListTeachersResponse;
+  teacher: TeacherResponse;
 }
 
 const TeacherPage: React.FC<TeacherPageProps> = ({ teacher }) => {
