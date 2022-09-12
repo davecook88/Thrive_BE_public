@@ -8,14 +8,41 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 const ReviewCarousel: React.FC<ReviewCarouselProps> = ({
   reviews = defaultReviews,
 }) => {
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  });
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  });
+
   const slicedReviews = useMemo(() => {
     const sliced = [];
-    const sliceSize = 3;
+    let sliceSize;
+    const REVIEWS_SHOWN_ON_MOBILE = 1;
+    const REVIEWS_SHOWN_ON_DESKTOP = 3;
+    const MOBILE_SCREEN_WIDTH_BREAKPOINT = 768;
+    sliceSize =
+      windowSize.width > MOBILE_SCREEN_WIDTH_BREAKPOINT
+        ? REVIEWS_SHOWN_ON_DESKTOP
+        : REVIEWS_SHOWN_ON_MOBILE;
     for (let i = 0; i < reviews.length; i += sliceSize) {
       sliced.push(reviews.slice(i, i + sliceSize));
     }
     return sliced;
-  }, [reviews]);
+  }, [reviews, windowSize]);
   return (
     <Carousel
       autoPlay={false}
