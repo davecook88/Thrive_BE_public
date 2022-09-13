@@ -13,11 +13,13 @@ const ReviewCarousel: React.FC<ReviewCarouselProps> = ({
     height: undefined,
   });
   useEffect(() => {
-    if (typeof window === "undefined") return;
     setWindowSize({
       width: window.innerWidth,
       height: window.innerHeight,
     });
+  }, []);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     const handleResize = () => {
       setWindowSize({
         width: window.innerWidth,
