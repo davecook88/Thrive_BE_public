@@ -2,7 +2,7 @@ import React from "react";
 import tw from "tailwind-styled-components";
 import { selectUser } from "../../../../auth/userSlice";
 import { selectAdmin } from "../../../admin/adminSlice";
-import { ClassScheduleTable } from "../../../course/ClassSheduleTable";
+import { ClassScheduleTable } from "../../../course/ClassScheduleTable";
 import { useAppSelector } from "../../../redux/hooks";
 import { StandardButton } from "../../../styled/Buttons";
 import { PaymentConfirmationPageComponentProps } from "./types";
