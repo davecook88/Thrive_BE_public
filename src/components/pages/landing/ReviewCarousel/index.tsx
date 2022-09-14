@@ -5,19 +5,26 @@ import ReviewDetails from "./ReviewDetails";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 
+type WindowSize = {
+  width?: number;
+  height?: number;
+};
+
 const ReviewCarousel: React.FC<ReviewCarouselProps> = ({
   reviews = defaultReviews,
 }) => {
-  const [windowSize, setWindowSize] = useState({
+  const [windowSize, setWindowSize] = useState<WindowSize>({
     width: undefined,
     height: undefined,
   });
   useEffect(() => {
-    if (typeof window === "undefined") return;
     setWindowSize({
       width: window.innerWidth,
       height: window.innerHeight,
     });
+  }, []);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     const handleResize = () => {
       setWindowSize({
         width: window.innerWidth,
@@ -35,7 +42,7 @@ const ReviewCarousel: React.FC<ReviewCarouselProps> = ({
     const REVIEWS_SHOWN_ON_DESKTOP = 3;
     const MOBILE_SCREEN_WIDTH_BREAKPOINT = 768;
     sliceSize =
-      windowSize.width > MOBILE_SCREEN_WIDTH_BREAKPOINT
+      windowSize?.width && windowSize.width > MOBILE_SCREEN_WIDTH_BREAKPOINT
         ? REVIEWS_SHOWN_ON_DESKTOP
         : REVIEWS_SHOWN_ON_MOBILE;
     for (let i = 0; i < reviews.length; i += sliceSize) {
