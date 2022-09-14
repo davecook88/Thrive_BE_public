@@ -29,7 +29,6 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
     title: entry?.title || "",
     start: new Date(entry.start),
     end: new Date(entry.end),
-    status: entry.status,
     id: entry.id,
   });
 
