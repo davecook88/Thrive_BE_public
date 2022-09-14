@@ -9,12 +9,6 @@ export class AvailabilityAsEvent {
     styleMap?: StyleMap
   ): EventPropGetter<AvailabilityCalendarEvent> =>
     function (event, start, end, isSelected) {
-      const style: React.CSSProperties | undefined = styleMap?.get(
-        event.status
-      );
-
-      return {
-        style,
-      };
+      return {};
     };
 }

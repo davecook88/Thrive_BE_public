@@ -1,5 +1,5 @@
 import React from "react";
-import { ClassScheduleTable } from "../../../../course/ClassScheduleTable";
+import { ClassScheduleTable } from "../../../../course/ClassSheduleTable";
 import {
   Course,
   CourseClassResponse,
