@@ -18,10 +18,8 @@ const createCheckAgainstBookedSlots =
         end: new Date(end),
       });
       return (
-        start >= bookedSlot.start &&
-        start <= bookedSlot.end &&
-        end <= bookedSlot.end &&
-        end >= bookedSlot.start
+        (start >= bookedSlot.start && start < bookedSlot.end) ||
+        (end > bookedSlot.start && end <= bookedSlot.end)
       );
     });
     const startDate = new Date(start);
