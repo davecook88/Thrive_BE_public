@@ -9,7 +9,7 @@ import {
   CourseMinimal,
 } from "../../types/course/responses";
 import { parseDbTime } from "../../utils/dateMethods";
-import { ClassScheduleTable } from "../ClassSheduleTable";
+import { ClassScheduleTable } from "../ClassScheduleTable";
 import { BookCourseButton } from "./BookCourseButton";
 import { CourseInfoEntry } from "./CourseInfoEntry";
 import { CourseCollapseProps } from "./types";
