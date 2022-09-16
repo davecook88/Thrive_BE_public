@@ -10,8 +10,8 @@ export const CourseInfoEntry: React.FC<CourseInfoEntryProps> = ({
 }) => {
   return (
     <div className="px-4">
-      <span className="text-xs">{title}</span>
-      <span>{value}</span>
+      <span >{title}</span>
+      <span className="font-bold">{value}</span>
     </div>
   );
 };

@@ -38,28 +38,46 @@ export const CourseCollapse: React.FC<CourseCollapseProps> = ({
   return (
     <div
       className={clsx(
-        "collapse collapse-arrow border border-base-300 bg-base-100 rounded-box",
+        "collapse collapse-arrow border border-base-300 bg-base-100 rounded-box m-6",
+
         isOpen && "collapse-open"
       )}
       onClick={() => setIsOpen((prev) => !prev)}
     >
-      <div className="collapse-title ">
-        <div className=" p-1 flex  w-full">
-          <div className="font-medium">{course.name}</div>
-          <CourseInfoEntry
-            title="Class Time "
-            value={moment(parseDbTime(course.start_time)).format("HH:mm")}
-          />
-          <CourseInfoEntry
-            title="Starts "
-            value={formatCourseDate(course.start_time)}
-          />
-          <CourseInfoEntry
-            title="Ends "
-            value={formatCourseDate(course.end_time)}
-          />
-          {showBookNowButton && <BookCourseButton courseId={course.id} />}
+      <div className="collapse-title border-t-8 border-primary/50 flex items-center gap-8">
+        <div className="flex flex-col border-t-6 border-primary w-full">
+          <div className=" p-1 flex justify-between items-center w-full border-t-2 border-b-2">
+            <div className="font-medium text-primary font-bold border-r-2 px-8 py-4 w-1/3">
+              {course.name}
+            </div>
+            <div className="border-r-2 p-4 font-bold w-1/3 text-center">
+              Online
+            </div>
+            <div className="font-bold w-1/3 text-center">300 hours</div>
+          </div>
+          <div className="flex p-2">
+            <div className="w-1/2 px-4 py-2">
+              <CourseInfoEntry
+                title="Starts: "
+                value={formatCourseDate(course.start_time)}
+              />
+              <CourseInfoEntry
+                title="Ends: "
+                value={formatCourseDate(course.end_time)}
+              />
+            </div>
+            <div className="w-1/2 flex justify-center items-center  border-l-2 ">
+              <CourseInfoEntry
+                title="Class Time: "
+                value={moment(parseDbTime(course.start_time)).format("HH:mm")}
+              />
+            </div>
+          </div>
         </div>
+        <div className="grow-0">
+           {showBookNowButton && <BookCourseButton courseId={course.id} />}
+        </div>
+       
       </div>
       <div className="collapse-content">
         <p>List live class data here</p>
