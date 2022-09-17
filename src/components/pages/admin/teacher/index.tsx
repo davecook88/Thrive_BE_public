@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-big-calendar";
 import CalendarMenu from "../../../calendar/CalendarMenu";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -7,12 +7,8 @@ import {
   selectAvailability,
 } from "../../../redux/reducers/calendar/availabilitySlice";
 import EditAvailabilityForm from "../../../scheduling/availability/edit";
-import { AvailabilityAsEvent } from "../../../scheduling/BigBookingCalendar/events/eventPropGetters";
 import { StandardButton } from "../../../styled/Buttons";
-import {
-  AvailabilityStateEntry,
-  BookingStatus,
-} from "../../../types/calendar/types";
+import { BookingStatus } from "../../../types/calendar/types";
 import Modal from "react-modal";
 
 import {
@@ -24,6 +20,11 @@ import { getDefaultDisplayDates } from "../../../scheduling/BigBookingCalendar/u
 import EditAvailabilityEventModal from "./TeacherAvailabilitySettings/EditAvailabilityEventModel";
 import { SelectCalendarEventTypeDropdown } from "./SelectCalendarEventTypeDropdown";
 import { CreatePrivateClassOptionForm } from "../../../admin/privateClass/CreatePrivateClassOptionForm";
+import {
+  fetchTeacherAsync,
+  selectTeacherProfilePageState,
+} from "../../../redux/reducers/teachers/TeacherProfilePageSlice/slice";
+import { AdminTeacherPrivateClassOptions } from "./AdminTeacherPrivateClassOptions";
 
 interface TeacherAvailabilitySettingsProps {
   height?: string;
@@ -43,7 +44,13 @@ export const TeacherAvailabilitySettings: React.FC<
   const [displayEventType, setDisplayEventType] =
     useState<BookingStatus>("available");
   const availability = useAppSelector(selectAvailability);
+  const teacherState = useAppSelector(selectTeacherProfilePageState);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchTeacherAsync({ teacherId }));
+  }, []);
+
   const onDisplayedDatesUpdate = (displayedDates: DisplayDatesType) => {
     dispatch(fetchAvailabilityAsync({ teacherId, ...displayedDates }));
   };
@@ -64,15 +71,6 @@ export const TeacherAvailabilitySettings: React.FC<
         event.end < details.end.getTime()
     );
   };
-
-  const formatEvents =
-    (title?: string) =>
-    (entry: AvailabilityStateEntry): AvailabilityCalendarEvent => ({
-      title: title || "",
-      start: new Date(entry.start),
-      end: new Date(entry.end),
-      id: entry.id,
-    });
 
   const addAvailability = () => {
     // setSelectedEvent(undefined);
@@ -129,8 +127,10 @@ export const TeacherAvailabilitySettings: React.FC<
           />
         }
       </Modal>
-
       <CreatePrivateClassOptionForm teacherId={teacherId} />
+      <AdminTeacherPrivateClassOptions
+        options={teacherState.teacher?.private_class_options || []}
+      />
     </div>
   );
 };

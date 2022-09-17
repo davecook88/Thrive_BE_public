@@ -16,7 +16,6 @@ export const TeacherBookClassModal: React.FC<TeacherBookClassModalProps> = ({
     }),
     [availabilitySlot]
   );
-
   if (!privateClassOption)
     return <div>You need to select a private class option to book</div>;
 

@@ -53,10 +53,10 @@ export const availabilitySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAvailabilityAsync.fulfilled, (state, action) => {
-      state.available = action.payload.available.map(
-        formatAvailabilityEntryForStore
-      );
-      state.booked = action.payload.booked.map(formatAvailabilityEntryForStore);
+      state.available =
+        action.payload.available?.map(formatAvailabilityEntryForStore) || [];
+      state.booked =
+        action.payload.booked?.map(formatAvailabilityEntryForStore) || [];
       state.loadStatus = "ready";
     });
   },
