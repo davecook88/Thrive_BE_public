@@ -3,6 +3,7 @@ import { StandardButton } from "../../../../styled/Buttons";
 import { PrivateClassPackageOptionAdminDisplay } from "./PrivateClassPackageOptionAdminDisplay";
 import { PrivateClassOptionAdminDisplayProps } from "./types";
 import Modal from "react-modal";
+import { PrivateClassPackageOptionEditForm } from "./PrivateClassPackageOptionEditForm";
 
 export const PrivateClassOptionAdminDisplay: React.FC<
   PrivateClassOptionAdminDisplayProps
@@ -57,7 +58,9 @@ export const PrivateClassOptionAdminDisplay: React.FC<
         isOpen={modalOpen}
         onRequestClose={() => setModalOpen(false)}
         className="w-max h-max p-4 bg-white m-auto mt-24 border-4 border-solid border-slate-400"
-      ></Modal>
+      >
+        <PrivateClassPackageOptionEditForm />
+      </Modal>
     </div>
   );
 };
