@@ -2,6 +2,8 @@ import { PrivateClassPackageOption } from "../../../../../types/privateClass/res
 
 export type PrivateClassPackageOptionEditFormProps = {
   packageOption?: PrivateClassPackageOption;
+  privateClassOptionId: number;
+  refresh: () => void;
 };
 
 type PrivateClassPackageOptionEditFormInputs = {

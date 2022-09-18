@@ -4,11 +4,26 @@ import { PrivateClassPackageOptionAdminDisplay } from "./PrivateClassPackageOpti
 import { PrivateClassOptionAdminDisplayProps } from "./types";
 import Modal from "react-modal";
 import { PrivateClassPackageOptionEditForm } from "./PrivateClassPackageOptionEditForm";
+import ApiAdaptor from "../../../../../backend/apiAdaptor";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import {
+  fetchTeacherAsync,
+  selectTeacherProfilePageState,
+} from "../../../../redux/reducers/teachers/TeacherProfilePageSlice/slice";
 
 export const PrivateClassOptionAdminDisplay: React.FC<
   PrivateClassOptionAdminDisplayProps
 > = ({ option }) => {
   const [modalOpen, setModalOpen] = useState(false);
+
+  const teacherState = useAppSelector(selectTeacherProfilePageState);
+
+  const dispatch = useAppDispatch();
+
+  const refresh = () => {
+    if (!teacherState.teacher) return;
+    dispatch(fetchTeacherAsync({ teacherId: teacherState.teacher.id }));
+  };
 
   const onCreatePackageClick = () => {
     setModalOpen(true);
@@ -41,11 +56,12 @@ export const PrivateClassOptionAdminDisplay: React.FC<
       <div className="flex justify-center m-2">
         <h5 className="font-extrabold">Available packages</h5>
       </div>
-      <div>
+      <div className="flex">
         {option.package_options.map((packageOption) => (
           <PrivateClassPackageOptionAdminDisplay
             packageOption={packageOption}
             key={packageOption.id}
+            refresh={refresh}
           />
         ))}
       </div>
@@ -59,7 +75,10 @@ export const PrivateClassOptionAdminDisplay: React.FC<
         onRequestClose={() => setModalOpen(false)}
         className="w-max h-max p-4 bg-white m-auto mt-24 border-4 border-solid border-slate-400"
       >
-        <PrivateClassPackageOptionEditForm />
+        <PrivateClassPackageOptionEditForm
+          privateClassOptionId={option.id}
+          refresh={refresh}
+        />
       </Modal>
     </div>
   );

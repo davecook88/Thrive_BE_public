@@ -13,3 +13,8 @@ export interface CreatePrivateClassCoursePayload {
   minutes_duration: number;
   max_students: number;
 }
+
+export interface CreatePrivateClassPackagePayload {
+  class_count: number;
+  discount_percentage: number;
+}

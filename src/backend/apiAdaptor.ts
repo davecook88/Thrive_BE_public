@@ -20,6 +20,7 @@ import { RouteCreator } from "../components/utils/routeConstants";
 import { CreateAvailabilityCalendarEvent } from "../components/scheduling/BigBookingCalendar/types";
 import {
   CreatePrivateClassCoursePayload,
+  CreatePrivateClassPackagePayload,
   PrivateClassOptionBase,
 } from "../components/types/privateClass/payloads";
 import { PrivateClassOption } from "../components/types/privateClass/responses";
@@ -313,6 +314,24 @@ class ApiAdaptor {
       "POST",
       { payload }
     )) as Course;
+  }
+
+  static async createPrivateClassPackage(
+    privateClassOptionId: number,
+    payload: CreatePrivateClassPackagePayload
+  ) {
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/${privateClassOptionId}/package`,
+      "POST",
+      { payload }
+    );
+  }
+
+  static async deletePrivateClassPackage(packageId: number) {
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/package/${packageId}`,
+      "DELETE"
+    );
   }
 
   static async listTeachers(options?: { serverSide?: boolean }) {

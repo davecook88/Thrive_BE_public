@@ -1,5 +1,12 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import ApiAdaptor from "../../../../../../backend/apiAdaptor";
+import { showToast } from "../../../../../common/alerts/toastSlice";
+import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
+import {
+  fetchTeacherAsync,
+  selectTeacherProfilePageState,
+} from "../../../../../redux/reducers/teachers/TeacherProfilePageSlice/slice";
 import {
   PrivateClassPackageOptionEditFormInputs,
   PrivateClassPackageOptionEditFormProps,
@@ -7,15 +14,35 @@ import {
 
 export const PrivateClassPackageOptionEditForm: React.FC<
   PrivateClassPackageOptionEditFormProps
-> = () => {
+> = ({ privateClassOptionId, refresh }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<PrivateClassPackageOptionEditFormInputs>();
-  const onSubmit: SubmitHandler<PrivateClassPackageOptionEditFormInputs> = (
-    data
-  ) => console.log(data);
+
+  const dispatch = useAppDispatch();
+
+  const onSubmit: SubmitHandler<
+    PrivateClassPackageOptionEditFormInputs
+  > = async (data) => {
+    console.log(data);
+    const res = await ApiAdaptor.createPrivateClassPackage(
+      privateClassOptionId,
+      {
+        class_count: data.classCount,
+        discount_percentage: data.discountPercentage,
+      }
+    );
+
+    if (!res) return;
+    dispatch(
+      showToast({
+        message: "Package created",
+      })
+    );
+    refresh();
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

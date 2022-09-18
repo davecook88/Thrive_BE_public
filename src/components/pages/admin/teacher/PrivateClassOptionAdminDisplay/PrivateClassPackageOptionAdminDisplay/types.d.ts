@@ -2,4 +2,5 @@ import { PrivateClassPackageOption } from "../../../../../types/privateClass/res
 
 export type PrivateClassPackageOptionAdminDisplayProps = {
   packageOption: PrivateClassPackageOption;
+  refresh: () => void;
 };
