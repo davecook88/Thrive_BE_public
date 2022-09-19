@@ -1,11 +1,12 @@
 import React from "react";
 import { StandardButton } from "../../../../../styled/Buttons";
 import { getFormattedPrice } from "../utils";
+import { BookClassModalPackageOptionButton } from "./BookClassModalPackageOptionButton";
 import { BookClassModelCallToActionProps } from "./types";
 
 export const BookClassModelCallToAction: React.FC<
   BookClassModelCallToActionProps
-> = ({ startTime, endTime, price, onBookNowClick }) => {
+> = ({ startTime, endTime, price, onBookNowClick, packageOptions }) => {
   return (
     <section>
       <div className="p-2">
@@ -39,6 +40,14 @@ export const BookClassModelCallToAction: React.FC<
 
       <div className="font-bold w-full flex justify-center p-2">
         <h5>Or book a package to get a discount</h5>
+      </div>
+      <div>
+        {packageOptions.map((packageOption) => (
+          <BookClassModalPackageOptionButton
+            packageOption={packageOption}
+            classPrice={price}
+          />
+        ))}
       </div>
     </section>
   );

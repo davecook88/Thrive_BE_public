@@ -42,6 +42,7 @@ export const TeacherBookClassModal: React.FC<TeacherBookClassModalProps> = ({
               startTime={times.start}
               price={privateClassOption.cents_price}
               onBookNowClick={() => setShowPaymentContents(true)}
+              packageOptions={privateClassOption.package_options}
             />
           )}
         </div>
