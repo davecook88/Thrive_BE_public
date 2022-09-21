@@ -13,6 +13,8 @@ import { ClassScheduleTable } from "../ClassScheduleTable";
 import { BookCourseButton } from "./BookCourseButton";
 import { CourseInfoEntry } from "./CourseInfoEntry";
 import { CourseCollapseProps } from "./types";
+import { SyncClass } from "./SyncClass";
+import { AsyncClass } from "./AsyncClass";
 
 export const formatCourseDate = (val: string | Date) => {
   const d = val instanceof Date ? val : parseDbTime(val);
@@ -38,7 +40,7 @@ export const CourseCollapse: React.FC<CourseCollapseProps> = ({
   return (
     <div
       className={clsx(
-        "collapse collapse-arrow border border-base-300 bg-base-100 rounded-box m-6",
+        "collapse collapse-open border border-base-300 bg-base-100 rounded-box m-6",
 
         isOpen && "collapse-open"
       )}
@@ -55,33 +57,18 @@ export const CourseCollapse: React.FC<CourseCollapseProps> = ({
             </div>
             <div className="font-bold w-1/3 text-center">300 hours</div>
           </div>
-          <div className="flex p-2">
-            <div className="w-1/2 px-4 py-2">
-              <CourseInfoEntry
-                title="Starts: "
-                value={formatCourseDate(course.start_time)}
-              />
-              <CourseInfoEntry
-                title="Ends: "
-                value={formatCourseDate(course.end_time)}
-              />
-            </div>
-            <div className="w-1/2 flex justify-center items-center  border-l-2 ">
-              <CourseInfoEntry
-                title="Class Time: "
-                value={moment(parseDbTime(course.start_time)).format("HH:mm")}
-              />
-            </div>
-          </div>
+          {course.start_time ? (
+            <SyncClass course={course} />
+          ) : (
+            <AsyncClass course={course} />
+          )}
         </div>
         <div className="grow-0">
-           {showBookNowButton && <BookCourseButton courseId={course.id} />}
+          {showBookNowButton && <BookCourseButton courseId={course.id} />}
         </div>
-       
       </div>
       <div className="collapse-content">
-        <p>List live class data here</p>
-        <ClassScheduleTable courseClasses={classes} />
+        {course.start_time && <ClassScheduleTable courseClasses={classes} />}
       </div>
     </div>
   );
