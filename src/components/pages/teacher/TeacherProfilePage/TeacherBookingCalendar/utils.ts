@@ -4,19 +4,9 @@ const createCheckAgainstBookedSlots =
   (bookedSlots: AvailabilityStateEntry[]) => (start: number, end: number) => {
     /*
   Check one availability entry to see if it clashes with any booked slots
-  */ bookedSlots.forEach((s) => {
-      console.log(
-        `Booked from: ${new Date(s.start)} until: ${new Date(s.end)}`
-      );
-    });
+  */
 
     const clashingSlot = bookedSlots.find((bookedSlot) => {
-      console.log({
-        bookedSlotStart: new Date(bookedSlot.start),
-        bookedSlotEnd: new Date(bookedSlot.end),
-        start: new Date(start),
-        end: new Date(end),
-      });
       return (
         (start >= bookedSlot.start && start < bookedSlot.end) ||
         (end > bookedSlot.start && end <= bookedSlot.end)

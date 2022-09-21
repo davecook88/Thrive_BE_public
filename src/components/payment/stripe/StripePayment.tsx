@@ -25,6 +25,7 @@ const StripePayment: React.FC<StripePaymentProps> = (props) => {
     user_email,
     user_google_id,
     user_id,
+    package_id,
   }: StripePaymentProps) => {
     const payload: CreatePaymentIntentPayload = {
       currency: "usd",
@@ -34,6 +35,7 @@ const StripePayment: React.FC<StripePaymentProps> = (props) => {
       user_email,
       user_google_id,
       user_id,
+      package_id,
     };
     const response = await ApiAdaptor.createStripePaymentIntent(payload);
     setClientSecret(response.secret);

@@ -3,12 +3,15 @@ import { TeacherBookClassModalProps } from "./types";
 import { TeacherAvatar } from "../../../../user/teacher/TeacherAvatar";
 import { BookClassModelCallToAction } from "./BookClassModelCallToAction";
 import { TeacherBookClassModalPaymentForm } from "./BookClassModalPaymentForm";
+import { PrivateClassPackageOption } from "../../../../types/privateClass/responses";
 export const TeacherBookClassModal: React.FC<TeacherBookClassModalProps> = ({
   teacher,
   availabilitySlot,
   privateClassOption,
 }) => {
   const [showPaymentContents, setShowPaymentContents] = useState(false);
+  const [selectedPackage, setSelectedPackage] =
+    useState<PrivateClassPackageOption | null>(null);
   const times = useMemo(
     () => ({
       start: new Date(availabilitySlot.start),
@@ -35,6 +38,7 @@ export const TeacherBookClassModal: React.FC<TeacherBookClassModalProps> = ({
             <TeacherBookClassModalPaymentForm
               privateClassOption={privateClassOption}
               startTime={availabilitySlot.start}
+              privateClassPackage={selectedPackage}
             />
           ) : (
             <BookClassModelCallToAction
@@ -43,6 +47,7 @@ export const TeacherBookClassModal: React.FC<TeacherBookClassModalProps> = ({
               price={privateClassOption.cents_price}
               onBookNowClick={() => setShowPaymentContents(true)}
               packageOptions={privateClassOption.package_options}
+              setSelectedPackage={setSelectedPackage}
             />
           )}
         </div>

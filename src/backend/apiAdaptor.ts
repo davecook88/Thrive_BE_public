@@ -334,6 +334,39 @@ class ApiAdaptor {
     );
   }
 
+  static async createPrivateClassPackageBooking(packageId: number) {
+    /*
+    This creates the private class package booking so that a payment
+    intent can be issued against it.
+
+    Once the payment intent is marked paid, the package booking will be activated.
+
+    */
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/package-booking/${packageId}/create`,
+      "POST"
+    );
+  }
+
+  static async bookPrivateClassPackageBooking(
+    packageId: number,
+    start_time: Date
+  ) {
+    /*
+    If a student has an active package and want to use their credits to book a 
+    class, this is the route to use.
+    */
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/package-booking/${packageId}/book`,
+      "POST",
+      {
+        payload: {
+          start_time,
+        },
+      }
+    );
+  }
+
   static async listTeachers(options?: { serverSide?: boolean }) {
     return (await this.callApi(ApiEndpoints.teacher, "GET", {
       serverSide: options?.serverSide,

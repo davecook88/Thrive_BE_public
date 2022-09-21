@@ -59,8 +59,6 @@ export const TeacherAvailabilitySettings: React.FC<
     getDefaultDisplayDates()
   );
 
-  console.log({ availability });
-
   const checkOverlap = (
     type: BookingStatus,
     details: { start: Date; end: Date }

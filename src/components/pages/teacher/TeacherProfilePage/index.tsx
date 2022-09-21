@@ -12,7 +12,6 @@ import { TeacherProfilePageProps } from "./types";
 export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
   teacher,
 }) => {
-  console.log({ teacher });
   const [classLengthMinutes, setClassLengthMinutes] = useState<number>(60);
   const [selectedPrivateClassOptionId, setSelectedPrivateClassOptionId] =
     useState<number | undefined>();

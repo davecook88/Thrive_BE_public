@@ -73,6 +73,7 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
         isOpen={modalOpen}
         onRequestClose={() => setModalOpen(false)}
         className="w-max h-max p-4 bg-white m-auto mt-24 border-4 border-solid border-slate-400"
+        appElement={document.getElementById("root") || undefined}
       >
         <TeacherBookClassModal
           teacher={teacherProfileState.teacher}

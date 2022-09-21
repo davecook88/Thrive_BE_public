@@ -3,4 +3,5 @@ import { PrivateClassPackageOption } from "../../../../../../types/privateClass/
 export type BookClassModalPackageOptionButtonProps = {
   packageOption: PrivateClassPackageOption;
   classPrice: number;
+  onClick: () => void;
 };

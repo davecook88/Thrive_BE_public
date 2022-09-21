@@ -6,4 +6,5 @@ export interface BookClassModelCallToActionProps {
   price: number;
   onBookNowClick: () => void;
   packageOptions: PrivateClassPackageOption[];
+  setSelectedPackage: (package: PrivateClassPackageOption) => void;
 }
