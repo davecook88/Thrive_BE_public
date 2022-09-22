@@ -1,3 +1,6 @@
+import { PrivateClassBooking } from "../privateClass/responses";
+import { Course } from "../course/responses";
+
 export interface User {
   user_id: number;
   user_name: string;
@@ -14,4 +17,5 @@ export interface UserProfile {
   student_id?: number;
   teaching_courses: Course[];
   studying_courses: Course[];
+  package_bookings: PrivateClassBooking[];
 }

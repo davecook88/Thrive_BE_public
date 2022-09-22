@@ -1,6 +1,6 @@
 import { PrivateClassOptionBase } from "./payloads";
 import { Course } from "../course/responses";
-
+import { Student } from "../student/response";
 export interface PrivateClassOption extends PrivateClassOptionBase {
   id: number;
   cents_price: number;
@@ -19,7 +19,16 @@ export interface PrivateClassPackageOption {
   discount_percentage: number;
 }
 
-export interface PrivateClassBooking {}
+export interface PrivateClassBooking {
+  id: number;
+  package: PrivateClassOption;
+  student: Student;
+  total_classes: number;
+  classes_booked: number;
+  paid: boolean;
+  active: boolean;
+  payment_package_id?: number;
+}
 export interface PrivateClassBookingResponse {
   course: Course;
   booking: PrivateClassBooking;

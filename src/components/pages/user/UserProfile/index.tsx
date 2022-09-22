@@ -3,7 +3,8 @@ import course from "../../../../pages/admin/course";
 import { GenericCard } from "../../../common/cards/GenericCard";
 import { PageContainer } from "../../../common/container/PageContainer/styled";
 import { CourseCollapse } from "../../../course/CourseCollapse";
-import { UserCard } from "../../../user/UserCard";
+import { UserCard } from "../../../cards/UserCard";
+import { PackageBookingsSection } from "./PackageBookingsSection";
 import { UserProfileProps } from "./types";
 
 export const UserProfilePage: React.FC<UserProfileProps> = ({ user }) => {
@@ -16,6 +17,7 @@ export const UserProfilePage: React.FC<UserProfileProps> = ({ user }) => {
         userName={user.user_name}
         isAdmin={user.admin}
       />
+      <PackageBookingsSection packageBookings={user.package_bookings || []} />
       {user.studying_courses.length > 0 && (
         <GenericCard>
           <div className="w-full p-4 flex justify-center">
@@ -26,6 +28,7 @@ export const UserProfilePage: React.FC<UserProfileProps> = ({ user }) => {
           </div>
         </GenericCard>
       )}
+
       {user.teaching_courses.length > 0 && (
         <GenericCard className="w-full">
           <div className="w-full text-center">

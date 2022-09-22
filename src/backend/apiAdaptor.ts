@@ -1,8 +1,6 @@
-import { AvailabilityState } from "../components/types/calendar/types";
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../auth/utils";
 import { ThriveUser } from "../auth/types";
-import moment from "moment";
 import { CreatePaymentIntentPayload } from "../components/payment/stripe/types";
 import {
   CreateCourseClassPayload,
