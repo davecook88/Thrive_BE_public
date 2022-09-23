@@ -9,6 +9,8 @@ import {
   CourseMinimal,
 } from "../../types/course/responses";
 import { parseDbTime } from "../../utils/dateMethods";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import { ClassScheduleTable } from "../ClassScheduleTable";
 import { BookCourseButton } from "./BookCourseButton";
 import { CourseInfoEntry } from "./CourseInfoEntry";
@@ -40,7 +42,7 @@ export const CourseCollapse: React.FC<CourseCollapseProps> = ({
   return (
     <div
       className={clsx(
-        "collapse collapse-open border border-base-300 bg-base-100 rounded-box m-6",
+        "collapse collapse-close border border-base-300 bg-base-100 rounded-box m-6",
 
         isOpen && "collapse-open"
       )}
@@ -62,6 +64,17 @@ export const CourseCollapse: React.FC<CourseCollapseProps> = ({
           ) : (
             <AsyncClass course={course} />
           )}
+          <div className="self-center">
+            <button
+              className="btn p-1 min-h-1 text-xs mt-4 px-2 text-info bg-base-100 border-info hover:bg-opacity-5"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsOpen((prev) => !prev);
+              }}
+            >
+              <FontAwesomeIcon icon={faCalendarDays} className="pr-2"/> Show Schedule
+            </button>
+          </div>
         </div>
         <div className="grow-0">
           {showBookNowButton && <BookCourseButton courseId={course.id} />}

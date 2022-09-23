@@ -8,7 +8,7 @@ export const BookCourseButton: React.FC<{ courseId: number }> = ({
 }) => {
   return (
     <button
-      className="btn btn-accent p-1 min-h-1 text-xs"
+      className="btn btn-primary p-1 min-h-1 text-m"
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
