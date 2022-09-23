@@ -21,8 +21,12 @@ import {
   CreatePrivateClassPackagePayload,
   PrivateClassOptionBase,
 } from "../components/types/privateClass/payloads";
-import { PrivateClassOption } from "../components/types/privateClass/responses";
+import {
+  PrivateClassOption,
+  PrivateClassPackageBooking,
+} from "../components/types/privateClass/responses";
 import { Course } from "../components/types/course/responses";
+import { ListPackageBookingsParams } from "./params";
 
 export interface PaginationParams {
   limit?: number;
@@ -346,6 +350,14 @@ class ApiAdaptor {
     );
   }
 
+  static async listPrivatePackageBookings(params?: ListPackageBookingsParams) {
+    return (await this.callApi(
+      `${ApiEndpoints.privateClass}/package-booking/list`,
+      "GET",
+      { params }
+    )) as PrivateClassPackageBooking[];
+  }
+
   static async bookPrivateClassPackageBooking(
     packageId: number,
     start_time: Date
@@ -375,7 +387,9 @@ class ApiAdaptor {
     teacherId: number,
     options?: { serverSide?: boolean }
   ) {
-    return (await this.callApi(`${ApiEndpoints.teacher}/${teacherId}`, "GET", {
+    const url = `${ApiEndpoints.teacher}/${teacherId}`;
+
+    return (await this.callApi(url, "GET", {
       serverSide: options?.serverSide,
     })) as TeacherResponse;
   }

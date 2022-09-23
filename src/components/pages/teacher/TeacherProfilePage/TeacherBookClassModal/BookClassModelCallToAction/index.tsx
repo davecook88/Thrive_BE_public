@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { useAppSelector } from "../../../../../redux/hooks";
+import { selectBookings } from "../../../../../redux/reducers/bookings/bookingsSlice";
 import { StandardButton } from "../../../../../styled/Buttons";
 import { getFormattedPrice } from "../utils";
 import { BookClassModalPackageOptionButton } from "./BookClassModalPackageOptionButton";
 import { BookClassModelCallToActionProps } from "./types";
+import { PrivateClassPackageBooking } from "../../../../../types/privateClass/responses";
 
 export const BookClassModelCallToAction: React.FC<
   BookClassModelCallToActionProps
 > = ({
+  privateClassId,
   startTime,
   endTime,
   price,
@@ -14,6 +18,15 @@ export const BookClassModelCallToAction: React.FC<
   packageOptions,
   setSelectedPackage,
 }) => {
+  const bookings = useAppSelector(selectBookings);
+
+  const applicableBookings = useMemo(() => {
+    bookings.activePackageBookings[0];
+    return bookings.activePackageBookings.filter(
+      (booking: PrivateClassPackageBooking) => (booking.package as Package) === 
+    );
+  }, [privateClassId]);
+
   return (
     <section>
       <div className="p-2">

@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
+import {
+  fetchActivePackageBookingsAsync,
+  selectBookings,
+} from "../../../redux/reducers/bookings/bookingsSlice";
 import { selectAvailability } from "../../../redux/reducers/calendar/availabilitySlice";
 import { PrivateClassOption } from "../../../types/privateClass/responses";
 import { TeacherCard } from "../../../user/teacher/TeacherCard";
@@ -18,6 +22,10 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
   const privateClassOptions: PrivateClassOption[] =
     teacher.private_class_options;
   const availability = useAppSelector(selectAvailability);
+
+  useEffect(() => {
+    fetchActivePackageBookingsAsync();
+  });
 
   if (!availability) return null;
   useEffect(() => {

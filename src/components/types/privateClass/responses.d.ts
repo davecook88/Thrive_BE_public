@@ -19,17 +19,17 @@ export interface PrivateClassPackageOption {
   discount_percentage: number;
 }
 
-export interface PrivateClassBooking {
+export interface PrivateClassPackageBooking {
   id: number;
-  package: PrivateClassOption;
-  student: Student;
+  package: Package;
   total_classes: number;
   classes_booked: number;
   paid: boolean;
   active: boolean;
-  payment_package_id?: number;
+  payment_package_id: number;
+  teacher_id: number;
 }
 export interface PrivateClassBookingResponse {
   course: Course;
-  booking: PrivateClassBooking;
+  booking: PrivateClassPackageBooking;
 }

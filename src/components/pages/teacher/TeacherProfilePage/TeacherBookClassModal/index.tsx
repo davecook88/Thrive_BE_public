@@ -42,6 +42,7 @@ export const TeacherBookClassModal: React.FC<TeacherBookClassModalProps> = ({
             />
           ) : (
             <BookClassModelCallToAction
+              privateClassId={privateClassOption.id}
               endTime={times.end}
               startTime={times.start}
               price={privateClassOption.cents_price}
