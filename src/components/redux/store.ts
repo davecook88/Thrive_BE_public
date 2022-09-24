@@ -6,7 +6,7 @@ import toastReducer from "../common/alerts/toastSlice";
 import adminReducer from "../admin/adminSlice";
 import teacherProfilePageReducer from "./reducers/teachers/TeacherProfilePageSlice/slice";
 import teacherReducer from "./reducers/teachers/teacherSlice";
-import bookingReducer from "./reducers/bookings/bookingsSlice";
+import teacherPrivateClassReducer from "./reducers/teacherPrivateClassBooking/teacherPrivateClassBookingSlice";
 
 export const store = configureStore({
   reducer: {
@@ -17,7 +17,7 @@ export const store = configureStore({
     admin: adminReducer,
     teacherProfilePage: teacherProfilePageReducer,
     teachers: teacherReducer,
-    bookings: bookingReducer,
+    teacherPrivateClassBooking: teacherPrivateClassReducer,
   },
 });
 

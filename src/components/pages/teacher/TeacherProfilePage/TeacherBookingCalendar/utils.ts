@@ -1,3 +1,5 @@
+import { EventPropGetter } from "react-big-calendar";
+import { AvailabilityCalendarEvent } from "../../../../scheduling/BigBookingCalendar/types";
 import { AvailabilityStateEntry } from "../../../../types/calendar/types";
 
 const createCheckAgainstBookedSlots =
@@ -46,4 +48,15 @@ export const splitAvailabilitySlots = (
     }
   });
   return splitSlots;
+};
+
+export const eventPropGetter: EventPropGetter<AvailabilityCalendarEvent> = (
+  event
+) => {
+  return {
+    className: "bg-primary",
+    style: {
+      border: "none",
+    },
+  };
 };

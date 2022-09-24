@@ -1,31 +1,16 @@
-import React, { useMemo } from "react";
-import { useAppSelector } from "../../../../../redux/hooks";
-import { selectBookings } from "../../../../../redux/reducers/bookings/bookingsSlice";
+import React from "react";
 import { StandardButton } from "../../../../../styled/Buttons";
 import { getFormattedPrice } from "../utils";
 import { BookClassModalPackageOptionButton } from "./BookClassModalPackageOptionButton";
 import { BookClassModelCallToActionProps } from "./types";
-import { PrivateClassPackageBooking } from "../../../../../types/privateClass/responses";
+import { useSelectedSlot } from "../../hooks/useSelectedSlot";
+import { usePrivateClassOption } from "../../hooks/usePrivateClassOption";
 
 export const BookClassModelCallToAction: React.FC<
   BookClassModelCallToActionProps
-> = ({
-  privateClassId,
-  startTime,
-  endTime,
-  price,
-  onBookNowClick,
-  packageOptions,
-  setSelectedPackage,
-}) => {
-  const bookings = useAppSelector(selectBookings);
-
-  const applicableBookings = useMemo(() => {
-    bookings.activePackageBookings[0];
-    return bookings.activePackageBookings.filter(
-      (booking: PrivateClassPackageBooking) => (booking.package as Package) === 
-    );
-  }, [privateClassId]);
+> = ({ price, onBookNowClick, packageOptions }) => {
+  const { setSelectedPrivateClassPackage } = usePrivateClassOption();
+  const { selectedAvailabilitySlotDates } = useSelectedSlot();
 
   return (
     <section>
@@ -34,15 +19,21 @@ export const BookClassModelCallToAction: React.FC<
           <tbody>
             <tr>
               <td>Date</td>
-              <td>{startTime.toLocaleDateString()}</td>
+              <td>
+                {selectedAvailabilitySlotDates().start.toLocaleDateString()}
+              </td>
             </tr>
             <tr>
               <td>Start Time</td>
-              <td>{startTime.toLocaleTimeString()}</td>
+              <td>
+                {selectedAvailabilitySlotDates().start.toLocaleTimeString()}
+              </td>
             </tr>
             <tr>
               <td>End Time</td>
-              <td>{endTime.toLocaleTimeString()}</td>
+              <td>
+                {selectedAvailabilitySlotDates().end.toLocaleTimeString()}
+              </td>
             </tr>
             <tr>
               <td>Price</td>
@@ -50,6 +41,11 @@ export const BookClassModelCallToAction: React.FC<
             </tr>
           </tbody>
         </table>
+      </div>
+      <div className="w-full flex justify-center">
+        <StandardButton className="btn-info" onClick={() => onBookNowClick()}>
+          Book now for {getFormattedPrice(price)}
+        </StandardButton>
       </div>
       <div className="w-full flex justify-center">
         <StandardButton
@@ -70,7 +66,7 @@ export const BookClassModelCallToAction: React.FC<
             classPrice={price}
             key={packageOption.id}
             onClick={() => {
-              setSelectedPackage(packageOption);
+              setSelectedPrivateClassPackage(packageOption);
               onBookNowClick();
             }}
           />

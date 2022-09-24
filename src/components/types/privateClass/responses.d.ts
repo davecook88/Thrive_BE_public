@@ -21,13 +21,14 @@ export interface PrivateClassPackageOption {
 
 export interface PrivateClassPackageBooking {
   id: number;
-  package: Package;
+  package: PrivateClassPackageOption;
   total_classes: number;
   classes_booked: number;
   paid: boolean;
   active: boolean;
   payment_package_id: number;
   teacher_id: number;
+  private_class_id: number;
 }
 export interface PrivateClassBookingResponse {
   course: Course;

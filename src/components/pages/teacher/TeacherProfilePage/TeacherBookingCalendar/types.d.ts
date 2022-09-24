@@ -1,9 +1,8 @@
 import { PrivateClassOption } from "../../../../types/privateClass/responses";
+import { Teacher } from "../../../../types/teacher";
 
 export type TeacherBookingCalendarProps = {
-  availabilityEntries: AvailabilityStateEntry[];
-  bookedEntries: AvailabilityStateEntry[];
-  teacherId: number;
   classLength: number;
-  selectedPrivateClass?: PrivateClassOption;
+  displayedDates: DisplayDatesType;
+  setDisplayedDates: (displayedDates: DisplayDatesType) => void;
 };

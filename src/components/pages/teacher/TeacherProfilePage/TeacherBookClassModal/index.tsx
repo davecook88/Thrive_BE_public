@@ -1,26 +1,40 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { TeacherBookClassModalProps } from "./types";
 import { TeacherAvatar } from "../../../../user/teacher/TeacherAvatar";
 import { BookClassModelCallToAction } from "./BookClassModelCallToAction";
 import { TeacherBookClassModalPaymentForm } from "./BookClassModalPaymentForm";
 import { PrivateClassPackageOption } from "../../../../types/privateClass/responses";
-export const TeacherBookClassModal: React.FC<TeacherBookClassModalProps> = ({
-  teacher,
-  availabilitySlot,
-  privateClassOption,
-}) => {
+import { usePrivateClassOption } from "../hooks/usePrivateClassOption";
+import { useSelectedSlot } from "../hooks/useSelectedSlot";
+import { useTeacherProfile } from "../../../../../hooks/useTeacherProfile";
+import useDisplayedDates from "../hooks/useDisplayedDates";
+export const TeacherBookClassModal: React.FC<
+  TeacherBookClassModalProps
+> = ({}) => {
   const [showPaymentContents, setShowPaymentContents] = useState(false);
-  const [selectedPackage, setSelectedPackage] =
-    useState<PrivateClassPackageOption | null>(null);
-  const times = useMemo(
-    () => ({
-      start: new Date(availabilitySlot.start),
-      end: new Date(availabilitySlot.end),
-    }),
-    [availabilitySlot]
-  );
-  if (!privateClassOption)
+
+  const { selectedPrivateClassOption, selectedPrivateClassPackage } =
+    usePrivateClassOption();
+  const { selectedAvailabilitySlot } = useSelectedSlot();
+  const { teacher } = useTeacherProfile();
+
+  if (!selectedPrivateClassOption)
     return <div>You need to select a private class option to book</div>;
+
+  const displayModalContents = () => {
+    if (!selectedAvailabilitySlot) return "No slot selected";
+    if (showPaymentContents) return <TeacherBookClassModalPaymentForm />;
+    else if (selectedPrivateClassPackage) return <div></div>;
+    return (
+      <BookClassModelCallToAction
+        price={selectedPrivateClassOption.cents_price}
+        onBookNowClick={() => setShowPaymentContents(true)}
+        packageOptions={selectedPrivateClassOption.package_options}
+      />
+    );
+  };
+
+  if (!teacher) return null;
 
   return (
     <div className="p-6">
@@ -34,23 +48,7 @@ export const TeacherBookClassModal: React.FC<TeacherBookClassModalProps> = ({
               </h2>
             </div>
           </header>
-          {showPaymentContents ? (
-            <TeacherBookClassModalPaymentForm
-              privateClassOption={privateClassOption}
-              startTime={availabilitySlot.start}
-              privateClassPackage={selectedPackage}
-            />
-          ) : (
-            <BookClassModelCallToAction
-              privateClassId={privateClassOption.id}
-              endTime={times.end}
-              startTime={times.start}
-              price={privateClassOption.cents_price}
-              onBookNowClick={() => setShowPaymentContents(true)}
-              packageOptions={privateClassOption.package_options}
-              setSelectedPackage={setSelectedPackage}
-            />
-          )}
+          {displayModalContents()}
         </div>
       </div>
     </div>

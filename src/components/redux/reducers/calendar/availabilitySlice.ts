@@ -25,6 +25,7 @@ const initialState: AvailabilityState = {
 export const fetchAvailabilityAsync = createAsyncThunk(
   "availability/fetchAvailability",
   async (action: { teacherId: number; start: Date; end: Date }) => {
+    console.log("fetchAvailabilityAsync", action);
     const response = await ApiAdaptor.getAvailability(
       action.teacherId,
       action.start,

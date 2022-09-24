@@ -3,8 +3,4 @@ import {
   PrivateClassPackageOption,
 } from "../../../../../types/privateClass/responses";
 
-export interface TeacherBookClassModalPaymentFormProps {
-  privateClassOption: PrivateClassOption;
-  privateClassPackage: PrivateClassPackageOption | null;
-  startTime: Date;
-}
+export interface TeacherBookClassModalPaymentFormProps {}

@@ -9,7 +9,6 @@ export interface BigBookingCalendarProps {
   height: string;
   defaultView: View;
   availabilityEntries: AvailabilityStateEntry[];
-  onDisplayedDatesUpdate: (dates: DisplayDatesType) => void;
   onSelectEvent: (
     event: AvailabilityCalendarEvent,
     e: React.SyntheticEvent<HTMLElement, globalThis.Event>
@@ -17,6 +16,7 @@ export interface BigBookingCalendarProps {
   displayedDates: DisplayDatesType;
   setDisplayedDates: React.Dispatch<React.SetStateAction<DisplayDatesType>>;
   eventPropGetter?: EventPropGetter<AvailabilityCalendarEvent>;
+  onDisplayedDatesUpdate?: (dates: DisplayDatesType) => void;
 }
 export interface AvailabilityCalendarEvent extends Event {
   id?: string;
