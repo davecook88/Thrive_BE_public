@@ -15,7 +15,7 @@ export type TeacherPrivateClassBookingsState = {
   selectedPrivateClassOption: PrivateClassOption | null;
   selectedAvailabilitySlot: AvailabilityCalendarEvent | null;
   selectedPrivateClassPackage: PrivateClassPackageOption | null;
-  packageBookingToApply: PrivateClassBooking | null;
+  packageBookingToApply: PrivateClassPackageBooking | null;
 };
 
 export type SetPackageBookingsAction = {
@@ -41,10 +41,6 @@ export type SetPrivateClassPackageOptionAction = {
 
 export type SetSelectedAvailabilitySlotAction = {
   selectedAvailabilitySlot: AvailabilityCalendarEvent;
-};
-
-export type SetPackerAction = {
-  booking: PrivateClassPackageBooking | null;
 };
 
 export type SetActiveBookingToApplyAction = {

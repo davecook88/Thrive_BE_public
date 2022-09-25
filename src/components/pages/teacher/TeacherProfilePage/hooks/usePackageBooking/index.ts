@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react";
+import ApiAdaptor from "../../../../../../backend/apiAdaptor";
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
 import {
   fetchActivePackageBookingsAsync,
@@ -43,6 +44,16 @@ export const usePackageBooking = () => {
     );
   }, [selectedPrivateClassOption]);
 
+  const usePackageToBookClass = (startTime: Date) => {
+    if (!packageBookingToApply)
+      throw new Error("No packageBookingToApply selected");
+    ApiAdaptor.bookPrivateClassPackageBooking(
+      packageBookingToApply.id,
+      startTime
+    );
+    throw new Error("Implement this");
+  };
+
   return {
     activePackageBookings,
     packageBookingToApply,
@@ -50,6 +61,7 @@ export const usePackageBooking = () => {
     selectPackageBookingToApply,
     clearSelectedPackageBookingToApply,
     fetchActiveBookings,
+    usePackageToBookClass,
     fetchActivePackageBookingsAsync,
   };
 };

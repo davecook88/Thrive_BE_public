@@ -5,11 +5,13 @@ import { BookClassModalPackageOptionButton } from "./BookClassModalPackageOption
 import { BookClassModelCallToActionProps } from "./types";
 import { useSelectedSlot } from "../../hooks/useSelectedSlot";
 import { usePrivateClassOption } from "../../hooks/usePrivateClassOption";
+import { usePackageBooking } from "../../hooks/usePackageBooking";
 
 export const BookClassModelCallToAction: React.FC<
   BookClassModelCallToActionProps
 > = ({ price, onBookNowClick, packageOptions }) => {
   const { setSelectedPrivateClassPackage } = usePrivateClassOption();
+  const { applicableBookings } = usePackageBooking();
   const { selectedAvailabilitySlotDates } = useSelectedSlot();
 
   return (
@@ -43,9 +45,9 @@ export const BookClassModelCallToAction: React.FC<
         </table>
       </div>
       <div className="w-full flex justify-center">
-        <StandardButton className="btn-info" onClick={() => onBookNowClick()}>
-          Book now for {getFormattedPrice(price)}
-        </StandardButton>
+        {applicableBookings.map((booking) => (
+          <BookClassModalPackageOptionButton />
+        ))}
       </div>
       <div className="w-full flex justify-center">
         <StandardButton
