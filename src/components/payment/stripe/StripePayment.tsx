@@ -19,6 +19,7 @@ const StripePayment: React.FC<StripePaymentProps> = (props) => {
   }, []);
 
   const createPaymentIntent = async ({
+    category,
     amount,
     course_id,
     course_name,
@@ -28,6 +29,7 @@ const StripePayment: React.FC<StripePaymentProps> = (props) => {
     package_id,
   }: StripePaymentProps) => {
     const payload: CreatePaymentIntentPayload = {
+      category,
       currency: "usd",
       amount,
       course_id,

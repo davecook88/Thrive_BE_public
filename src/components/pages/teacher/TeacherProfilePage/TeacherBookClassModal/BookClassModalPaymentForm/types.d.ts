@@ -1,3 +1,4 @@
+import { PaymentIntentCategory } from "../../../../../payment/stripe/types";
 import {
   PrivateClassOption,
   PrivateClassPackageOption,

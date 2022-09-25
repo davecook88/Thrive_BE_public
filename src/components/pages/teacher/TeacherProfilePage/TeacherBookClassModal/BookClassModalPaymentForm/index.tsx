@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { selectUser } from "../../../../../../auth/userSlice";
 import ApiAdaptor from "../../../../../../backend/apiAdaptor";
 import StripePayment from "../../../../../payment/stripe/StripePayment";
+import { PaymentIntentCategory } from "../../../../../payment/stripe/types";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { Course } from "../../../../../types/course/responses";
 import {
   PrivateClassBookingResponse,
   PrivateClassPackageBooking,
 } from "../../../../../types/privateClass/responses";
-import { usePackageBooking } from "../../hooks/usePackageBooking";
 import { usePrivateClassOption } from "../../hooks/usePrivateClassOption";
 import { useSelectedSlot } from "../../hooks/useSelectedSlot";
 import { TeacherBookClassModalPaymentFormProps } from "./types";
 
 export const TeacherBookClassModalPaymentForm: React.FC<
   TeacherBookClassModalPaymentFormProps
-> = () => {
+> = ({}) => {
   const admin = useAppSelector(selectUser);
   const [course, setCourse] = useState<Course | null>(null);
   const [packageForPayment, setPackageForPayment] =
@@ -63,11 +63,17 @@ export const TeacherBookClassModalPaymentForm: React.FC<
     else createCourse();
   }, []);
 
+  const category: PaymentIntentCategory = useMemo(
+    () => (packageForPayment ? "PACKAGE_BOOKING" : "COURSE_BOOKING"),
+    [selectedPrivateClassPackage, packageForPayment]
+  );
+
   if (!course || !admin.user || !selectedPrivateClassOption)
     return <div>Loading...</div>;
   return (
     <div>
       <StripePayment
+        category={category}
         package_id={packageForPayment?.id}
         amount={selectedPrivateClassOption.cents_price}
         course_id={course.id}

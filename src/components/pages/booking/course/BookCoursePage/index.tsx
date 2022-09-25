@@ -51,6 +51,7 @@ const BookCoursePage: React.FC<BookCoursePage> = ({ course, levelCourses }) => {
       )}
       {user?.details.email && showPaymentForm && (
         <StripePayment
+          category="COURSE_BOOKING"
           amount={course.price}
           course_id={course.id}
           course_name={course.name}
