@@ -53,12 +53,12 @@ export const TeacherBookClassModalPaymentForm: React.FC<
       await ApiAdaptor.createPrivateClassPackageBooking(
         selectedPrivateClassPackage.id
       );
-
-    setCourse(bookingResponse.course);
     setPackageForPayment(bookingResponse.booking);
+    setCourse(bookingResponse.course);
   };
 
   useEffect(() => {
+    debugger;
     if (selectedPrivateClassPackage) createPackage();
     else createCourse();
   }, []);
@@ -74,7 +74,7 @@ export const TeacherBookClassModalPaymentForm: React.FC<
     <div>
       <StripePayment
         category={category}
-        package_id={packageForPayment?.id}
+        package_booking_id={packageForPayment?.id}
         amount={selectedPrivateClassOption.cents_price}
         course_id={course.id}
         course_name={course.name}

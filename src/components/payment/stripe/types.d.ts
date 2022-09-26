@@ -12,5 +12,5 @@ export interface CreatePaymentIntentPayload {
   user_email: string;
   course_name: string;
   user_google_id: string;
-  package_id?: number;
+  package_booking_id?: number;
 }
