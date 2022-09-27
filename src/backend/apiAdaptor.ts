@@ -27,34 +27,16 @@ import {
 } from "../components/types/privateClass/responses";
 import { Course } from "../components/types/course/responses";
 import { ListPackageBookingsParams } from "./params";
-
-export interface PaginationParams {
-  limit?: number;
-  page?: number;
-}
-
-export interface PostAvailabilityPayload {
-  timeframe: { start: Date; end: Date };
-  events: CreateAvailabilityCalendarEvent[];
-}
-
-export enum ApiEndpoints {
-  verifyGoogleToken = "/auth/google",
-  teacherAvailability = "/bookings/teacher-availability",
-  payment = "/payment",
-  paymentCreateIntent = "/payment/create-payment-intent",
-  course = "/course",
-  courseClass = "/course/class",
-  teacher = "/teacher",
-  teacherAdmin = "/admin/teacher",
-  level = "/level",
-  unit = "/level/unit",
-  bookCourse = "/book/course",
-  user = "/user",
-  privateClass = "/private_class",
-}
-
-export class MissingTokenError extends Error {}
+import { ApiEndpoints, MissingTokenError } from "./constants";
+import {
+  GetAvailabilityResponse,
+  PaginationParams,
+  PostAvailabilityPayload,
+} from "./types";
+import {
+  AddCourseBookingLineItemPayload,
+  AddPackageBookingLineItemPayload,
+} from "../components/types/invoice/payloads";
 
 class ApiAdaptor {
   static client = axios.create({
@@ -408,6 +390,42 @@ class ApiAdaptor {
     return await this.callApi(
       `${ApiEndpoints.payment}/confirmation?payment_intent_id=${paymentIntentId}`,
       "GET"
+    );
+  }
+
+  static async getInvoice(invoiceId: number) {
+    return await this.callApi(`${ApiEndpoints.invoice}/${invoiceId}`, "GET");
+  }
+
+  static async createInvoice() {
+    return await this.callApi(`${ApiEndpoints.invoice}`, "POST");
+  }
+
+  static async addPackageBookingLineItem(
+    invoiceId: number,
+    payload: AddPackageBookingLineItemPayload
+  ) {
+    return await this.callApi(
+      `${ApiEndpoints.invoice}/${invoiceId}/item/booking`,
+      "POST",
+      { payload }
+    );
+  }
+  static async addCourseLineItem(
+    invoiceId: number,
+    payload: AddCourseBookingLineItemPayload
+  ) {
+    return await this.callApi(
+      `${ApiEndpoints.invoice}/${invoiceId}/item/course`,
+      "POST",
+      { payload }
+    );
+  }
+
+  static async deleteLineItem(invoiceId: number, lineItemId: number) {
+    return await this.callApi(
+      `${ApiEndpoints.invoice}/${invoiceId}/item/${lineItemId}`,
+      "DELETE"
     );
   }
 }

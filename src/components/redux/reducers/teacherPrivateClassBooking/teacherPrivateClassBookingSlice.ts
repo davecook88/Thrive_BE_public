@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getDefaultDisplayDates } from "../../../scheduling/BigBookingCalendar/utils";
 import { RootState } from "../../store";
 import {
   TeacherPrivateClassBookingsState,
@@ -10,15 +9,7 @@ import {
   SetPrivateClassCalendarDisplayedDatesAction,
   SetPrivateClassPackageOptionAction,
 } from "./types";
-import { fetchAllPackageBookings } from "./utils";
-
-const getSerializableDisplayDates = () => {
-  const dates = getDefaultDisplayDates();
-  return {
-    start: dates.start.toISOString(),
-    end: dates.end.toISOString(),
-  };
-};
+import { fetchAllPackageBookings, getSerializableDisplayDates } from "./utils";
 
 export const initialState: TeacherPrivateClassBookingsState = {
   packageBookings: [],

@@ -45,9 +45,7 @@ export const BookClassModelCallToAction: React.FC<
         </table>
       </div>
       <div className="w-full flex justify-center">
-        {applicableBookings.map((booking) => (
-          <BookClassModalPackageOptionButton />
-        ))}
+
       </div>
       <div className="w-full flex justify-center">
         <StandardButton

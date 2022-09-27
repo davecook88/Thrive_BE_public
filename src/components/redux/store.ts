@@ -7,6 +7,7 @@ import adminReducer from "../admin/adminSlice";
 import teacherProfilePageReducer from "./reducers/teachers/TeacherProfilePageSlice/slice";
 import teacherReducer from "./reducers/teachers/teacherSlice";
 import teacherPrivateClassReducer from "./reducers/teacherPrivateClassBooking/teacherPrivateClassBookingSlice";
+import invoiceReducer from "./reducers/invoice/invoiceSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     teacherProfilePage: teacherProfilePageReducer,
     teachers: teacherReducer,
     teacherPrivateClassBooking: teacherPrivateClassReducer,
+    invoice: invoiceReducer,
   },
 });
 

@@ -8,6 +8,7 @@ import { usePrivateClassOption } from "../hooks/usePrivateClassOption";
 import { useSelectedSlot } from "../hooks/useSelectedSlot";
 import { useTeacherProfile } from "../../../../../hooks/useTeacherProfile";
 import useDisplayedDates from "../hooks/useDisplayedDates";
+import { useInvoice } from "../../../../../hooks/useInvoice";
 export const TeacherBookClassModal: React.FC<
   TeacherBookClassModalProps
 > = ({}) => {
@@ -17,6 +18,7 @@ export const TeacherBookClassModal: React.FC<
     usePrivateClassOption();
   const { selectedAvailabilitySlot } = useSelectedSlot();
   const { teacher } = useTeacherProfile();
+  const { invoice } = useInvoice();
 
   if (!selectedPrivateClassOption)
     return <div>You need to select a private class option to book</div>;

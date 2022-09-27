@@ -1,4 +1,5 @@
 import ApiAdaptor from "../../../../backend/apiAdaptor";
+import { getDefaultDisplayDates } from "../../../scheduling/BigBookingCalendar/utils";
 import { PrivateClassPackageBooking } from "../../../types/privateClass/responses";
 
 export const fetchAllPackageBookings = async (activeOnly: boolean) => {
@@ -18,4 +19,12 @@ export const fetchAllPackageBookings = async (activeOnly: boolean) => {
     }
   }
   return { bookings, activeOnly };
+};
+
+export const getSerializableDisplayDates = () => {
+  const dates = getDefaultDisplayDates();
+  return {
+    start: dates.start.toISOString(),
+    end: dates.end.toISOString(),
+  };
 };

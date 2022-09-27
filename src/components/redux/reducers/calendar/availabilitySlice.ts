@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ApiAdaptor from "../../../../backend/apiAdaptor";
+import { GetAvailabilityResponseEntry } from "../../../../backend/types";
 import {
   AvailabilityState,
   SetAvailabilityAction,
