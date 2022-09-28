@@ -42,7 +42,7 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
       user_email={user.details.email}
       user_google_id={user.details.google_id || ""}
       user_id={Number(user.details.id)}
-      returnUrl="/payment-confirmation"
+      returnUrl={process.env.NEXT_PUBLIC_APP_BASE_URL + "/payment-confirmation"}
     />
   );
   return (

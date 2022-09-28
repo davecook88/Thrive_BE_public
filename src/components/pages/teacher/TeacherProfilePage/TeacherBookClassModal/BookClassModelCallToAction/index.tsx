@@ -8,12 +8,11 @@ import { usePrivateClassOption } from "../../hooks/usePrivateClassOption";
 import { usePackageBooking } from "../../hooks/usePackageBooking";
 import { useTeacherProfilePayment } from "../../hooks/useTeacherProfilePayment";
 import { PrivateClassPackageOption } from "../../../../../types/privateClass/responses";
+import { BookClassWithExistingPackage } from "./BookClassWithExistingPackage";
 
 export const BookClassModelCallToAction: React.FC<
   BookClassModelCallToActionProps
 > = ({ price, packageOptions }) => {
-  const { setSelectedPrivateClassPackage } = usePrivateClassOption();
-  const { applicableBookings } = usePackageBooking();
   const { selectedAvailabilitySlotDates } = useSelectedSlot();
   const {
     showPaymentScreen,
@@ -66,7 +65,9 @@ export const BookClassModelCallToAction: React.FC<
           </tbody>
         </table>
       </div>
-      <div className="w-full flex justify-center"></div>
+      <div className="w-full flex justify-center">
+        <BookClassWithExistingPackage />
+      </div>
       <div className="w-full flex justify-center">
         <StandardButton className="btn-primary" onClick={onPrivateClassBooking}>
           Book now for {getFormattedPrice(price)}

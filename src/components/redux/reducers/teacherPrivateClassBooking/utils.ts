@@ -12,7 +12,7 @@ export const fetchAllPackageBookings = async (activeOnly: boolean) => {
       active_only: activeOnly,
     });
     if (Array.isArray(response) && response.length > 0) {
-      bookings.concat(response);
+      bookings.push(...response);
       page++;
     } else {
       finished = true;

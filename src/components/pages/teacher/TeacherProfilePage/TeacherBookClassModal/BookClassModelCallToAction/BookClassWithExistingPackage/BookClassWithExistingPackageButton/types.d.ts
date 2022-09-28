@@ -1,6 +1,6 @@
 import { PrivateClassPackageBooking } from "../../../../../../../types/privateClass/responses";
 
 export type BookClassWithExistingPackageButtonProps = {
-  booking: PrivateClassBookingResponse;
+  booking: PrivateClassPackageBooking;
   clickHandler: (booking: PrivateClassPackageBooking) => void;
 };

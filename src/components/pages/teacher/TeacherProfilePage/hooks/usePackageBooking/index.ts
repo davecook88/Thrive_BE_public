@@ -37,12 +37,16 @@ export const usePackageBooking = () => {
    * for the selected private class option
    */
   const applicableBookings = useMemo(() => {
+    console.log("applicableBookings", {
+      selectedPrivateClassOption,
+      activePackageBookings,
+    });
     if (!selectedPrivateClassOption) return [];
     return activePackageBookings.filter(
       (booking: PrivateClassPackageBooking) =>
         booking.private_class_id === selectedPrivateClassOption.id
     );
-  }, [selectedPrivateClassOption]);
+  }, [selectedPrivateClassOption, activePackageBookings]);
 
   const usePackageToBookClass = (startTime: Date) => {
     if (!packageBookingToApply)

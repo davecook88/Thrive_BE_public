@@ -7,7 +7,7 @@ export const BookClassWithExistingPackageButton: React.FC<
 > = ({ booking, clickHandler }) => {
   return (
     <StandardButton className="m-2" onClick={() => clickHandler(booking)}>
-      {booking.booking.classes_booked} / {booking.booking.total_classes}
+      {booking?.classes_booked} / {booking?.total_classes} classes used
     </StandardButton>
   );
 };
