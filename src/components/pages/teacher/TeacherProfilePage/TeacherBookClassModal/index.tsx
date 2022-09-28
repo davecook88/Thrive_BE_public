@@ -9,28 +9,24 @@ import { useSelectedSlot } from "../hooks/useSelectedSlot";
 import { useTeacherProfile } from "../../../../../hooks/useTeacherProfile";
 import useDisplayedDates from "../hooks/useDisplayedDates";
 import { useInvoice } from "../../../../../hooks/useInvoice";
+import { useTeacherProfilePayment } from "../hooks/useTeacherProfilePayment";
 export const TeacherBookClassModal: React.FC<
   TeacherBookClassModalProps
 > = ({}) => {
-  const [showPaymentContents, setShowPaymentContents] = useState(false);
-
-  const { selectedPrivateClassOption, selectedPrivateClassPackage } =
-    usePrivateClassOption();
+  const { readyForPayment } = useTeacherProfilePayment();
+  const { selectedPrivateClassOption } = usePrivateClassOption();
   const { selectedAvailabilitySlot } = useSelectedSlot();
   const { teacher } = useTeacherProfile();
-  const { invoice } = useInvoice();
 
   if (!selectedPrivateClassOption)
     return <div>You need to select a private class option to book</div>;
 
   const displayModalContents = () => {
     if (!selectedAvailabilitySlot) return "No slot selected";
-    if (showPaymentContents) return <TeacherBookClassModalPaymentForm />;
-    else if (selectedPrivateClassPackage) return <div></div>;
+    if (readyForPayment) return <TeacherBookClassModalPaymentForm />;
     return (
       <BookClassModelCallToAction
         price={selectedPrivateClassOption.cents_price}
-        onBookNowClick={() => setShowPaymentContents(true)}
         packageOptions={selectedPrivateClassOption.package_options}
       />
     );

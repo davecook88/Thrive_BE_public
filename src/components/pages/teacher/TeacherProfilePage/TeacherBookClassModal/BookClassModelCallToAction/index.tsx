@@ -6,13 +6,15 @@ import { BookClassModelCallToActionProps } from "./types";
 import { useSelectedSlot } from "../../hooks/useSelectedSlot";
 import { usePrivateClassOption } from "../../hooks/usePrivateClassOption";
 import { usePackageBooking } from "../../hooks/usePackageBooking";
+import { useTeacherProfilePayment } from "../../hooks/useTeacherProfilePayment";
 
 export const BookClassModelCallToAction: React.FC<
   BookClassModelCallToActionProps
-> = ({ price, onBookNowClick, packageOptions }) => {
+> = ({ price, packageOptions }) => {
   const { setSelectedPrivateClassPackage } = usePrivateClassOption();
   const { applicableBookings } = usePackageBooking();
   const { selectedAvailabilitySlotDates } = useSelectedSlot();
+  const { showPaymentScreen } = useTeacherProfilePayment();
 
   return (
     <section>
@@ -44,13 +46,11 @@ export const BookClassModelCallToAction: React.FC<
           </tbody>
         </table>
       </div>
-      <div className="w-full flex justify-center">
-
-      </div>
+      <div className="w-full flex justify-center"></div>
       <div className="w-full flex justify-center">
         <StandardButton
           className="btn-primary"
-          onClick={() => onBookNowClick()}
+          onClick={() => showPaymentScreen()}
         >
           Book now for {getFormattedPrice(price)}
         </StandardButton>
@@ -67,7 +67,7 @@ export const BookClassModelCallToAction: React.FC<
             key={packageOption.id}
             onClick={() => {
               setSelectedPrivateClassPackage(packageOption);
-              onBookNowClick();
+              showPaymentScreen();
             }}
           />
         ))}

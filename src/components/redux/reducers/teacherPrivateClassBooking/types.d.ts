@@ -9,6 +9,7 @@ import { DisplayDatesType } from "../../../scheduling/BigBookingCalendar/types";
 import { AvailabilityCalendarEvent } from "../../../scheduling/BigBookingCalendar/types";
 
 export type TeacherPrivateClassBookingsState = {
+  readyForPayment: boolean;
   packageBookings: PrivateClassBooking[];
   activePackageBookings: PrivateClassBooking[];
   calendarDisplayedDates: DisplayDatesSerializableType;
@@ -26,6 +27,10 @@ export interface DisplayDatesSerializableType {
   start: string;
   end: string;
 }
+
+export type SetReadyForPaymentAction = {
+  readyForPayment: boolean;
+};
 
 export type SetPrivateClassCalendarDisplayedDatesAction = {
   displayedDates: DisplayDatesSerializableType;

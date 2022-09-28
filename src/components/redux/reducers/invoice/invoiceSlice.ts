@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
+import { INVOICE_SLICE } from "./constants";
 import {
   addCourseLineItem,
   addPackageBookingLineItem,
@@ -14,11 +15,15 @@ export const initialState: InvoiceState = {
 };
 
 export const invoiceSlice = createSlice({
-  name: "teacherPrivateClassBooking",
+  name: INVOICE_SLICE,
   initialState,
   reducers: {
     setInvoice(state, action: PayloadAction<SetInvoiceAction>) {
+      console.log("setInvoice", { action });
       state.invoice = action.payload.invoice;
+    },
+    clearInvoice(state) {
+      state.invoice = null;
     },
   },
   extraReducers: (builder) => {
@@ -40,7 +45,7 @@ export const invoiceSlice = createSlice({
   },
 });
 
-export const { setInvoice } = invoiceSlice.actions;
+export const { setInvoice, clearInvoice } = invoiceSlice.actions;
 
 export const selectInvoiceState = (state: RootState) => state.invoice;
 export default invoiceSlice.reducer;

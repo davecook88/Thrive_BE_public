@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { selectUser } from "../../../../../../auth/userSlice";
 import ApiAdaptor from "../../../../../../backend/apiAdaptor";
+import { useInvoice } from "../../../../../../hooks/useInvoice";
+import { InvoiceConfirmation } from "../../../../../payment/InvoiceConfirmation";
 import StripePayment from "../../../../../payment/stripe/StripePayment";
 import { PaymentIntentCategory } from "../../../../../payment/stripe/types";
 import { useAppSelector } from "../../../../../redux/hooks";
@@ -11,18 +13,17 @@ import {
 } from "../../../../../types/privateClass/responses";
 import { usePrivateClassOption } from "../../hooks/usePrivateClassOption";
 import { useSelectedSlot } from "../../hooks/useSelectedSlot";
+import { useTeacherProfilePayment } from "../../hooks/useTeacherProfilePayment";
 import { TeacherBookClassModalPaymentFormProps } from "./types";
 
 export const TeacherBookClassModalPaymentForm: React.FC<
   TeacherBookClassModalPaymentFormProps
 > = ({}) => {
-  const admin = useAppSelector(selectUser);
-  const [course, setCourse] = useState<Course | null>(null);
-  const [packageForPayment, setPackageForPayment] =
-    useState<PrivateClassPackageBooking | null>(null);
   const { selectedPrivateClassOption, selectedPrivateClassPackage } =
     usePrivateClassOption();
   const { selectedAvailabilitySlotDates } = useSelectedSlot();
+  const { addPackageBookingToInvoice, addCourseToInvoice } = useInvoice();
+  const { hidePaymentScreen } = useTeacherProfilePayment();
 
   const createCourse = async () => {
     if (!selectedPrivateClassOption)
@@ -41,7 +42,7 @@ export const TeacherBookClassModalPaymentForm: React.FC<
         start_time: selectedAvailabilitySlotDates().start,
       }
     );
-    setCourse(newCourse);
+    addCourseToInvoice(newCourse.id);
   };
 
   const createPackage = async () => {
@@ -53,26 +54,18 @@ export const TeacherBookClassModalPaymentForm: React.FC<
       await ApiAdaptor.createPrivateClassPackageBooking(
         selectedPrivateClassPackage.id
       );
-    setPackageForPayment(bookingResponse.booking);
-    setCourse(bookingResponse.course);
+    addPackageBookingToInvoice(bookingResponse.booking.id);
   };
 
   useEffect(() => {
-    debugger;
     if (selectedPrivateClassPackage) createPackage();
     else createCourse();
   }, []);
 
-  const category: PaymentIntentCategory = useMemo(
-    () => (packageForPayment ? "PACKAGE_BOOKING" : "COURSE_BOOKING"),
-    [selectedPrivateClassPackage, packageForPayment]
-  );
-
-  if (!course || !admin.user || !selectedPrivateClassOption)
-    return <div>Loading...</div>;
   return (
     <div>
-      <StripePayment
+      <InvoiceConfirmation keepBrowsing={hidePaymentScreen} />
+      {/* <StripePayment
         category={category}
         package_booking_id={packageForPayment?.id}
         amount={selectedPrivateClassOption.cents_price}
@@ -85,7 +78,7 @@ export const TeacherBookClassModalPaymentForm: React.FC<
         returnUrl={
           process.env.NEXT_PUBLIC_APP_BASE_URL + "/payment-confirmation"
         }
-      />
+      /> */}
     </div>
   );
 };

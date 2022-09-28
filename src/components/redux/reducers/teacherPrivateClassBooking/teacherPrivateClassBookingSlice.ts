@@ -8,10 +8,12 @@ import {
   SetActiveBookingToApplyAction,
   SetPrivateClassCalendarDisplayedDatesAction,
   SetPrivateClassPackageOptionAction,
+  SetReadyForPaymentAction,
 } from "./types";
 import { fetchAllPackageBookings, getSerializableDisplayDates } from "./utils";
 
 export const initialState: TeacherPrivateClassBookingsState = {
+  readyForPayment: false,
   packageBookings: [],
   activePackageBookings: [],
   calendarDisplayedDates: getSerializableDisplayDates(),
@@ -41,6 +43,13 @@ export const teacherPrivateClassBookingSlice = createSlice({
   name: "teacherPrivateClassBooking",
   initialState,
   reducers: {
+    setReadyForPayment: (
+      state,
+      action: PayloadAction<SetReadyForPaymentAction>
+    ) => {
+      state.readyForPayment = action.payload.readyForPayment;
+    },
+
     setPackageBookings: (
       state,
       action: PayloadAction<SetPackageBookingsAction>
@@ -109,6 +118,7 @@ export const teacherPrivateClassBookingSlice = createSlice({
 });
 
 export const {
+  setReadyForPayment,
   setPackageBookings,
   setPrivateClassOption,
   setSelectedAvailabilitySlot,

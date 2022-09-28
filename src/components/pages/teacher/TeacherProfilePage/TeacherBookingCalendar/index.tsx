@@ -9,6 +9,7 @@ import { eventPropGetter, splitAvailabilitySlots } from "./utils";
 import { TeacherBookClassModal } from "../TeacherBookClassModal";
 import { useSelectedSlot } from "../hooks/useSelectedSlot";
 import { useTeacherProfile } from "../../../../../hooks/useTeacherProfile";
+import { useInvoice } from "../../../../../hooks/useInvoice";
 
 export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
   classLength,
@@ -20,6 +21,7 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
 
   const { setSlot } = useSelectedSlot();
   const { teacher } = useTeacherProfile();
+  const { invoice } = useInvoice();
   const onSelectEvent = (event: AvailabilityCalendarEvent) => {
     setSlot(event);
     setModalOpen(true);
@@ -47,7 +49,7 @@ export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
         className="w-max h-max p-4 bg-white m-auto mt-24 border-4 border-solid border-slate-400"
         appElement={document.getElementById("root") || undefined}
       >
-        <TeacherBookClassModal />
+        {invoice && <TeacherBookClassModal />}
       </Modal>
     </div>
   );

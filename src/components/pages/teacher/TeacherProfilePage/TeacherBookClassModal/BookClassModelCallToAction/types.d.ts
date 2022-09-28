@@ -2,6 +2,5 @@ import { PrivateClassPackageOption } from "../../../../../types/privateClass/res
 
 export interface BookClassModelCallToActionProps {
   price: number;
-  onBookNowClick: () => void;
   packageOptions: PrivateClassPackageOption[];
 }
