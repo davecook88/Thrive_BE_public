@@ -4,6 +4,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { CreatePaymentIntentPayload } from "./types";
 import ApiAdaptor from "../../../backend/apiAdaptor";
 import CheckoutForm from "./CheckoutForm";
+import { useInvoice } from "../../../hooks/useInvoice";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_API as string);
 interface StripePaymentProps extends CreatePaymentIntentPayload {
@@ -13,31 +14,24 @@ interface StripePaymentProps extends CreatePaymentIntentPayload {
 
 const StripePayment: React.FC<StripePaymentProps> = (props) => {
   const [clientSecret, setClientSecret] = useState("");
+  const { invoice } = useInvoice();
 
   useEffect(() => {
-    createPaymentIntent(props);
-  }, []);
+    if (!invoice) return;
+    createPaymentIntent(invoice.id, props);
+  }, [invoice]);
 
-  const createPaymentIntent = async ({
-    category,
-    amount,
-    course_id,
-    course_name,
-    user_email,
-    user_google_id,
-    user_id,
-    package_booking_id,
-  }: StripePaymentProps) => {
+  const createPaymentIntent = async (
+    invoiceId: number,
+    { amount, user_email, user_google_id, user_id }: StripePaymentProps
+  ) => {
     const payload: CreatePaymentIntentPayload = {
-      category,
       currency: "usd",
       amount,
-      course_id,
-      course_name,
       user_email,
       user_google_id,
       user_id,
-      package_booking_id,
+      invoice_id: invoiceId,
     };
     const response = await ApiAdaptor.createStripePaymentIntent(payload);
     setClientSecret(response.secret);
