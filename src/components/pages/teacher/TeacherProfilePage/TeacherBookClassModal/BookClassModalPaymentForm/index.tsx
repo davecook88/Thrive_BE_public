@@ -19,48 +19,7 @@ import { TeacherBookClassModalPaymentFormProps } from "./types";
 export const TeacherBookClassModalPaymentForm: React.FC<
   TeacherBookClassModalPaymentFormProps
 > = ({}) => {
-  const { selectedPrivateClassOption, selectedPrivateClassPackage } =
-    usePrivateClassOption();
-  const { selectedAvailabilitySlotDates } = useSelectedSlot();
-  const { addPackageBookingToInvoice, addCourseToInvoice } = useInvoice();
   const { hidePaymentScreen } = useTeacherProfilePayment();
-
-  const createCourse = async () => {
-    if (!selectedPrivateClassOption)
-      throw new Error("No selected privateClassOption");
-    /*
-    If just one class is being booked then
-    this will create a new course with one live class.
-
-    TODO: Convert this so that everything uses a package
-    */
-    const newCourse = await ApiAdaptor.createPrivateClassCourse(
-      selectedPrivateClassOption?.id,
-      {
-        minutes_duration: selectedPrivateClassOption?.length_minutes,
-        max_students: 1,
-        start_time: selectedAvailabilitySlotDates().start,
-      }
-    );
-    addCourseToInvoice(newCourse.id);
-  };
-
-  const createPackage = async () => {
-    if (!selectedPrivateClassPackage?.id)
-      throw new Error(
-        "createPackage should be called only when a privateClassPackage has been selected"
-      );
-    const bookingResponse: PrivateClassBookingResponse =
-      await ApiAdaptor.createPrivateClassPackageBooking(
-        selectedPrivateClassPackage.id
-      );
-    addPackageBookingToInvoice(bookingResponse.booking.id);
-  };
-
-  useEffect(() => {
-    if (selectedPrivateClassPackage) createPackage();
-    else createCourse();
-  }, []);
 
   return (
     <div>

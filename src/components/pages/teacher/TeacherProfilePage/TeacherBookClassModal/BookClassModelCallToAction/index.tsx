@@ -7,6 +7,7 @@ import { useSelectedSlot } from "../../hooks/useSelectedSlot";
 import { usePrivateClassOption } from "../../hooks/usePrivateClassOption";
 import { usePackageBooking } from "../../hooks/usePackageBooking";
 import { useTeacherProfilePayment } from "../../hooks/useTeacherProfilePayment";
+import { PrivateClassPackageOption } from "../../../../../types/privateClass/responses";
 
 export const BookClassModelCallToAction: React.FC<
   BookClassModelCallToActionProps
@@ -14,7 +15,26 @@ export const BookClassModelCallToAction: React.FC<
   const { setSelectedPrivateClassPackage } = usePrivateClassOption();
   const { applicableBookings } = usePackageBooking();
   const { selectedAvailabilitySlotDates } = useSelectedSlot();
-  const { showPaymentScreen } = useTeacherProfilePayment();
+  const {
+    showPaymentScreen,
+    addNewCourseToInvoice,
+    addNewPackageBookingToInvoice,
+  } = useTeacherProfilePayment();
+
+  const onPrivateClassBooking = async () => {
+    await addNewCourseToInvoice();
+    showPaymentScreen();
+  };
+
+  const onOrderPrivatePackage = async (
+    packageOption: PrivateClassPackageOption
+  ) => {
+    // Set package option in redux
+    // Create the inactive booking and add to invoice
+    await addNewPackageBookingToInvoice(packageOption);
+
+    showPaymentScreen();
+  };
 
   return (
     <section>
@@ -48,10 +68,7 @@ export const BookClassModelCallToAction: React.FC<
       </div>
       <div className="w-full flex justify-center"></div>
       <div className="w-full flex justify-center">
-        <StandardButton
-          className="btn-primary"
-          onClick={() => showPaymentScreen()}
-        >
+        <StandardButton className="btn-primary" onClick={onPrivateClassBooking}>
           Book now for {getFormattedPrice(price)}
         </StandardButton>
       </div>
@@ -65,10 +82,7 @@ export const BookClassModelCallToAction: React.FC<
             packageOption={packageOption}
             classPrice={price}
             key={packageOption.id}
-            onClick={() => {
-              setSelectedPrivateClassPackage(packageOption);
-              showPaymentScreen();
-            }}
+            onClick={() => onOrderPrivatePackage(packageOption)}
           />
         ))}
       </div>

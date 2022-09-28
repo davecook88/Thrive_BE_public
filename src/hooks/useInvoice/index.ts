@@ -33,30 +33,6 @@ export const useInvoice = () => {
     else createInvoice();
   }, []);
 
-  const addPackageBookingToInvoice = (packageBookingId: number) => {
-    if (!invoice) {
-      throw new Error("No invoice to add line item to");
-    }
-    dispatch(
-      addPackageBookingLineItem({
-        invoiceId: invoice.id,
-        packageBookingId,
-      })
-    );
-  };
-
-  const addCourseToInvoice = (courseId: number) => {
-    if (!invoice) {
-      throw new Error("No invoice to add line item to");
-    }
-    dispatch(
-      addCourseLineItem({
-        invoiceId: invoice.id,
-        courseId,
-      })
-    );
-  };
-
   const deleteInvoiceLineItem = (lineItemId: number) => {
     if (!invoice) {
       throw new Error("No invoice");
@@ -66,8 +42,7 @@ export const useInvoice = () => {
 
   return {
     invoice,
-    addPackageBookingToInvoice,
-    addCourseToInvoice,
+    setInvoice,
     deleteInvoiceLineItem,
   };
 };

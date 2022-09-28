@@ -49,11 +49,17 @@ export const InvoiceConfirmation: React.FC<InvoiceConfirmationProps> = ({
           </tr>
         </tbody>
       </table>
-      <div className="w-full flex justify-center m-2">
-        {keepBrowsing && (
-          <StandardButton onClick={keepBrowsing}>Keep browsing</StandardButton>
-        )}
-        <StandardButton>Pay now</StandardButton>
+      <div className="w-full flex justify-around m-2">
+        <div className="w-1 flex justify-around mt-4">
+          {keepBrowsing && (
+            <StandardButton className="btn-sm text-xs" onClick={keepBrowsing}>
+              Keep browsing
+            </StandardButton>
+          )}
+        </div>
+        <StandardButton className="font-bold bg-primary border-2 border-primary hover:bg-base-100 hover:text-primary">
+          Pay now
+        </StandardButton>
       </div>
     </div>
   );
