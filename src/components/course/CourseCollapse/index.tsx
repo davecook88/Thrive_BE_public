@@ -42,7 +42,7 @@ export const CourseCollapse: React.FC<CourseCollapseProps> = ({
   return (
     <div
       className={clsx(
-        "collapse collapse-close border border-base-300 bg-base-100 rounded-box m-6",
+        "collapse collapse-close border border-base-300 bg-base-100 rounded-box",
 
         isOpen && "collapse-open"
       )}
@@ -72,7 +72,8 @@ export const CourseCollapse: React.FC<CourseCollapseProps> = ({
                 setIsOpen((prev) => !prev);
               }}
             >
-              <FontAwesomeIcon icon={faCalendarDays} className="pr-2"/> Show Schedule
+              <FontAwesomeIcon icon={faCalendarDays} className="pr-2" /> Show
+              Schedule
             </button>
           </div>
         </div>
