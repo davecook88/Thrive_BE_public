@@ -16,10 +16,3 @@ export const DeleteButton: React.FC<Props> = ({ clickHandler }) => (
   </button>
 );
 
-export const DeleteFAButton = ({ onClick }) => {
-  <FontAwesomeIcon
-    className="text-base-100"
-    icon={faTrash}
-    onClick={onDeletePackage}
-  />;
-};

@@ -19,7 +19,6 @@ export const invoiceSlice = createSlice({
   initialState,
   reducers: {
     setInvoice(state, action: PayloadAction<SetInvoiceAction>) {
-      console.log("setInvoice", { action });
       state.invoice = action.payload.invoice;
     },
     clearInvoice(state) {

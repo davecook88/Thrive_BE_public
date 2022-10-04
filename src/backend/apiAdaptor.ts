@@ -327,7 +327,7 @@ class ApiAdaptor {
 
     */
     return await this.callApi(
-      `${ApiEndpoints.privateClass}/package-booking/${packageId}/create`,
+      `${ApiEndpoints.privateClass}/package/${packageId}/create-booking`,
       "POST"
     );
   }

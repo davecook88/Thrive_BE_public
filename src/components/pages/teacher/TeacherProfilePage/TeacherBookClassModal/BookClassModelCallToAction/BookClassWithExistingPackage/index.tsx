@@ -14,7 +14,8 @@ export const BookClassWithExistingPackage = () => {
         You already have packages available for this class
       </div>
 
-      <div className="flex justify-around">
+      <div className="flex justify-around¨
+      ">
         {applicableBookings.map((booking) => (
           <BookClassWithExistingPackageButton
             booking={booking}
