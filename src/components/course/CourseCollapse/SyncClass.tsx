@@ -10,8 +10,8 @@ interface SyncClassProps {
 }
 export const SyncClass: React.FC<SyncClassProps> = ({ course }) => {
   return (
-    <div className="flex p-2">
-      <div className="w-1/2 px-4 py-2">
+    <div className="flex flex-col sm:flex-row sm:justify-evenly py-1">
+      <div className="px-4 sm:py-2 mx-auto sm:mx-0 sm:w-2/3">
         <table className="border-separate">
           <tbody>
             <CourseInfoEntry
@@ -25,7 +25,7 @@ export const SyncClass: React.FC<SyncClassProps> = ({ course }) => {
           </tbody>
         </table>
       </div>
-      <div className="w-1/2 flex justify-center items-center  border-l-2 ">
+      <div className="m-auto py-1">
         <CourseInfoEntry
           title="Class Time: "
           value={moment(parseDbTime(course.start_time)).format("HH:mm")}

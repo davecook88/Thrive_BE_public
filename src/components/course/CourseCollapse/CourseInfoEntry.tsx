@@ -15,7 +15,7 @@ export const CourseInfoEntry: React.FC<CourseInfoEntryProps> = ({
       <td>
         <FontAwesomeIcon icon={faClock} className="pr-2" />
       </td>
-      <td>{title}</td>
+      <td className="pr-1">{title}</td>
       <td className="font-bold">{value}</td>
     </tr>
   );
