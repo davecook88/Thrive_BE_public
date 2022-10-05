@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { StandardButton } from "../../../../../styled/Buttons";
 import { getFormattedPrice } from "../utils";
 import { BookClassModalPackageOptionButton } from "./BookClassModalPackageOptionButton";
@@ -14,16 +14,8 @@ export const BookClassModelCallToAction: React.FC<
   BookClassModelCallToActionProps
 > = ({ price, packageOptions }) => {
   const { selectedAvailabilitySlotDates } = useSelectedSlot();
-  const {
-    showPaymentScreen,
-    addNewCourseToInvoice,
-    addNewPackageBookingToInvoice,
-  } = useTeacherProfilePayment();
-
-  const onPrivateClassBooking = async () => {
-    await addNewCourseToInvoice();
-    showPaymentScreen();
-  };
+  const { showPaymentScreen, addNewPackageBookingToInvoice } =
+    useTeacherProfilePayment();
 
   const onOrderPrivatePackage = async (
     packageOption: PrivateClassPackageOption
@@ -31,9 +23,27 @@ export const BookClassModelCallToAction: React.FC<
     // Set package option in redux
     // Create the inactive booking and add to invoice
     await addNewPackageBookingToInvoice(packageOption);
-
     showPaymentScreen();
   };
+
+  const singleClassPackageOption = useMemo(
+    () =>
+      packageOptions.find(
+        (packageOption) =>
+          packageOption.class_count === 1 &&
+          packageOption &&
+          packageOption.active
+      ),
+    [packageOptions]
+  );
+
+  const multiClassPackageOptions = useMemo(
+    () =>
+      packageOptions.filter(
+        (packageOption) => packageOption.class_count > 1 && packageOption.active
+      ),
+    [packageOptions]
+  );
 
   return (
     <section>
@@ -68,25 +78,33 @@ export const BookClassModelCallToAction: React.FC<
       <div className="w-full flex justify-center">
         <BookClassWithExistingPackage />
       </div>
-      <div className="w-full flex justify-center">
-        <StandardButton className="btn-primary" onClick={onPrivateClassBooking}>
-          Book now for {getFormattedPrice(price)}
-        </StandardButton>
-      </div>
-
-      <div className="font-bold w-full flex justify-center p-2">
-        <h5>Or book a package to get a discount</h5>
-      </div>
-      <div>
-        {packageOptions.map((packageOption) => (
-          <BookClassModalPackageOptionButton
-            packageOption={packageOption}
-            classPrice={price}
-            key={packageOption.id}
-            onClick={() => onOrderPrivatePackage(packageOption)}
-          />
-        ))}
-      </div>
+      {singleClassPackageOption && (
+        <div className="w-full flex justify-center">
+          <StandardButton
+            className="btn-primary"
+            onClick={() => onOrderPrivatePackage(singleClassPackageOption)}
+          >
+            Book now for {getFormattedPrice(price)}
+          </StandardButton>
+        </div>
+      )}
+      {multiClassPackageOptions.length > 0 && (
+        <>
+          <div className="font-bold w-full flex justify-center p-2">
+            <h5>Or book a package to get a discount</h5>
+          </div>
+          <div>
+            {multiClassPackageOptions.map((packageOption) => (
+              <BookClassModalPackageOptionButton
+                packageOption={packageOption}
+                classPrice={price}
+                key={packageOption.id}
+                onClick={() => onOrderPrivatePackage(packageOption)}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 };

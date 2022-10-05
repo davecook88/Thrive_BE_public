@@ -20,11 +20,10 @@ import { getDefaultDisplayDates } from "../../../scheduling/BigBookingCalendar/u
 import EditAvailabilityEventModal from "./TeacherAvailabilitySettings/EditAvailabilityEventModel";
 import { SelectCalendarEventTypeDropdown } from "./SelectCalendarEventTypeDropdown";
 import { CreatePrivateClassOptionForm } from "../../../admin/privateClass/CreatePrivateClassOptionForm";
-import {
-  fetchTeacherAsync,
-  selectTeacherProfilePageState,
-} from "../../../redux/reducers/teachers/TeacherProfilePageSlice/slice";
+import { selectTeacherProfilePageState } from "../../../redux/reducers/teachers/TeacherProfilePageSlice/slice";
 import { AdminTeacherPrivateClassOptions } from "./AdminTeacherPrivateClassOptions";
+import { setTeacherId } from "../../../redux/reducers/teachers/TeacherAdminSlice/slice";
+import { useTeacherAdmin } from "./hooks/useTeacherAdmin";
 
 interface TeacherAvailabilitySettingsProps {
   height?: string;
@@ -34,7 +33,6 @@ interface TeacherAvailabilitySettingsProps {
 export const TeacherAvailabilitySettings: React.FC<
   TeacherAvailabilitySettingsProps
 > = ({ height = "600px", defaultView = "month", teacherId }) => {
-  const [view, setView] = useState<View>(defaultView);
   const [displayAvailabilityForm, setDisplayAvailabilityForm] =
     useState<boolean>(false);
   const [editModelOpen, setEditModalOpen] = useState<boolean>(false);
@@ -44,12 +42,17 @@ export const TeacherAvailabilitySettings: React.FC<
   const [displayEventType, setDisplayEventType] =
     useState<BookingStatus>("available");
   const availability = useAppSelector(selectAvailability);
-  const teacherState = useAppSelector(selectTeacherProfilePageState);
   const dispatch = useAppDispatch();
 
+  const { teacherId: savedTeacherId, refreshTeacher } = useTeacherAdmin();
+
   useEffect(() => {
-    dispatch(fetchTeacherAsync({ teacherId }));
-  }, []);
+    dispatch(setTeacherId({ teacherId }));
+  }, [teacherId]);
+
+  useEffect(() => {
+    refreshTeacher();
+  }, [savedTeacherId]);
 
   const onDisplayedDatesUpdate = (displayedDates: DisplayDatesType) => {
     dispatch(fetchAvailabilityAsync({ teacherId, ...displayedDates }));
@@ -126,9 +129,7 @@ export const TeacherAvailabilitySettings: React.FC<
         }
       </Modal>
       <CreatePrivateClassOptionForm teacherId={teacherId} />
-      <AdminTeacherPrivateClassOptions
-        options={teacherState.teacher?.private_class_options || []}
-      />
+      <AdminTeacherPrivateClassOptions />
     </div>
   );
 };

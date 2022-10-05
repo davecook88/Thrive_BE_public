@@ -5,28 +5,29 @@ import { PrivateClassOptionAdminDisplayProps } from "./types";
 import Modal from "react-modal";
 import { PrivateClassPackageOptionEditForm } from "./PrivateClassPackageOptionEditForm";
 import ApiAdaptor from "../../../../../backend/apiAdaptor";
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
-import {
-  fetchTeacherAsync,
-  selectTeacherProfilePageState,
-} from "../../../../redux/reducers/teachers/TeacherProfilePageSlice/slice";
+import { DeleteIconButton } from "../../../../common/buttons/DeleteIconButton";
+import { useTeacherAdmin } from "../hooks/useTeacherAdmin";
+import { useToast } from "../../../../../hooks/useToast";
 
 export const PrivateClassOptionAdminDisplay: React.FC<
   PrivateClassOptionAdminDisplayProps
 > = ({ option }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const { toast } = useToast();
 
-  const teacherState = useAppSelector(selectTeacherProfilePageState);
-
-  const dispatch = useAppDispatch();
-
-  const refresh = () => {
-    if (!teacherState.teacher) return;
-    dispatch(fetchTeacherAsync({ teacherId: teacherState.teacher.id }));
-  };
+  const { refreshTeacher } = useTeacherAdmin();
 
   const onCreatePackageClick = () => {
     setModalOpen(true);
+  };
+
+  const onDeletePrivateClassOption = async () => {
+    if (confirm("Are you sure? All associated classes will be deleted!"))
+      await ApiAdaptor.deletePrivateClassOption(option.id);
+    toast({
+      message: "Private class option deleted",
+    });
+    refreshTeacher();
   };
   return (
     <div className="p-4 border border-primary rounded-sm m-2">
@@ -61,11 +62,17 @@ export const PrivateClassOptionAdminDisplay: React.FC<
           <PrivateClassPackageOptionAdminDisplay
             packageOption={packageOption}
             key={packageOption.id}
-            refresh={refresh}
+            refresh={refreshTeacher}
           />
         ))}
       </div>
-      <div className="flex justify-center m-2">
+      <div className="flex justify-around m-2">
+        <StandardButton
+          className="bg-error border-error"
+          onClick={onDeletePrivateClassOption}
+        >
+          <DeleteIconButton onClick={onDeletePrivateClassOption} />
+        </StandardButton>
         <StandardButton onClick={() => onCreatePackageClick()}>
           Create Package
         </StandardButton>
@@ -77,7 +84,7 @@ export const PrivateClassOptionAdminDisplay: React.FC<
       >
         <PrivateClassPackageOptionEditForm
           privateClassOptionId={option.id}
-          refresh={refresh}
+          refresh={refreshTeacher}
         />
       </Modal>
     </div>

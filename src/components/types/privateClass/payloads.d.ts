@@ -18,3 +18,7 @@ export interface CreatePrivateClassPackagePayload {
   class_count: number;
   discount_percentage: number;
 }
+
+export interface CreatePrivateClassBookingPayload {
+  classes: { start_time: Date }[];
+}

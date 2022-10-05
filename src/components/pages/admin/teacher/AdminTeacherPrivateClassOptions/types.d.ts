@@ -1,5 +1,3 @@
 import { PrivateClassOption } from "../../../../types/privateClass/responses";
 
-export type AdminTeacherPrivateClassOptionsProps = {
-  options: PrivateClassOption[];
-};
+export type AdminTeacherPrivateClassOptionsProps = {};

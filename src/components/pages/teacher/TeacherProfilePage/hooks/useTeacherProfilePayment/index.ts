@@ -43,7 +43,9 @@ export const useTeacherProfilePayment = () => {
   ) => {
     if (!invoice?.id) throw new Error("No invoice selected");
     const bookingResponse: PrivateClassBookingResponse =
-      await ApiAdaptor.createPrivateClassPackageBooking(packageOption.id);
+      await ApiAdaptor.createPrivateClassPackageBooking(packageOption.id, {
+        classes: [{ start_time: selectedAvailabilitySlotDates().start }],
+      });
     const updatedInvoice = await ApiAdaptor.addPackageBookingLineItem(
       invoice.id,
       { package_booking_id: bookingResponse.booking.id }
