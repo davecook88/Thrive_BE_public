@@ -1,28 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../../store";
-import { TeacherResponse } from "../../../../types/teacher/responses";
-import ApiAdaptor from "../../../../../backend/apiAdaptor";
-
-interface TeacherProfilePageState {
-  teacher?: TeacherResponse;
-}
+import { fetchTeacherAsync } from "./thunks";
+import { SetTeacherAction, TeacherProfilePageState } from "./types";
 
 const initialState: TeacherProfilePageState = {
   teacher: undefined,
 };
-
-export interface SetTeacherAction {
-  teacher: TeacherResponse;
-}
-
-export const fetchTeacherAsync = createAsyncThunk(
-  "teacherProfilePage/fetchTeacher",
-  async (action: { teacherId: number }) => {
-    const response = await ApiAdaptor.getTeacherById(action.teacherId);
-    // The value we return becomes the `fulfilled` action payload
-    return response;
-  }
-);
 
 const teacherProfilePageSlice = createSlice({
   name: "teacherProfilePage",

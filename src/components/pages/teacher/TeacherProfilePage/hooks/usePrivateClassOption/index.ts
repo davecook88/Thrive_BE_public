@@ -20,7 +20,7 @@ export const usePrivateClassOption = () => {
     dispatch(setPrivateClassOption({ privateClassOption: option }));
 
   const privateClassOptions: PrivateClassOption[] =
-    teacher?.private_class_options || [];
+    teacher?.private_class_options.filter((option) => option.active) || [];
 
   const setPrivateClassOptionById = (optionId: number) => {
     const selectedOption = privateClassOptions.find(

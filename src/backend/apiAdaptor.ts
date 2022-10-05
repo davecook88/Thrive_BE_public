@@ -17,6 +17,7 @@ import {
 import { RouteCreator } from "../components/utils/routeConstants";
 import { CreateAvailabilityCalendarEvent } from "../components/scheduling/BigBookingCalendar/types";
 import {
+  CreatePrivateClassBookingPayload,
   CreatePrivateClassCoursePayload,
   CreatePrivateClassPackagePayload,
   PrivateClassOptionBase,
@@ -282,6 +283,13 @@ class ApiAdaptor {
     )) as PrivateClassOption;
   }
 
+  static async deletePrivateClassOption(privateClassOptionId: number) {
+    return (await this.callApi(
+      `${ApiEndpoints.privateClass}/${privateClassOptionId}`,
+      "DELETE"
+    )) as PrivateClassOption;
+  }
+
   static async listPrivateClassesByTeacher(teacherId: number) {
     return (await this.callApi(
       `${ApiEndpoints.privateClass}/teacher/${teacherId}`,
@@ -318,7 +326,10 @@ class ApiAdaptor {
     );
   }
 
-  static async createPrivateClassPackageBooking(packageId: number) {
+  static async createPrivateClassPackageBooking(
+    packageId: number,
+    payload: CreatePrivateClassBookingPayload
+  ) {
     /*
     This creates the private class package booking so that a payment
     intent can be issued against it.
@@ -328,7 +339,8 @@ class ApiAdaptor {
     */
     return await this.callApi(
       `${ApiEndpoints.privateClass}/package/${packageId}/create-booking`,
-      "POST"
+      "POST",
+      { payload }
     );
   }
 

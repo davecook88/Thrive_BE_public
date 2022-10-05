@@ -11,12 +11,14 @@ export interface PrivateClassOption extends PrivateClassOptionBase {
   name: string;
   package_options: PrivateClassPackageOption[];
   teacher_id: number;
+  active: boolean | null;
 }
 
 export interface PrivateClassPackageOption {
   id: number;
   class_count: number;
   discount_percentage: number;
+  active: boolean | null;
 }
 
 export interface PrivateClassPackageBooking {

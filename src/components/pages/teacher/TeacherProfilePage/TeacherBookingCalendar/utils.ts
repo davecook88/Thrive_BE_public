@@ -14,9 +14,6 @@ const createCheckAgainstBookedSlots =
         (end > bookedSlot.start && end <= bookedSlot.end)
       );
     });
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    // if (Boolean(clashingSlot)) debugger;
     return Boolean(clashingSlot);
   };
 
