@@ -283,6 +283,17 @@ class ApiAdaptor {
     )) as PrivateClassOption;
   }
 
+  static async putPrivateClassOption(
+    optionId: number,
+    payload: PrivateClassOptionBase
+  ) {
+    return (await this.callApi(
+      `${ApiEndpoints.privateClass}/${optionId}`,
+      "PUT",
+      { payload }
+    )) as PrivateClassOption;
+  }
+
   static async deletePrivateClassOption(privateClassOptionId: number) {
     return (await this.callApi(
       `${ApiEndpoints.privateClass}/${privateClassOptionId}`,

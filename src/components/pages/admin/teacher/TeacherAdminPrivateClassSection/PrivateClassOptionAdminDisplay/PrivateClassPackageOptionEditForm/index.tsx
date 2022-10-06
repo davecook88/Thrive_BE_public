@@ -1,12 +1,9 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import ApiAdaptor from "../../../../../../backend/apiAdaptor";
-import { showToast } from "../../../../../common/alerts/toastSlice";
-import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
-import {
-  fetchTeacherAsync,
-  selectTeacherProfilePageState,
-} from "../../../../../redux/reducers/teachers/TeacherProfilePageSlice/slice";
+import ApiAdaptor from "../../../../../../../backend/apiAdaptor";
+import { showToast } from "../../../../../../common/alerts/toastSlice";
+import { useAppDispatch } from "../../../../../../redux/hooks";
+
 import {
   PrivateClassPackageOptionEditFormInputs,
   PrivateClassPackageOptionEditFormProps,

@@ -2,8 +2,8 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import tw from "tailwind-styled-components";
-import ApiAdaptor from "../../../../../../backend/apiAdaptor";
-import { DeleteIconButton } from "../../../../../common/buttons/DeleteIconButton";
+import ApiAdaptor from "../../../../../../../backend/apiAdaptor";
+import { DeleteIconButton } from "../../../../../../common/buttons/DeleteIconButton";
 import { PrivateClassPackageOptionAdminDisplayProps } from "./types";
 
 const IconHolder = tw.div`

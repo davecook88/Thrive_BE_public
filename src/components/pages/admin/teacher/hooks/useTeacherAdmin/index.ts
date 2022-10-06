@@ -1,7 +1,6 @@
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
-import { selectTeacherAdminState } from "../../../../redux/reducers/teachers/TeacherAdminSlice/slice";
-import { fetchTeacherAdminAsync } from "../../../../redux/reducers/teachers/TeacherAdminSlice/thunks";
+import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
+import { selectTeacherAdminState } from "../../../../../redux/reducers/teachers/TeacherAdminSlice/slice";
+import { fetchTeacherAdminAsync } from "../../../../../redux/reducers/teachers/TeacherAdminSlice/thunks";
 
 export const useTeacherAdmin = () => {
   const dispatch = useAppDispatch();

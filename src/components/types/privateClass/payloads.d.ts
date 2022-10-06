@@ -5,6 +5,7 @@ export interface PrivateClassOptionBase {
   length_minutes: number;
   teacher_id: number;
   description: string;
+  active: boolean;
 }
 
 export interface CreatePrivateClassCoursePayload {

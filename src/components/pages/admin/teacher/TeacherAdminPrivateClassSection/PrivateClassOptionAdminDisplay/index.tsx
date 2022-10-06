@@ -1,21 +1,24 @@
 import React, { useState } from "react";
-import { StandardButton } from "../../../../styled/Buttons";
+import { StandardButton } from "../../../../../styled/Buttons";
 import { PrivateClassPackageOptionAdminDisplay } from "./PrivateClassPackageOptionAdminDisplay";
 import { PrivateClassOptionAdminDisplayProps } from "./types";
 import Modal from "react-modal";
 import { PrivateClassPackageOptionEditForm } from "./PrivateClassPackageOptionEditForm";
-import ApiAdaptor from "../../../../../backend/apiAdaptor";
-import { DeleteIconButton } from "../../../../common/buttons/DeleteIconButton";
-import { useTeacherAdmin } from "../hooks/useTeacherAdmin";
-import { useToast } from "../../../../../hooks/useToast";
+import ApiAdaptor from "../../../../../../backend/apiAdaptor";
+import { DeleteIconButton } from "../../../../../common/buttons/DeleteIconButton";
+import { useTeacherAdmin } from "../../hooks/useTeacherAdmin";
+import { useToast } from "../../../../../../hooks/useToast";
+import { EditIconButton } from "../../../../../common/buttons/EditIconButton";
+import { usePrivateClassAdmin } from "../hooks/usePrivateClassAdmin";
 
 export const PrivateClassOptionAdminDisplay: React.FC<
   PrivateClassOptionAdminDisplayProps
-> = ({ option }) => {
+> = ({ option, onEditClick }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { toast } = useToast();
 
   const { refreshTeacher } = useTeacherAdmin();
+  const { selectPrivateClass } = usePrivateClassAdmin();
 
   const onCreatePackageClick = () => {
     setModalOpen(true);
@@ -29,6 +32,12 @@ export const PrivateClassOptionAdminDisplay: React.FC<
     });
     refreshTeacher();
   };
+
+  const onEditPrivateClassOption = async () => {
+    selectPrivateClass(option.id);
+    onEditClick && onEditClick();
+  };
+
   return (
     <div className="p-4 border border-primary rounded-sm m-2">
       <div className="flex justify-center m-2">
@@ -72,6 +81,12 @@ export const PrivateClassOptionAdminDisplay: React.FC<
           onClick={onDeletePrivateClassOption}
         >
           <DeleteIconButton onClick={onDeletePrivateClassOption} />
+        </StandardButton>
+        <StandardButton
+          className="bg-error border-info"
+          onClick={onEditPrivateClassOption}
+        >
+          <EditIconButton onClick={onEditPrivateClassOption} />
         </StandardButton>
         <StandardButton onClick={() => onCreatePackageClick()}>
           Create Package

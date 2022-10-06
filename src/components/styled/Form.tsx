@@ -1,6 +1,6 @@
 import tw from "tailwind-styled-components";
 
-export const StandardForm = tw.form`
+export const StandardForm = tw.form<{}>`
     rounded
     p-5
     pb-1
