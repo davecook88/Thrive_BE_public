@@ -19,8 +19,6 @@ import BigBookingCalendar from "../../../scheduling/BigBookingCalendar";
 import { getDefaultDisplayDates } from "../../../scheduling/BigBookingCalendar/utils";
 import EditAvailabilityEventModal from "./TeacherAvailabilitySettings/EditAvailabilityEventModel";
 import { SelectCalendarEventTypeDropdown } from "./SelectCalendarEventTypeDropdown";
-import { CreatePrivateClassOptionForm } from "../../../admin/privateClass/CreatePrivateClassOptionForm";
-import { AdminTeacherPrivateClassOptions } from "./TeacherAdminPrivateClassSection/AdminTeacherPrivateClassOptions";
 import { setTeacherId } from "../../../redux/reducers/teachers/TeacherAdminSlice/slice";
 import { useTeacherAdmin } from "./hooks/useTeacherAdmin";
 import { TeacherAdminPrivateClassSection } from "./TeacherAdminPrivateClassSection";
