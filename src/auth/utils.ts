@@ -17,7 +17,6 @@ export const GoogleSuccessfulAuthOnlineCallback = async (
   callback?: (user: ThriveUser, googleProfile: GoogleProfile) => void
 ) => {
   const { googleId, profileObj, tokenId } = response;
-  console.log({ profileObj }, JSON.stringify(profileObj));
   const thriveUser = await ApiAdaptor.verifyGoogleToken(
     tokenId,
     profileObj.email,

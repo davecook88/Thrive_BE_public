@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View } from "react-big-calendar";
 import CalendarMenu from "../../../calendar/CalendarMenu";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -7,12 +7,8 @@ import {
   selectAvailability,
 } from "../../../redux/reducers/calendar/availabilitySlice";
 import EditAvailabilityForm from "../../../scheduling/availability/edit";
-import { AvailabilityAsEvent } from "../../../scheduling/BigBookingCalendar/events/eventPropGetters";
 import { StandardButton } from "../../../styled/Buttons";
-import {
-  AvailabilityStateEntry,
-  BookingStatus,
-} from "../../../types/calendar/types";
+import { BookingStatus } from "../../../types/calendar/types";
 import Modal from "react-modal";
 
 import {
@@ -23,7 +19,9 @@ import BigBookingCalendar from "../../../scheduling/BigBookingCalendar";
 import { getDefaultDisplayDates } from "../../../scheduling/BigBookingCalendar/utils";
 import EditAvailabilityEventModal from "./TeacherAvailabilitySettings/EditAvailabilityEventModel";
 import { SelectCalendarEventTypeDropdown } from "./SelectCalendarEventTypeDropdown";
-import { CreatePrivateClassOptionForm } from "../../../admin/privateClass/CreatePrivateClassOptionForm";
+import { setTeacherId } from "../../../redux/reducers/teachers/TeacherAdminSlice/slice";
+import { useTeacherAdmin } from "./hooks/useTeacherAdmin";
+import { TeacherAdminPrivateClassSection } from "./TeacherAdminPrivateClassSection";
 
 interface TeacherAvailabilitySettingsProps {
   height?: string;
@@ -33,7 +31,6 @@ interface TeacherAvailabilitySettingsProps {
 export const TeacherAvailabilitySettings: React.FC<
   TeacherAvailabilitySettingsProps
 > = ({ height = "600px", defaultView = "month", teacherId }) => {
-  const [view, setView] = useState<View>(defaultView);
   const [displayAvailabilityForm, setDisplayAvailabilityForm] =
     useState<boolean>(false);
   const [editModelOpen, setEditModalOpen] = useState<boolean>(false);
@@ -44,6 +41,19 @@ export const TeacherAvailabilitySettings: React.FC<
     useState<BookingStatus>("available");
   const availability = useAppSelector(selectAvailability);
   const dispatch = useAppDispatch();
+
+  const formRef = useRef<HTMLFormElement>();
+
+  const { teacherId: savedTeacherId, refreshTeacher } = useTeacherAdmin();
+
+  useEffect(() => {
+    dispatch(setTeacherId({ teacherId }));
+  }, [teacherId]);
+
+  useEffect(() => {
+    refreshTeacher();
+  }, [savedTeacherId]);
+
   const onDisplayedDatesUpdate = (displayedDates: DisplayDatesType) => {
     dispatch(fetchAvailabilityAsync({ teacherId, ...displayedDates }));
   };
@@ -51,8 +61,6 @@ export const TeacherAvailabilitySettings: React.FC<
   const [displayedDates, setDisplayedDates] = useState<DisplayDatesType>(
     getDefaultDisplayDates()
   );
-
-  console.log({ availability });
 
   const checkOverlap = (
     type: BookingStatus,
@@ -64,15 +72,6 @@ export const TeacherAvailabilitySettings: React.FC<
         event.end < details.end.getTime()
     );
   };
-
-  const formatEvents =
-    (title?: string) =>
-    (entry: AvailabilityStateEntry): AvailabilityCalendarEvent => ({
-      title: title || "",
-      start: new Date(entry.start),
-      end: new Date(entry.end),
-      id: entry.id,
-    });
 
   const addAvailability = () => {
     // setSelectedEvent(undefined);
@@ -129,8 +128,7 @@ export const TeacherAvailabilitySettings: React.FC<
           />
         }
       </Modal>
-
-      <CreatePrivateClassOptionForm teacherId={teacherId} />
+      <TeacherAdminPrivateClassSection />
     </div>
   );
 };

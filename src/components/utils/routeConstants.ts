@@ -1,4 +1,4 @@
-import { ApiEndpoints } from "../../backend/apiAdaptor";
+import { ApiEndpoints } from "../../backend/constants";
 
 export class RouteCreator {
   static getBookCourseRoute(courseId: number) {

@@ -1,30 +1,19 @@
+import { EventPropGetter } from "react-big-calendar";
+import { AvailabilityCalendarEvent } from "../../../../scheduling/BigBookingCalendar/types";
 import { AvailabilityStateEntry } from "../../../../types/calendar/types";
 
 const createCheckAgainstBookedSlots =
   (bookedSlots: AvailabilityStateEntry[]) => (start: number, end: number) => {
     /*
   Check one availability entry to see if it clashes with any booked slots
-  */ bookedSlots.forEach((s) => {
-      console.log(
-        `Booked from: ${new Date(s.start)} until: ${new Date(s.end)}`
-      );
-    });
+  */
 
     const clashingSlot = bookedSlots.find((bookedSlot) => {
-      console.log({
-        bookedSlotStart: new Date(bookedSlot.start),
-        bookedSlotEnd: new Date(bookedSlot.end),
-        start: new Date(start),
-        end: new Date(end),
-      });
       return (
         (start >= bookedSlot.start && start < bookedSlot.end) ||
         (end > bookedSlot.start && end <= bookedSlot.end)
       );
     });
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    // if (Boolean(clashingSlot)) debugger;
     return Boolean(clashingSlot);
   };
 
@@ -56,4 +45,15 @@ export const splitAvailabilitySlots = (
     }
   });
   return splitSlots;
+};
+
+export const eventPropGetter: EventPropGetter<AvailabilityCalendarEvent> = (
+  event
+) => {
+  return {
+    className: "bg-primary",
+    style: {
+      border: "none",
+    },
+  };
 };

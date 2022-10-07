@@ -9,16 +9,15 @@ import { TeacherCard } from "../../components/user/teacher/TeacherCard";
 import { TeacherProfilePage } from "../../components/pages/teacher/TeacherProfilePage";
 import { useAppDispatch } from "../../components/redux/hooks";
 import { setSelectedProfilePageTeacher } from "../../components/redux/reducers/teachers/TeacherProfilePageSlice/slice";
+import { useTeacherProfile } from "../../hooks/useTeacherProfile";
 
 interface TeacherPageProps {
   teacher: TeacherResponse;
 }
 
 const TeacherPage: React.FC<TeacherPageProps> = ({ teacher }) => {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(setSelectedProfilePageTeacher({ teacher }));
-  }, [teacher]);
+  const { setTeacherProfile } = useTeacherProfile();
+  setTeacherProfile(teacher);
 
   return <TeacherProfilePage teacher={teacher} />;
 };

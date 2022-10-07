@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ApiAdaptor from "../../../../backend/apiAdaptor";
+import { GetAvailabilityResponseEntry } from "../../../../backend/types";
 import {
   AvailabilityState,
   SetAvailabilityAction,
@@ -25,6 +26,7 @@ const initialState: AvailabilityState = {
 export const fetchAvailabilityAsync = createAsyncThunk(
   "availability/fetchAvailability",
   async (action: { teacherId: number; start: Date; end: Date }) => {
+    console.log("fetchAvailabilityAsync", action);
     const response = await ApiAdaptor.getAvailability(
       action.teacherId,
       action.start,
@@ -53,10 +55,10 @@ export const availabilitySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAvailabilityAsync.fulfilled, (state, action) => {
-      state.available = action.payload.available.map(
-        formatAvailabilityEntryForStore
-      );
-      state.booked = action.payload.booked.map(formatAvailabilityEntryForStore);
+      state.available =
+        action.payload.available?.map(formatAvailabilityEntryForStore) || [];
+      state.booked =
+        action.payload.booked?.map(formatAvailabilityEntryForStore) || [];
       state.loadStatus = "ready";
     });
   },

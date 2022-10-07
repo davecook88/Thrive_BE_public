@@ -15,3 +15,4 @@ export const DeleteButton: React.FC<Props> = ({ clickHandler }) => (
     X
   </button>
 );
+

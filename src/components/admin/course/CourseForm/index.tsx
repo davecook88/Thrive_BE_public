@@ -73,7 +73,6 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, refresh }) => {
   };
 
   const createCourse = async () => {
-    debugger;
     const selectedUnit = selectedLevel?.units.find((l) => l.id == unit);
     if (selectedUnit === undefined) {
       displayToast("No unit selected");

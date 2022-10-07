@@ -80,9 +80,9 @@ module.exports = {
       {
         lakarencita: {
           primary: "#ff4b00",
-          secondary: "#d8ae2d",
+          secondary: "#ffcd00",
           accent: "#0283cb",
-          neutral: "#1E2529",
+          neutral: "#efefef",
           "base-100": "#FFFFFF",
           info: "#0084CF",
           success: "#55E7CC",

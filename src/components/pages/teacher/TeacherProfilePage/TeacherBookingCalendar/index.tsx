@@ -1,84 +1,55 @@
 import React, { useState } from "react";
-import { EventPropGetter, View } from "react-big-calendar";
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { useAppSelector } from "../../../../redux/hooks";
 import BigBookingCalendar from "../../../../scheduling/BigBookingCalendar";
-import {
-  AvailabilityCalendarEvent,
-  DisplayDatesType,
-} from "../../../../scheduling/BigBookingCalendar/types";
-import { getDefaultDisplayDates } from "../../../../scheduling/BigBookingCalendar/utils";
+import { AvailabilityCalendarEvent } from "../../../../scheduling/BigBookingCalendar/types";
 import Modal from "react-modal";
-import { fetchAvailabilityAsync } from "../../../../redux/reducers/calendar/availabilitySlice";
+import { selectAvailability } from "../../../../redux/reducers/calendar/availabilitySlice";
 import { TeacherBookingCalendarProps } from "./types";
-import { AvailabilityStateEntry } from "../../../../types/calendar/types";
-import { splitAvailabilitySlots } from "./utils";
+import { eventPropGetter, splitAvailabilitySlots } from "./utils";
 import { TeacherBookClassModal } from "../TeacherBookClassModal";
-import { selectTeacherProfilePageState } from "../../../../redux/reducers/teachers/TeacherProfilePageSlice/slice";
+import { useSelectedSlot } from "../hooks/useSelectedSlot";
+import { useTeacherProfile } from "../../../../../hooks/useTeacherProfile";
+import { useInvoice } from "../../../../../hooks/useInvoice";
 
 export const TeacherBookingCalendar: React.FC<TeacherBookingCalendarProps> = ({
-  availabilityEntries,
-  bookedEntries,
-  teacherId,
   classLength,
-  selectedPrivateClass,
+  displayedDates,
+  setDisplayedDates,
 }) => {
-  const teacherProfileState = useAppSelector(selectTeacherProfilePageState);
-  const [view, setView] = useState<View>("month");
-  const dispatch = useAppDispatch();
-  const [displayedDates, setDisplayedDates] = useState<DisplayDatesType>(
-    getDefaultDisplayDates()
-  );
+  const availability = useAppSelector(selectAvailability);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [selectedAvailabilitySlot, setSelectedAvailabilitySlot] = useState<
-    AvailabilityCalendarEvent | undefined
-  >();
 
+  const { setSlot } = useSelectedSlot();
+  const { teacher } = useTeacherProfile();
+  const { invoice } = useInvoice();
   const onSelectEvent = (event: AvailabilityCalendarEvent) => {
-    setSelectedAvailabilitySlot(event);
+    setSlot(event);
     setModalOpen(true);
   };
-
-  const onDisplayedDatesUpdate = (displayedDates: DisplayDatesType) => {
-    dispatch(fetchAvailabilityAsync({ teacherId, ...displayedDates }));
-  };
-
-  const eventPropGetter: EventPropGetter<AvailabilityCalendarEvent> = (
-    event
-  ) => {
-    return {
-      className: "bg-primary",
-      style: {
-        border: "none",
-      },
-    };
-  };
-  if (!teacherProfileState.teacher) return <div>No teacher selected</div>;
+  if (typeof document === "undefined") return null;
+  if (!teacher) return <div>No teacher selected</div>;
   return (
     <div>
       <BigBookingCalendar
         availabilityEntries={splitAvailabilitySlots(
-          availabilityEntries,
-          bookedEntries,
+          availability.available,
+          availability.booked,
           classLength
         )}
-        onDisplayedDatesUpdate={onDisplayedDatesUpdate}
+        setDisplayedDates={setDisplayedDates}
+        displayedDates={displayedDates}
         onSelectEvent={onSelectEvent}
         height="600px"
         defaultView="month"
-        displayedDates={displayedDates}
-        setDisplayedDates={setDisplayedDates}
         eventPropGetter={eventPropGetter}
       />
       <Modal
         isOpen={modalOpen}
         onRequestClose={() => setModalOpen(false)}
         className="w-max h-max p-4 bg-white m-auto mt-24 border-4 border-solid border-slate-400"
+        appElement={document.getElementById("root") || undefined}
       >
-        <TeacherBookClassModal
-          teacher={teacherProfileState.teacher}
-          availabilitySlot={selectedAvailabilitySlot}
-          privateClassOption={selectedPrivateClass}
-        />
+        {invoice && <TeacherBookClassModal />}
       </Modal>
     </div>
   );

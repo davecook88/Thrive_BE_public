@@ -1,39 +1,37 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useAppSelector } from "../../../redux/hooks";
-import { selectAvailability } from "../../../redux/reducers/calendar/availabilitySlice";
-import { PrivateClassOption } from "../../../types/privateClass/responses";
+import React, { useEffect, useState } from "react";
+import { useDisplayedDates } from "./hooks/useDisplayedDates";
 import { TeacherCard } from "../../../user/teacher/TeacherCard";
 import { ClassLengthSelect } from "./ClassLengthSelect";
 import { PrivateClassOptionDisplay } from "./PrivateClassOptionDisplay";
 import { PrivateClassOptionsMenu } from "./PrivateClassOptionsMenu";
 import { TeacherBookingCalendar } from "./TeacherBookingCalendar";
 import { TeacherProfilePageProps } from "./types";
+import { usePrivateClassOption } from "./hooks/usePrivateClassOption";
 
 export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
   teacher,
 }) => {
-  console.log({ teacher });
   const [classLengthMinutes, setClassLengthMinutes] = useState<number>(60);
-  const [selectedPrivateClassOptionId, setSelectedPrivateClassOptionId] =
-    useState<number | undefined>();
-  const privateClassOptions: PrivateClassOption[] =
-    teacher.private_class_options;
-  const availability = useAppSelector(selectAvailability);
+  const { displayedDates, setDisplayedDates } = useDisplayedDates({
+    teacher,
+  });
 
-  if (!availability) return null;
+  const {
+    selectedPrivateClassOption,
+    privateClassOptions,
+    setPrivateClassOptionById,
+    setSelectedPrivateClassOption,
+  } = usePrivateClassOption();
+
   useEffect(() => {
     const durationOptions = privateClassOptions?.filter(
       (o) => o.length_minutes === classLengthMinutes
     );
     if (!durationOptions) return;
-    setSelectedPrivateClassOptionId(durationOptions[0].id);
-  });
 
-  const selectedPrivateClassOption = useMemo(
-    () =>
-      privateClassOptions?.find((o) => o.id === selectedPrivateClassOptionId),
-    [selectedPrivateClassOptionId]
-  );
+    setSelectedPrivateClassOption(durationOptions[0]);
+  }, []);
+
   return (
     <section className="container">
       <div>
@@ -44,7 +42,9 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
           selectedClassLength={classLengthMinutes}
           onSelectClassLength={setClassLengthMinutes}
           classLengthOptions={
-            privateClassOptions?.map((o) => o.length_minutes).sort() || []
+            Array.from(
+              new Set(privateClassOptions?.map((o) => o.length_minutes))
+            ).sort() || []
           }
         />
       </section>
@@ -55,7 +55,7 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
               (o) => o.length_minutes === classLengthMinutes
             ) || []
           }
-          onSelectOption={setSelectedPrivateClassOptionId}
+          onSelectOption={setPrivateClassOptionById}
         />
       </section>
       <section
@@ -70,11 +70,9 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
       </section>
       <section>
         <TeacherBookingCalendar
-          availabilityEntries={availability.available}
-          bookedEntries={availability.booked}
-          teacherId={teacher.id}
           classLength={classLengthMinutes}
-          selectedPrivateClass={selectedPrivateClassOption}
+          displayedDates={displayedDates}
+          setDisplayedDates={setDisplayedDates}
         />
       </section>
     </section>

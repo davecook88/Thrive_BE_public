@@ -5,6 +5,7 @@ export interface PrivateClassOptionBase {
   length_minutes: number;
   teacher_id: number;
   description: string;
+  active: boolean;
 }
 
 export interface CreatePrivateClassCoursePayload {
@@ -12,4 +13,14 @@ export interface CreatePrivateClassCoursePayload {
   start_time: Date;
   minutes_duration: number;
   max_students: number;
+}
+
+export interface CreatePrivateClassPackagePayload {
+  class_count: number;
+  discount_percentage: number;
+  active?: boolean;
+}
+
+export interface CreatePrivateClassBookingPayload {
+  classes: { start_time: Date }[];
 }

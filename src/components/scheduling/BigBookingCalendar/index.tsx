@@ -13,14 +13,14 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
   availabilityEntries,
   onDisplayedDatesUpdate,
   onSelectEvent,
+  eventPropGetter,
   displayedDates,
   setDisplayedDates,
-  eventPropGetter,
 }) => {
   const [view, setView] = useState<View>(defaultView);
 
   useEffect(() => {
-    onDisplayedDatesUpdate(displayedDates);
+    onDisplayedDatesUpdate && onDisplayedDatesUpdate(displayedDates);
   }, [displayedDates]);
 
   const formatEvents = (
@@ -31,15 +31,6 @@ const BigBookingCalendar: React.FC<BigBookingCalendarProps> = ({
     end: new Date(entry.end),
     id: entry.id,
   });
-
-  const createStyleMap = () => {
-    const styleObj: { [statusName: string]: React.CSSProperties } = {
-      booked: {
-        backgroundColor: "#ff0000",
-      },
-    };
-    return new Map(Object.entries(styleObj));
-  };
 
   const onViewChange = (view: View) => {
     setView(view);

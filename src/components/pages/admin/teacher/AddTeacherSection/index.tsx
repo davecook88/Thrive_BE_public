@@ -11,7 +11,6 @@ export const AddTeacherSection = () => {
   ) => {
     e.preventDefault();
     const res = await ApiAdaptor.createTeacher(email);
-    debugger;
     if (res.detail) {
       setError(String(res.detail));
       return;

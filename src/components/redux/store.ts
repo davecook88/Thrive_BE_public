@@ -4,8 +4,11 @@ import editAvailabilityConfigReducer from "./reducers/calendar/editAvailabilityS
 import userReducer from "../../auth/userSlice";
 import toastReducer from "../common/alerts/toastSlice";
 import adminReducer from "../admin/adminSlice";
+import teacherAdminReducer from "./reducers/teachers/TeacherAdminSlice/slice";
 import teacherProfilePageReducer from "./reducers/teachers/TeacherProfilePageSlice/slice";
 import teacherReducer from "./reducers/teachers/teacherSlice";
+import teacherPrivateClassReducer from "./reducers/teacherPrivateClassBooking/teacherPrivateClassBookingSlice";
+import invoiceReducer from "./reducers/invoice/invoiceSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,8 +17,11 @@ export const store = configureStore({
     user: userReducer,
     toast: toastReducer,
     admin: adminReducer,
+    teacherAdmin: teacherAdminReducer,
     teacherProfilePage: teacherProfilePageReducer,
     teachers: teacherReducer,
+    teacherPrivateClassBooking: teacherPrivateClassReducer,
+    invoice: invoiceReducer,
   },
 });
 

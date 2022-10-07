@@ -1,8 +1,6 @@
-import { AvailabilityState } from "../components/types/calendar/types";
 import axios from "axios";
 import { getTokenFromLocalStorage } from "../auth/utils";
 import { ThriveUser } from "../auth/types";
-import moment from "moment";
 import { CreatePaymentIntentPayload } from "../components/payment/stripe/types";
 import {
   CreateCourseClassPayload,
@@ -19,39 +17,27 @@ import {
 import { RouteCreator } from "../components/utils/routeConstants";
 import { CreateAvailabilityCalendarEvent } from "../components/scheduling/BigBookingCalendar/types";
 import {
+  CreatePrivateClassBookingPayload,
   CreatePrivateClassCoursePayload,
+  CreatePrivateClassPackagePayload,
   PrivateClassOptionBase,
 } from "../components/types/privateClass/payloads";
-import { PrivateClassOption } from "../components/types/privateClass/responses";
+import {
+  PrivateClassOption,
+  PrivateClassPackageBooking,
+} from "../components/types/privateClass/responses";
 import { Course } from "../components/types/course/responses";
-
-export interface PaginationParams {
-  limit?: number;
-  page?: number;
-}
-
-export interface PostAvailabilityPayload {
-  timeframe: { start: Date; end: Date };
-  events: CreateAvailabilityCalendarEvent[];
-}
-
-export enum ApiEndpoints {
-  verifyGoogleToken = "/auth/google",
-  teacherAvailability = "/bookings/teacher-availability",
-  payment = "/payment",
-  paymentCreateIntent = "/payment/create-payment-intent",
-  course = "/course",
-  courseClass = "/course/class",
-  teacher = "/teacher",
-  teacherAdmin = "/admin/teacher",
-  level = "/level",
-  unit = "/level/unit",
-  bookCourse = "/book/course",
-  user = "/user",
-  privateClass = "/private_class",
-}
-
-export class MissingTokenError extends Error {}
+import { ListPackageBookingsParams } from "./params";
+import { ApiEndpoints, MissingTokenError } from "./constants";
+import {
+  GetAvailabilityResponse,
+  PaginationParams,
+  PostAvailabilityPayload,
+} from "./types";
+import {
+  AddCourseBookingLineItemPayload,
+  AddPackageBookingLineItemPayload,
+} from "../components/types/invoice/payloads";
 
 class ApiAdaptor {
   static client = axios.create({
@@ -105,7 +91,7 @@ class ApiAdaptor {
     email: string,
     googleId: string
   ) {
-    const respone = await ApiAdaptor.callApi(
+    const response = await ApiAdaptor.callApi(
       ApiEndpoints.verifyGoogleToken,
       "POST",
       {
@@ -117,7 +103,7 @@ class ApiAdaptor {
         token,
       }
     );
-    return respone as ThriveUser;
+    return response as ThriveUser;
   }
 
   static async getAvailability(
@@ -297,6 +283,24 @@ class ApiAdaptor {
     )) as PrivateClassOption;
   }
 
+  static async putPrivateClassOption(
+    optionId: number,
+    payload: PrivateClassOptionBase
+  ) {
+    return (await this.callApi(
+      `${ApiEndpoints.privateClass}/${optionId}`,
+      "PUT",
+      { payload }
+    )) as PrivateClassOption;
+  }
+
+  static async deletePrivateClassOption(privateClassOptionId: number) {
+    return (await this.callApi(
+      `${ApiEndpoints.privateClass}/${privateClassOptionId}`,
+      "DELETE"
+    )) as PrivateClassOption;
+  }
+
   static async listPrivateClassesByTeacher(teacherId: number) {
     return (await this.callApi(
       `${ApiEndpoints.privateClass}/teacher/${teacherId}`,
@@ -315,6 +319,79 @@ class ApiAdaptor {
     )) as Course;
   }
 
+  static async createPrivateClassPackage(
+    privateClassOptionId: number,
+    payload: CreatePrivateClassPackagePayload
+  ) {
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/${privateClassOptionId}/package`,
+      "POST",
+      { payload }
+    );
+  }
+  static async putPrivateClassPackage(
+    packageId: number,
+    payload: CreatePrivateClassPackagePayload
+  ) {
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/package/${packageId}`,
+      "PUT",
+      { payload }
+    );
+  }
+
+  static async deletePrivateClassPackage(packageId: number) {
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/package/${packageId}`,
+      "DELETE"
+    );
+  }
+
+  static async createPrivateClassPackageBooking(
+    packageId: number,
+    payload: CreatePrivateClassBookingPayload
+  ) {
+    /*
+    This creates the private class package booking so that a payment
+    intent can be issued against it.
+
+    Once the payment intent is marked paid, the package booking will be activated.
+
+    */
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/package/${packageId}/create-booking`,
+      "POST",
+      { payload }
+    );
+  }
+
+  static async listPrivatePackageBookings(params?: ListPackageBookingsParams) {
+    return (await this.callApi(
+      `${ApiEndpoints.privateClass}/package-booking/list`,
+      "GET",
+      { params }
+    )) as PrivateClassPackageBooking[];
+  }
+
+  static async bookPrivateClassPackageBooking(
+    packageId: number,
+    start_time: Date
+  ) {
+    /*
+    If a student has an active package and want to use their credits to book a 
+    class, this is the route to use.
+    */
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/package-booking/${packageId}/book`,
+      "POST",
+      {
+        payload: {
+          start_time,
+        },
+      }
+    );
+  }
+
   static async listTeachers(options?: { serverSide?: boolean }) {
     return (await this.callApi(ApiEndpoints.teacher, "GET", {
       serverSide: options?.serverSide,
@@ -325,7 +402,9 @@ class ApiAdaptor {
     teacherId: number,
     options?: { serverSide?: boolean }
   ) {
-    return (await this.callApi(`${ApiEndpoints.teacher}/${teacherId}`, "GET", {
+    const url = `${ApiEndpoints.teacher}/${teacherId}`;
+
+    return (await this.callApi(url, "GET", {
       serverSide: options?.serverSide,
     })) as TeacherResponse;
   }
@@ -344,6 +423,42 @@ class ApiAdaptor {
     return await this.callApi(
       `${ApiEndpoints.payment}/confirmation?payment_intent_id=${paymentIntentId}`,
       "GET"
+    );
+  }
+
+  static async getInvoice(invoiceId: number) {
+    return await this.callApi(`${ApiEndpoints.invoice}/${invoiceId}`, "GET");
+  }
+
+  static async createInvoice() {
+    return await this.callApi(`${ApiEndpoints.invoice}`, "POST");
+  }
+
+  static async addPackageBookingLineItem(
+    invoiceId: number,
+    payload: AddPackageBookingLineItemPayload
+  ) {
+    return await this.callApi(
+      `${ApiEndpoints.invoice}/${invoiceId}/item/booking`,
+      "POST",
+      { payload }
+    );
+  }
+  static async addCourseLineItem(
+    invoiceId: number,
+    payload: AddCourseBookingLineItemPayload
+  ) {
+    return await this.callApi(
+      `${ApiEndpoints.invoice}/${invoiceId}/item/course`,
+      "POST",
+      { payload }
+    );
+  }
+
+  static async deleteLineItem(invoiceId: number, lineItemId: number) {
+    return await this.callApi(
+      `${ApiEndpoints.invoice}/${invoiceId}/item/${lineItemId}`,
+      "DELETE"
     );
   }
 }
