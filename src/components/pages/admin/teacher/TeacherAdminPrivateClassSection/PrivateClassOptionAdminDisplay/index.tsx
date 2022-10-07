@@ -10,6 +10,7 @@ import { useTeacherAdmin } from "../../hooks/useTeacherAdmin";
 import { useToast } from "../../../../../../hooks/useToast";
 import { EditIconButton } from "../../../../../common/buttons/EditIconButton";
 import { usePrivateClassAdmin } from "../hooks/usePrivateClassAdmin";
+import clsx from "clsx";
 
 export const PrivateClassOptionAdminDisplay: React.FC<
   PrivateClassOptionAdminDisplayProps
@@ -38,10 +39,47 @@ export const PrivateClassOptionAdminDisplay: React.FC<
     onEditClick && onEditClick();
   };
 
+  const toggleActive = async () => {
+    await ApiAdaptor.putPrivateClassOption(option.id, {
+      ...option,
+      active: !option.active,
+    });
+    refreshTeacher();
+  };
+
   return (
     <div className="p-4 border border-primary rounded-sm m-2">
-      <div className="flex justify-center m-2">
-        <h5 className="font-extrabold">Private Class Option Details</h5>
+      <div className="flex">
+        <div className="w-1/6">
+          <StandardButton
+            className="m-2 bg-error border-error"
+            onClick={onDeletePrivateClassOption}
+          >
+            <DeleteIconButton onClick={onDeletePrivateClassOption} />
+          </StandardButton>
+          <StandardButton
+            className="m-2 bg-info border-info"
+            onClick={onEditPrivateClassOption}
+          >
+            <EditIconButton onClick={onEditPrivateClassOption} />
+          </StandardButton>
+        </div>
+        <div className="flex justify-center w-4/6">
+          <h5 className="font-extrabold">Private Class Option Details</h5>
+        </div>
+        <div>
+          <div
+            className={clsx(
+              "badge mx-2",
+              "p-2",
+              "cursor-pointer",
+              option.active ? "badge-primary" : "badge-neutral"
+            )}
+            onClick={toggleActive}
+          >
+            {option.active ? "active" : "inactive"}
+          </div>
+        </div>
       </div>
       <table className="table table-compact w-full">
         <tbody>
@@ -76,18 +114,6 @@ export const PrivateClassOptionAdminDisplay: React.FC<
         ))}
       </div>
       <div className="flex justify-around m-2">
-        <StandardButton
-          className="bg-error border-error"
-          onClick={onDeletePrivateClassOption}
-        >
-          <DeleteIconButton onClick={onDeletePrivateClassOption} />
-        </StandardButton>
-        <StandardButton
-          className="bg-error border-info"
-          onClick={onEditPrivateClassOption}
-        >
-          <EditIconButton onClick={onEditPrivateClassOption} />
-        </StandardButton>
         <StandardButton onClick={() => onCreatePackageClick()}>
           Create Package
         </StandardButton>
