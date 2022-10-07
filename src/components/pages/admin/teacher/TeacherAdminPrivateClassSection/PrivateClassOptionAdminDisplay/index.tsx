@@ -11,12 +11,15 @@ import { useToast } from "../../../../../../hooks/useToast";
 import { EditIconButton } from "../../../../../common/buttons/EditIconButton";
 import { usePrivateClassAdmin } from "../hooks/usePrivateClassAdmin";
 import clsx from "clsx";
+import { PrivateClassPackageOption } from "../../../../../types/privateClass/responses";
 
 export const PrivateClassOptionAdminDisplay: React.FC<
   PrivateClassOptionAdminDisplayProps
 > = ({ option, onEditClick }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { toast } = useToast();
+  const [selectedPackage, setSelectedPackage] =
+    useState<PrivateClassPackageOption | null>(null);
 
   const { refreshTeacher } = useTeacherAdmin();
   const { selectPrivateClass } = usePrivateClassAdmin();
@@ -45,6 +48,16 @@ export const PrivateClassOptionAdminDisplay: React.FC<
       active: !option.active,
     });
     refreshTeacher();
+  };
+
+  const onEditPackageClick = (packageOption: PrivateClassPackageOption) => {
+    setSelectedPackage(packageOption);
+    setModalOpen(true);
+  };
+
+  const onModalClose = () => {
+    setModalOpen(false);
+    setSelectedPackage(null);
   };
 
   return (
@@ -108,6 +121,7 @@ export const PrivateClassOptionAdminDisplay: React.FC<
         {option.package_options.map((packageOption) => (
           <PrivateClassPackageOptionAdminDisplay
             packageOption={packageOption}
+            onEditClick={() => onEditPackageClick(packageOption)}
             key={packageOption.id}
             refresh={refreshTeacher}
           />
@@ -120,12 +134,14 @@ export const PrivateClassOptionAdminDisplay: React.FC<
       </div>
       <Modal
         isOpen={modalOpen}
-        onRequestClose={() => setModalOpen(false)}
+        onRequestClose={onModalClose}
         className="w-max h-max p-4 bg-white m-auto mt-24 border-4 border-solid border-slate-400"
       >
         <PrivateClassPackageOptionEditForm
+          packageOption={selectedPackage || undefined}
           privateClassOptionId={option.id}
           refresh={refreshTeacher}
+          closeModal={onModalClose}
         />
       </Modal>
     </div>

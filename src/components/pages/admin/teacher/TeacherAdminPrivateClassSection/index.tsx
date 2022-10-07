@@ -12,10 +12,12 @@ export const TeacherAdminPrivateClassSection: React.FC = () => {
   if (!savedTeacherId) return <div>No teacher selected</div>;
   return (
     <section>
-      <CreatePrivateClassOptionForm
-        teacherId={savedTeacherId}
-        formRef={formRef}
-      />
+      <div className="w-full flex justify-center">
+        <CreatePrivateClassOptionForm
+          teacherId={savedTeacherId}
+          formRef={formRef}
+        />
+      </div>
       <AdminTeacherPrivateClassOptions onEditPrivateClassClick={scrollToForm} />
     </section>
   );

@@ -30,7 +30,7 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
     if (!durationOptions) return;
 
     setSelectedPrivateClassOption(durationOptions[0]);
-  }, [privateClassOptions]);
+  }, []);
 
   return (
     <section className="container">
@@ -42,7 +42,9 @@ export const TeacherProfilePage: React.FC<TeacherProfilePageProps> = ({
           selectedClassLength={classLengthMinutes}
           onSelectClassLength={setClassLengthMinutes}
           classLengthOptions={
-            privateClassOptions?.map((o) => o.length_minutes).sort() || []
+            Array.from(
+              new Set(privateClassOptions?.map((o) => o.length_minutes))
+            ).sort() || []
           }
         />
       </section>

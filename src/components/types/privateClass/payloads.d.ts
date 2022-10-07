@@ -18,6 +18,7 @@ export interface CreatePrivateClassCoursePayload {
 export interface CreatePrivateClassPackagePayload {
   class_count: number;
   discount_percentage: number;
+  active?: boolean;
 }
 
 export interface CreatePrivateClassBookingPayload {

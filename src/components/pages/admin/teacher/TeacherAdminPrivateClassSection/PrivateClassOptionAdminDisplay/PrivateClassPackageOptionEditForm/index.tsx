@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import ApiAdaptor from "../../../../../../../backend/apiAdaptor";
 import { showToast } from "../../../../../../common/alerts/toastSlice";
@@ -11,34 +11,47 @@ import {
 
 export const PrivateClassPackageOptionEditForm: React.FC<
   PrivateClassPackageOptionEditFormProps
-> = ({ privateClassOptionId, refresh }) => {
+> = ({ privateClassOptionId, refresh, packageOption, closeModal }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<PrivateClassPackageOptionEditFormInputs>();
 
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    setValue("active", packageOption?.active || false);
+    setValue("classCount", packageOption?.class_count || 5);
+    setValue("discountPercentage", packageOption?.discount_percentage || 0.1);
+  }, [packageOption]);
+
   const onSubmit: SubmitHandler<
     PrivateClassPackageOptionEditFormInputs
   > = async (data) => {
     console.log(data);
-    const res = await ApiAdaptor.createPrivateClassPackage(
-      privateClassOptionId,
-      {
+    if (!packageOption) {
+      await ApiAdaptor.createPrivateClassPackage(privateClassOptionId, {
         class_count: data.classCount,
         discount_percentage: data.discountPercentage,
-      }
-    );
+        active: data.active,
+      });
+    } else {
+      await ApiAdaptor.putPrivateClassPackage(packageOption.id, {
+        class_count: data.classCount,
+        discount_percentage: data.discountPercentage,
+        active: data.active,
+      });
+    }
 
-    if (!res) return;
     dispatch(
       showToast({
-        message: "Package created",
+        message: packageOption ? "Package updated" : "Package created",
       })
     );
     refresh();
+    closeModal();
   };
 
   return (
@@ -59,9 +72,9 @@ export const PrivateClassPackageOptionEditForm: React.FC<
         })}
       />
       {/* errors will return when field validation fails  */}
-      {errors.discountPercentage && (
+      {errors.classCount && (
         <div className="text-info text-xs p-2">
-          <span>This field must be a number between 0.01 and 1.</span>
+          <span>This field must be a number between 1 and 100.</span>
         </div>
       )}
       {/* include validation with required or other standard HTML validation rules */}
@@ -77,15 +90,25 @@ export const PrivateClassPackageOptionEditForm: React.FC<
           valueAsNumber: true,
           value: 0.1,
           max: 1,
-          min: 0.01,
+          min: 0,
         })}
       />
       {/* errors will return when field validation fails  */}
       {errors.discountPercentage && (
         <div className="text-info text-xs p-2">
-          <span>This field must be a number between 0.01 and 1.</span>
+          <span>This field must be a number between 0 and 1.</span>
         </div>
       )}
+      <div className="form-control w-20 m-auto my-2">
+        <label className="label cursor-pointer">
+          <span className="label-text">Active</span>
+          <input
+            type="checkbox"
+            {...register("active")}
+            className="checkbox checkbox-primary"
+          />
+        </label>
+      </div>
       <div className="p-4 flex w-full justify-center">
         <input className="btn btn-primary" type="submit" />
       </div>

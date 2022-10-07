@@ -3,4 +3,5 @@ import { PrivateClassPackageOption } from "../../../../../../types/privateClass/
 export type PrivateClassPackageOptionAdminDisplayProps = {
   packageOption: PrivateClassPackageOption;
   refresh: () => void;
+  onEditClick: () => void;
 };

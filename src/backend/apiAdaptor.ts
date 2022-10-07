@@ -91,7 +91,7 @@ class ApiAdaptor {
     email: string,
     googleId: string
   ) {
-    const respone = await ApiAdaptor.callApi(
+    const response = await ApiAdaptor.callApi(
       ApiEndpoints.verifyGoogleToken,
       "POST",
       {
@@ -103,7 +103,7 @@ class ApiAdaptor {
         token,
       }
     );
-    return respone as ThriveUser;
+    return response as ThriveUser;
   }
 
   static async getAvailability(
@@ -326,6 +326,16 @@ class ApiAdaptor {
     return await this.callApi(
       `${ApiEndpoints.privateClass}/${privateClassOptionId}/package`,
       "POST",
+      { payload }
+    );
+  }
+  static async putPrivateClassPackage(
+    packageId: number,
+    payload: CreatePrivateClassPackagePayload
+  ) {
+    return await this.callApi(
+      `${ApiEndpoints.privateClass}/package/${packageId}`,
+      "PUT",
       { payload }
     );
   }

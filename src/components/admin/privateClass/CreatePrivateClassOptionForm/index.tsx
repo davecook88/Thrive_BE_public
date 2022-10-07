@@ -16,6 +16,7 @@ import {
   CreatePrivateClassOptionFormProps,
   PrivateClassOptionEditFormInputs,
 } from "./types";
+import tw from "tailwind-styled-components";
 
 export const PRIVATE_CLASS_DURATION_OPTIONS = [30, 60];
 
@@ -66,88 +67,94 @@ export const CreatePrivateClassOptionForm: React.FC<
     refreshTeacher();
   };
 
+  const FormBody = tw.div`
+  w-max
+  p-4
+  rounded-sm
+  shadow-sm
+  border
+  border-primary
+  m-auto`;
   return (
     <StandardForm onSubmit={handleSubmit(onSubmit)}>
-      <StandardFormBody ref={formRef}>
-        <FormSection>
-          <div className="p-2">
-            <label className="input-group">
-              <span className="text-xs bg-primary text-base-100">
-                Private Class Name
-              </span>
-              <input
-                {...register("name", {
-                  required: true,
-                  value: selectedPrivateClassOption?.name,
-                })}
-                type="text"
-                placeholder="Name your private class"
-                className="input input-bordered w-full"
-              />
-            </label>
-          </div>
-          <div className="p-2">
-            <label className="input-group">
-              <span className="text-xs bg-primary text-base-100">
-                Private Class Description
-              </span>
-              <input
-                type="text"
-                {...register("description", {
-                  required: true,
-                })}
-                placeholder="Describe your private class"
-                className="input input-bordered w-full"
-              />
-            </label>
-          </div>
-          <div className="p-2">
-            <label>Set class duration (minutes)</label>
-            <Dropdown
-              options={PRIVATE_CLASS_DURATION_OPTIONS.map((t) => ({
-                name: String(t),
-                id: t,
-              }))}
-              name="duration"
-              rules={{
-                required: true,
-              }}
-              register={register}
-            />
-          </div>
-          <div className="p-2">
-            <span className="">Price (cents)</span>
+      <FormBody ref={formRef}>
+        <div className="p-2">
+          <label className="input-group">
+            <span className="text-xs bg-primary text-base-100">
+              Private Class Name
+            </span>
             <input
-              {...register("price", {
+              {...register("name", {
                 required: true,
-                valueAsNumber: true,
+                value: selectedPrivateClassOption?.name,
               })}
-              placeholder="Set your price"
-              className="input input-bordered "
+              type="text"
+              placeholder="Name your private class"
+              className="input input-bordered w-full"
             />
-          </div>
-          <div className="form-control w-10 m-auto my-2">
-            <label className="label cursor-pointer">
-              <span className="label-text">Active</span>
-              <input
-                type="checkbox"
-                {...register("active")}
-                className="checkbox checkbox-primary"
-              />
-            </label>
-          </div>
-          <div className="flex items-center justify-center p-2">
-            <StandardButton
-              className="bg-primary border-none drop-shadow-md btn-wide text-white hover:bg-secondary mx-2"
-              type="submit"
-            >
-              {selectedPrivateClassOption
-                ? "Edit Private Class"
-                : "Create Private Class"}
-            </StandardButton>
-          </div>
-        </FormSection>
-      </StandardFormBody>
+          </label>
+        </div>
+        <div className="p-2">
+          <label className="input-group">
+            <span className="text-xs bg-primary text-base-100">
+              Private Class Description
+            </span>
+            <input
+              type="text"
+              {...register("description", {
+                required: true,
+              })}
+              placeholder="Describe your private class"
+              className="input input-bordered w-full"
+            />
+          </label>
+        </div>
+        <div className="p-2">
+          <label>Set class duration (minutes)</label>
+          <Dropdown
+            options={PRIVATE_CLASS_DURATION_OPTIONS.map((t) => ({
+              name: String(t),
+              id: t,
+            }))}
+            name="duration"
+            rules={{
+              required: true,
+            }}
+            register={register}
+          />
+        </div>
+        <div className="p-2">
+          <span className="">Price (cents)</span>
+          <input
+            {...register("price", {
+              required: true,
+              valueAsNumber: true,
+            })}
+            placeholder="Set your price"
+            className="input input-bordered "
+          />
+        </div>
+        <div className="form-control w-20 m-auto my-2">
+          <label className="label cursor-pointer">
+            <span className="label-text">Active</span>
+            <input
+              type="checkbox"
+              {...register("active")}
+              className="checkbox checkbox-primary"
+            />
+          </label>
+        </div>
+        <div className="flex items-center justify-center p-2">
+          <StandardButton
+            className="bg-primary border-none drop-shadow-md btn-wide text-white hover:bg-secondary mx-2"
+            type="submit"
+          >
+            {selectedPrivateClassOption
+              ? "Edit Private Class"
+              : "Create Private Class"}
+          </StandardButton>
+        </div>
+      </FormBody>
     </StandardForm>
   );
 };
