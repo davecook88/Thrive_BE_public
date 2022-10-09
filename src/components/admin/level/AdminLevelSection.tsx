@@ -10,7 +10,7 @@ export const AdminLevelSection = () => {
   const [levels, setLevels] = useState<LevelResponse[]>([]);
 
   useEffect(() => {
-    ApiAdaptor.listLevels({ page: 0 }).then(setLevels);
+    ApiAdaptor.listLevels({ page: 1 }).then(setLevels);
   }, []);
 
   const listLevels = () =>
@@ -19,9 +19,9 @@ export const AdminLevelSection = () => {
         <Link href={`/admin/level/${level.id}`}>
           <div
             id="row-container"
-            className="flex justify-between align-center drop-shadow border border-base-600 bg-base-100 p-4 rounded-full hover:bg-base-300  cursor-pointer uppercase"
+            className="align-center border-base-600 flex cursor-pointer justify-between rounded-full border bg-base-100 p-4 uppercase  drop-shadow hover:bg-base-300"
           >
-            <div className="font-bold px-6">{level.name}</div>
+            <div className="px-6 font-bold">{level.name}</div>
           </div>
         </Link>
       </div>
@@ -30,7 +30,7 @@ export const AdminLevelSection = () => {
   return (
     <AdminSectionContainer id="course-admin">
       <div className="w-full text-center">
-        <AdminSectionTitle className="font-bold p-2 uppercase text-xl">
+        <AdminSectionTitle className="p-2 text-xl font-bold uppercase">
           Levels
         </AdminSectionTitle>
       </div>
