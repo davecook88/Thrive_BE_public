@@ -32,14 +32,13 @@ export const ArrowBetweenPoints: React.FC<ArrowBetweenDivsProps> = ({
   }, [lineCoordinates]);
 
   return (
-    <svg className="absolute hidden h-full w-full md:block">
+    <svg className="absolute z-0 hidden h-96 w-full md:block">
       <path
         d={curve}
         stroke="black"
         strokeWidth="4"
         strokeLinecap="round"
         fill="transparent"
-        className="z-100"
         strokeDasharray="3,10"
       ></path>
     </svg>

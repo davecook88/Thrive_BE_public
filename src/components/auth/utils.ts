@@ -2,7 +2,7 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";
-import { setUser } from "../../auth/userSlice";
+import { setUser } from "../redux/reducers/user/userSlice";
 import { GoogleSuccessfulAuthOnlineCallback } from "../../auth/utils";
 import { useAppDispatch } from "../redux/hooks";
 

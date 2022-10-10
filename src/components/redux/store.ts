@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import availabilityReducer from "./reducers/calendar/availabilitySlice";
 import editAvailabilityConfigReducer from "./reducers/calendar/editAvailabilitySlice";
-import userReducer from "../../auth/userSlice";
+import userReducer from "./reducers/user/userSlice";
 import toastReducer from "../common/alerts/toastSlice";
 import adminReducer from "../admin/adminSlice";
 import teacherAdminReducer from "./reducers/teachers/TeacherAdminSlice/slice";

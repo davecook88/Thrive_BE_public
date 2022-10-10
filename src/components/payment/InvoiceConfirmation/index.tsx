@@ -25,30 +25,38 @@ export const InvoiceConfirmation: React.FC<InvoiceConfirmationProps> = ({
     return <div>You haven't selected anything to order yet.</div>;
 
   return (
-    <div>
-      <div className="w-full text-extrabold text-center">
-        Confirm your order
+    <div className="rounded shadow">
+      <div className="text-extrabold w-full rounded-t bg-primary p-2 text-center text-base-100">
+        Booking Summary
       </div>
-      <table className="table">
-        <tbody>
-          {invoice.line_items.map((lineItem) => (
-            <tr>
-              <td>{lineItem.name}</td>
-              <td>${(lineItem.price / 100).toFixed(2)}</td>
-              <td>
-                <DeleteIconButton
-                  onClick={() => deleteInvoiceLineItem(lineItem.id)}
-                />
-              </td>
+      <div className="w-full">
+        <table className="m-auto table  ">
+          <tbody>
+            <tr className="border-b-2 border-black font-bold">
+              <td>Your items</td>
+              <td></td>
+              <td></td>
             </tr>
-          ))}
-          <tr>
-            <td className="font-bold">Total</td>
-            <td className="font-bold">${(invoice.total / 100).toFixed(2)}</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+            {invoice.line_items.map((lineItem) => (
+              <tr>
+                <td>
+                  <DeleteIconButton
+                    onClick={() => deleteInvoiceLineItem(lineItem.id)}
+                  />
+                </td>
+                <td className="row-span-2">{lineItem.name}</td>
+                <td> </td>
+                <td>${(lineItem.price / 100).toFixed(2)}</td>
+              </tr>
+            ))}
+            <tr className="border-t-2 border-black">
+              <td></td> <td className="font-bold">Total</td>
+              <td></td>
+              <td className="font-bold">${(invoice.total / 100).toFixed(2)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
