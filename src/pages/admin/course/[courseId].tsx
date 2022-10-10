@@ -17,8 +17,8 @@ import {
   setSelectedCourse,
   setSelectedCourseClass,
 } from "../../../components/admin/adminSlice";
-import { selectUser } from "../../../auth/userSlice";
 import UnauthorizedAccessPage from "../../../auth/UnauthorizedPage";
+import { selectUser } from "../../../components/redux/reducers/user/userSlice";
 
 const EditCoursePage = () => {
   const dispatch = useAppDispatch();
@@ -63,8 +63,8 @@ const EditCoursePage = () => {
   if (!course) return "loading";
   return (
     <div className="artboard-demo">
-      <div className="mb-4 w-full flex justify-center pt-4">
-        <h1 className="font-bold uppercase text-3xl">Edit course</h1>
+      <div className="mb-4 flex w-full justify-center pt-4">
+        <h1 className="text-3xl font-bold uppercase">Edit course</h1>
       </div>
       <CourseForm course={course} refresh={refresh} />
       <DisplayClassList courseClasses={course.live_classes} />

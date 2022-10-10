@@ -1,9 +1,9 @@
 import { GetServerSideProps } from "next/types";
 import React from "react";
 import UnauthorizedAccessPage from "../../../auth/UnauthorizedPage";
-import { selectUser } from "../../../auth/userSlice";
 import { TeacherAvailabilitySettings } from "../../../components/pages/admin/teacher";
 import { useAppSelector } from "../../../components/redux/hooks";
+import { selectUser } from "../../../components/redux/reducers/user/userSlice";
 
 interface AdminTeacherProps {
   teacherId: number;

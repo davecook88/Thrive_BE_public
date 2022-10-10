@@ -18,8 +18,8 @@ import {
 } from "../../../components/types/level/response";
 import { DisplayUnitList } from "../../../components/admin/level/LevelForm/DisplayUnitsList";
 import { UnitForm } from "../../../components/admin/level/LevelForm/UnitForm";
-import { selectUser } from "../../../auth/userSlice";
 import UnauthorizedAccessPage from "../../../auth/UnauthorizedPage";
+import { selectUser } from "../../../components/redux/reducers/user/userSlice";
 
 const EditCoursePage = () => {
   const dispatch = useAppDispatch();
@@ -53,8 +53,8 @@ const EditCoursePage = () => {
   if (!selectedLevel) return "loading";
   return (
     <div className="artboard-demo">
-      <div className="mb-4 w-full flex justify-center pt-4">
-        <h1 className="font-bold uppercase text-3xl">Edit level</h1>
+      <div className="mb-4 flex w-full justify-center pt-4">
+        <h1 className="text-3xl font-bold uppercase">Edit level</h1>
       </div>
       <LevelForm level={selectedLevel} refresh={refresh} />
       <DisplayUnitList units={units} />
