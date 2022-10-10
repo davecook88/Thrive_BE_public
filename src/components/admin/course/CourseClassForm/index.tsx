@@ -43,7 +43,9 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
   const [name, setName] = useState(`Live Class ${classNumber}`);
   const [description, setDescription] = useState<string | undefined>();
   const [selectedTeacher, setSelectedTeacher] =
-    useState<ListCourseTeachersResponse | null>(null);
+    useState<ListCourseTeachersResponse | null>(
+      course.course_teachers?.[0] || null
+    );
   const [startTime, setStartTime] = useState(
     courseClass?.start_time ? new Date(courseClass?.start_time) : new Date()
   );
@@ -73,8 +75,9 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
     setStartTime(_start);
     const _duration = courseClass ? calculateDuration(courseClass) : 60;
     setDuration(_duration);
-    if (courseClass?.class_teachers.length) {
-      setSelectedTeacher(courseClass.class_teachers[0]);
+    debugger;
+    if (course?.course_teachers.length) {
+      setSelectedTeacher(course.course_teachers[0]);
     } else {
       setSelectedTeacher(null);
     }
@@ -92,6 +95,7 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
 
   const courseTeachers: ListCourseTeachersResponse[] = course.course_teachers;
   const selectTeacher = (val: string | number) => {
+    debugger;
     const selectedTeacher = courseTeachers.find((t) => t.user_id == val);
     if (!selectedTeacher) return;
     setSelectedTeacher(selectedTeacher);
@@ -174,7 +178,7 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
   const teacherComponent = () => {
     if (!selectTeacher && !courseTeachers?.length)
       return <div>No teachers assigned to this course yet</div>;
-    else if (!selectedTeacher)
+    else if (!selectedTeacher && courseTeachers.length > 1)
       return (
         <Dropdown
           options={courseTeachers.map((t) => ({
@@ -182,14 +186,16 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
             id: t.user_id,
           }))}
           onChange={selectTeacher}
-          defaultOption="Select  teacher"
-          value={0}
         />
       );
     else if (selectedTeacher)
       return (
         <SelectedList
-          onRemove={() => setSelectedTeacher(null)}
+          onRemove={
+            courseTeachers.length > 1
+              ? () => setSelectedTeacher(null)
+              : undefined
+          }
           items={[
             { id: selectedTeacher.teacher_id, name: selectedTeacher.user_name },
           ]}
@@ -203,7 +209,7 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
         <FormSection>
           <div className="p-2">
             <label className="input-group">
-              <span className="text-xs bg-secondary">Class Name</span>
+              <span className="bg-secondary text-xs">Class Name</span>
               <input
                 type="text"
                 value={name}
@@ -214,14 +220,14 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
             </label>
           </div>
           <div className="p-2">
-            <label className="input-group  h-25">
-              <span className="text-xs bg-secondary">Description</span>
+            <label className="h-25  input-group">
+              <span className="bg-secondary text-xs">Description</span>
               <textarea
                 rows={10}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="This course focuses on..."
-                className="input input-bordered w-full h-25"
+                className="h-25 input input-bordered w-full"
               />
             </label>
           </div>
@@ -229,7 +235,7 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
         <FormSection>
           <div className="p-2">
             <label className="label">
-              <span className="label-text uppercase text-sm ">
+              <span className="label-text text-sm uppercase ">
                 Class Teacher
               </span>
             </label>
@@ -238,18 +244,18 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
         </FormSection>
         <FormSection>
           <label className="label">
-            <span className="label-text uppercase text-sm ">Start time</span>
+            <span className="label-text text-sm uppercase ">Start time</span>
             {startTime.getTime() < new Date().getTime() && (
-              <span className="label-text-alt text-error text-xs ">
+              <span className="label-text-alt text-xs text-error ">
                 Time must be in the future
               </span>
             )}
           </label>
           <DateTimePicker onChange={setStartTime} value={startTime} />
-          <div className="p-6 flex align-center flex justify-center">
+          <div className="align-center flex flex justify-center p-6">
             <div>
-              <label className="input-group w-min m-auto ">
-                <span className="text-xs bg-secondary">Duration minutes</span>
+              <label className="input-group m-auto w-min ">
+                <span className="bg-secondary text-xs">Duration minutes</span>
                 <input
                   value={duration}
                   onChange={(e) => {
@@ -275,10 +281,10 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
           )}
         </FormSection>
       </StandardFormBody>
-      <div className="flex items-center w-full justify-center p-2">
+      <div className="flex w-full items-center justify-center p-2">
         {courseClass && (
           <StandardButton
-            className="bg-error border-none drop-shadow-md btn-wide mx-2 text-white"
+            className="btn-wide mx-2 border-none bg-error text-white drop-shadow-md"
             onClick={(e: React.SyntheticEvent) => {
               e.preventDefault();
               deleteCourseClass(courseClass.id, courseClass.name);
@@ -288,7 +294,7 @@ export const CourseClassForm: React.FC<CourseClassFormProps> = ({
           </StandardButton>
         )}
         <StandardButton
-          className="bg-primary border-none drop-shadow-md btn-wide mx-2 text-white hover:bg-secondary"
+          className="btn-wide mx-2 border-none bg-primary text-white drop-shadow-md hover:bg-secondary"
           onClick={(e: React.SyntheticEvent) => {
             e.preventDefault();
             onSubmitCourseClass();

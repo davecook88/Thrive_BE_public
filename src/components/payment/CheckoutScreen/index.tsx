@@ -17,17 +17,17 @@ export const CheckoutScreen: React.FC<CheckoutScreenProps> = ({
   if (!user) return <LoggedOutError />;
 
   const showButtons = () => (
-    <div className="w-full flex justify-around m-2">
-      <div className="w-1 flex justify-around mt-4">
-        {keepBrowsing && (
+    <div className="m-2 flex w-full justify-around">
+      {keepBrowsing && (
+        <div className="mt-4 flex w-1 justify-around">
           <StandardButton className="btn-sm text-xs" onClick={keepBrowsing}>
             Keep browsing
           </StandardButton>
-        )}
-      </div>
+        </div>
+      )}
       <StandardButton
         onClick={() => setShowPaymentForm(true)}
-        className="font-bold bg-primary border-2 border-primary hover:bg-base-100 hover:text-primary"
+        className="z-100 w-4/6 cursor-pointer border-2 border-primary bg-primary font-bold hover:bg-base-100 hover:text-primary"
       >
         Pay now
       </StandardButton>

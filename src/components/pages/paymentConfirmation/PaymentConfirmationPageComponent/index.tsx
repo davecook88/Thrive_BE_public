@@ -1,6 +1,6 @@
 import React from "react";
 import tw from "tailwind-styled-components";
-import { selectUser } from "../../../../auth/userSlice";
+import { selectUser } from "../../../redux/reducers/user/userSlice";
 import { selectAdmin } from "../../../admin/adminSlice";
 import { ClassScheduleTable } from "../../../course/ClassScheduleTable";
 import { useAppSelector } from "../../../redux/hooks";
@@ -18,11 +18,11 @@ export const PaymentConfirmationPageComponent: React.FC<
   const admin = useAppSelector(selectUser);
   return (
     <div className="container">
-      <div className="w-full flex justify-center m-4">
+      <div className="m-4 flex w-full justify-center">
         <h1 className="text-3xl font-extrabold ">Thank you for your payment</h1>
       </div>
 
-      <div className="card rounded-sm shadow border-2 border-primary flex justify-center p-6">
+      <div className="card flex justify-center rounded-sm border-2 border-primary p-6 shadow">
         <ParagraphElement>
           Thank you for your booking, {admin.googleProfile?.givenName}.
         </ParagraphElement>
@@ -50,7 +50,7 @@ export const PaymentConfirmationPageComponent: React.FC<
           If you haven't received an invitation to Google Classroom or if you
           have any questions, please feel free to{" "}
           <a
-            className="text-primary font-bold hover:text-info"
+            className="font-bold text-primary hover:text-info"
             href="mailto:contact@lakarencita.com"
           >
             get in touch
@@ -68,7 +68,7 @@ export const PaymentConfirmationPageComponent: React.FC<
             Calendar.{" "}
             <a
               href="https://calendar.google.com"
-              className="text-primary font-bold hover:text-info"
+              className="font-bold text-primary hover:text-info"
             >
               Click here
             </a>{" "}

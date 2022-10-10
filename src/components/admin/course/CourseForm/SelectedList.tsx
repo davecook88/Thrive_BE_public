@@ -2,7 +2,7 @@ import React from "react";
 import { DeleteButton } from "../../../common/buttons/DeleteButton";
 interface SelectedListProps {
   items: { id: string | number; name: string }[];
-  onRemove: (id: string | number) => void;
+  onRemove?: (id: string | number) => void;
 }
 const SelectedList: React.FC<SelectedListProps> = ({ items, onRemove }) => {
   return (
@@ -10,15 +10,17 @@ const SelectedList: React.FC<SelectedListProps> = ({ items, onRemove }) => {
       {items.map((item) => (
         <div
           key={item.id}
-          className="flex justify-between m-4/6 p-1 border-b-2"
+          className="m-4/6 flex justify-between border-b-2 p-1"
         >
           <div>{item.name}</div>
           <div>
-            <DeleteButton
-              clickHandler={() => {
-                onRemove(item.id);
-              }}
-            />
+            {onRemove && (
+              <DeleteButton
+                clickHandler={() => {
+                  onRemove(item.id);
+                }}
+              />
+            )}
           </div>
         </div>
       ))}

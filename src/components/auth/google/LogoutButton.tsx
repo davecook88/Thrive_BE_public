@@ -4,7 +4,7 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";
-import { clearUser } from "../../../auth/userSlice";
+import { clearUser } from "../../redux/reducers/user/userSlice";
 import {
   deleteTokenFromLocalStorage,
   GoogleSuccessfulAuthOnlineCallback,

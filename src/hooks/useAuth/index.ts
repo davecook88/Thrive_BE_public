@@ -1,4 +1,4 @@
-import { selectUser } from "../../auth/userSlice";
+import { selectUser } from "../../components/redux/reducers/user/userSlice";
 import { useAppSelector } from "../../components/redux/hooks";
 
 export const useAuth = () => {

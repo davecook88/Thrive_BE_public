@@ -8,7 +8,7 @@ const AdminCourseSection = () => {
   const [courses, setCourses] = useState<Course[]>([]);
 
   useEffect(() => {
-    ApiAdaptor.listCourses({ page: 0 }).then(setCourses);
+    ApiAdaptor.listCourses({ page: 1 }).then(setCourses);
   }, []);
 
   const listCourses = () =>
@@ -17,9 +17,9 @@ const AdminCourseSection = () => {
         <Link href={`/admin/course/${course.id}`}>
           <div
             id="row-container"
-            className="flex justify-between align-center drop-shadow border border-base-600 bg-base-100 p-4 rounded-full hover:bg-base-300  cursor-pointer uppercase"
+            className="align-center border-base-600 flex cursor-pointer justify-between rounded-full border bg-base-100 p-4 uppercase  drop-shadow hover:bg-base-300"
           >
-            <div className="font-bold px-6">{course.name}</div>
+            <div className="px-6 font-bold">{course.name}</div>
           </div>
         </Link>
       </div>
@@ -28,7 +28,7 @@ const AdminCourseSection = () => {
   return (
     <AdminSectionContainer id="course-admin">
       <div className="w-full text-center">
-        <AdminSectionTitle className="font-bold p-2 uppercase text-xl">
+        <AdminSectionTitle className="p-2 text-xl font-bold uppercase">
           Courses
         </AdminSectionTitle>
       </div>
