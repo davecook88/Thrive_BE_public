@@ -30,7 +30,7 @@ export const InvoiceConfirmation: React.FC<InvoiceConfirmationProps> = ({
         Booking Summary
       </div>
       <div className="w-full">
-        <table className="m-auto table  ">
+        <table className="m-auto table">
           <tbody>
             <tr className="border-b-2 border-black font-bold">
               <td>Your items</td>

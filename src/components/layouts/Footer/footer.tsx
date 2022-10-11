@@ -3,15 +3,17 @@ import React from "react";
 const Footer = () => {
   return (
     <>
-      <section className="footer bg-skin-fill border-t bg-primary">
+      <section className="footer border-t bg-skin-fill bg-primary text-base-100">
         <div className="container  mx-auto ">
-          <div className="flex flex-wrap items-center justify-between py-4 mx-auto gap-4 ">
-            <div className="first">
-              <p className="text-skin-white">© Copyright Free Content, Inc.</p>
+          <div className="mx-auto flex flex-wrap items-center justify-between gap-4 py-4 ">
+            <div className="first w-20">
+              <a href="mailto:contact@lakarencita.com">
+                <p className="text-skin-white hover:font-bold">Contact us!</p>
+              </a>
             </div>
 
             <div className="last float-right text-skin-white">
-              <p>© 2021 AbcXYZ, Inc.</p>
+              <p>La Karencita ©{new Date().getFullYear()}</p>
             </div>
           </div>
         </div>
