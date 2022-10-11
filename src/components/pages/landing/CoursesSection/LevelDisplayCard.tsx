@@ -40,6 +40,7 @@ const LevelDisplayCard: React.FC<LevelDisplayCardProps> = ({
         "mx-auto",
         "md:mx-none",
         "my-2",
+        "border-t-6",
         focused ? "w-5/6 h-max flex-grow" : "w-0 flex-shrink",
         hidden ? "w-1 h-2 opacity-0 border-0" : "h-min w-4/6 md:w-2/6",
 
@@ -49,12 +50,12 @@ const LevelDisplayCard: React.FC<LevelDisplayCardProps> = ({
       key={level.id}
     >
       <div className={clsx("card-body", hidden ? "w-0 p-0 " : "h-max")}>
-        <div className="flex justify-between">
-          <h2 className="card-title font-extrabold">{`...${level.title}`}</h2>{" "}
+        <div className="flex justify-center bg-primary">
+          <h2 className="card-title font-extrabold text-base-100 left-50">{`...${level.title}`}</h2>{" "}
           {focused && (
             <StandardButton
               onClick={showAllLevels}
-              className="btn btn-info text-base-100 hover:text-info hover:bg-base-100 py-0.5 text-xs"
+              className="btn btn-info bg-neutral border-none text-base-100 hover:bg-neutral/90 py-0.5 text-xs ml-auto"
             >
               Show all levels
             </StandardButton>
@@ -65,10 +66,7 @@ const LevelDisplayCard: React.FC<LevelDisplayCardProps> = ({
 
         {focused && (
           <div>
-            <hr className="border-t-info" />
-            <p className="text-sm p-2">{level.description}</p>
-            <h3 className="p-1 font-extrabold text-xl m-4">Upcoming Courses</h3>
-
+            <p className="p-2 text-center">{level.description}</p>
             {allCourses.map((c) => (
               <CourseCollapse course={c} showBookNowButton={true} />
             ))}

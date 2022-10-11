@@ -9,10 +9,14 @@ import {
   CourseMinimal,
 } from "../../types/course/responses";
 import { parseDbTime } from "../../utils/dateMethods";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import { ClassScheduleTable } from "../ClassScheduleTable";
 import { BookCourseButton } from "./BookCourseButton";
 import { CourseInfoEntry } from "./CourseInfoEntry";
 import { CourseCollapseProps } from "./types";
+import { SyncClass } from "./SyncClass";
+import { AsyncClass } from "./AsyncClass";
 
 export const formatCourseDate = (val: string | Date) => {
   const d = val instanceof Date ? val : parseDbTime(val);
@@ -38,32 +42,46 @@ export const CourseCollapse: React.FC<CourseCollapseProps> = ({
   return (
     <div
       className={clsx(
-        "collapse collapse-arrow border border-base-300 bg-base-100 rounded-box",
+        "collapse collapse-close border border-base-300 bg-base-100 rounded-box m-6",
+
         isOpen && "collapse-open"
       )}
       onClick={() => setIsOpen((prev) => !prev)}
     >
-      <div className="collapse-title ">
-        <div className=" p-1 flex  w-full">
-          <div className="font-medium">{course.name}</div>
-          <CourseInfoEntry
-            title="Class Time "
-            value={moment(parseDbTime(course.start_time)).format("HH:mm")}
-          />
-          <CourseInfoEntry
-            title="Starts "
-            value={formatCourseDate(course.start_time)}
-          />
-          <CourseInfoEntry
-            title="Ends "
-            value={formatCourseDate(course.end_time)}
-          />
+      <div className="collapse-title border-t-8 border-primary/50 flex items-center gap-8">
+        <div className="flex flex-col border-t-6 border-primary w-full">
+          <div className=" p-1 flex justify-between items-center w-full border-t-2 border-b-2">
+            <div className="font-medium text-primary font-bold border-r-2 px-8 py-4 w-1/3">
+              {course.name}
+            </div>
+            <div className="border-r-2 p-4 font-bold w-1/3 text-center">
+              Online
+            </div>
+            <div className="font-bold w-1/3 text-center">300 hours</div>
+          </div>
+          {course.start_time ? (
+            <SyncClass course={course} />
+          ) : (
+            <AsyncClass course={course} />
+          )}
+          <div className="self-center">
+            <button
+              className="btn p-1 min-h-1 text-xs mt-4 px-2 text-info bg-base-100 border-info hover:bg-opacity-5"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsOpen((prev) => !prev);
+              }}
+            >
+              <FontAwesomeIcon icon={faCalendarDays} className="pr-2"/> Show Schedule
+            </button>
+          </div>
+        </div>
+        <div className="grow-0">
           {showBookNowButton && <BookCourseButton courseId={course.id} />}
         </div>
       </div>
       <div className="collapse-content">
-        <p>List live class data here</p>
-        <ClassScheduleTable courseClasses={classes} />
+        {course.start_time && <ClassScheduleTable courseClasses={classes} />}
       </div>
     </div>
   );
