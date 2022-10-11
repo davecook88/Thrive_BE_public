@@ -1,10 +1,13 @@
 import React from "react";
-import Toggle from "../../toggle";
 import Link from "next/link";
-import GoogleLoginButton from "../../auth/google/LoginButton";
-import GoogleLogoutButton from "../../auth/google/LogoutButton";
-import { useAppSelector } from "../../redux/hooks";
-import { selectUser } from "../../redux/reducers/user/userSlice";
+import { useAppSelector } from "../../../redux/hooks";
+import { selectUser } from "../../../redux/reducers/user/userSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import GoogleLogoutButton from "../../../auth/google/LogoutButton";
+import GoogleLoginButton from "../../../auth/google/LoginButton";
+import Toggle from "../../../toggle";
+import { IconHolder } from "./styled";
 
 const Navigation = () => {
   const auth = useAppSelector(selectUser);
@@ -15,7 +18,20 @@ const Navigation = () => {
       <div className="md:block lg:flex lg:gap-8">
         <div className="py-2 text-lg text-primary">
           <Link href="/">
-            <a>Home</a>
+            <a>
+              <IconHolder>
+                <FontAwesomeIcon icon={faHouse} />
+              </IconHolder>
+            </a>
+          </Link>
+        </div>
+        <div className="py-2 text-lg text-primary">
+          <Link href="/order">
+            <a>
+              <IconHolder>
+                <FontAwesomeIcon icon={faShoppingCart} />
+              </IconHolder>{" "}
+            </a>
           </Link>
         </div>
         {auth.user?.is_teacher && (

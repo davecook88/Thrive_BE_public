@@ -14,7 +14,6 @@ interface BookCoursePage {
 }
 
 const BookCoursePage: React.FC<BookCoursePage> = ({ course, levelCourses }) => {
-  const { user } = useAppSelector(selectUser);
   const paymentFormRef = useRef<HTMLDivElement>();
   const onHeroCTAClick = () => {
     if (!paymentFormRef.current) return;
