@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClock } from "@fortawesome/free-regular-svg-icons";
 
 interface CourseInfoEntryProps {
   title: string;
@@ -9,9 +11,12 @@ export const CourseInfoEntry: React.FC<CourseInfoEntryProps> = ({
   value,
 }) => {
   return (
-    <div className="px-4">
-      <span className="text-xs">{title}</span>
-      <span>{value}</span>
-    </div>
+    <tr>
+      <td>
+        <FontAwesomeIcon icon={faClock} className="pr-2" />
+      </td>
+      <td className="pr-1">{title}</td>
+      <td className="font-bold">{value}</td>
+    </tr>
   );
 };

@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import NavIcon from "../../icons/navicon";
 import Logo from "./logo";
-import Navigation from "./navigation";
+import Navigation from "./Navigation";
 
 const Header = () => {
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState<boolean>(false);
 
   return (
-    <section className="header bg-base-100 fixed w-full shadow-sm z-50 top-0">
+    <section className="header fixed top-0 z-50 w-full bg-base-100 shadow-sm">
       <div className="container mx-auto ">
-        <div className="flex flex-wrap items-center justify-between py-4 mx-auto gap-4">
-          <div className="flex-none z-10	">
+        <div className="mx-auto flex flex-wrap items-center justify-between gap-4 py-4">
+          <div className="z-10 flex-none	">
             <Logo />
           </div>
 
@@ -22,7 +22,7 @@ const Header = () => {
           </div>
 
           <div
-            className={`lg:flex flex-col lg:flex-row lg:items-center lg:justify-center text-sm w-full lg:w-auto z-0	${
+            className={`z-0 w-full flex-col text-sm lg:flex lg:w-auto lg:flex-row lg:items-center lg:justify-center	${
               mobileMenuIsOpen ? `block animate-slideIn` : `hidden`
             }`}
           >
