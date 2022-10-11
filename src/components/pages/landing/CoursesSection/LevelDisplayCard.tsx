@@ -4,6 +4,8 @@ import { StandardButton } from "../../../styled/Buttons";
 import { CourseMinimal } from "../../../types/course/responses";
 import { LevelResponse } from "../../../types/level/response";
 import { CourseCollapse } from "../../../course/CourseCollapse";
+import { AllCoursesView } from "./AllCoursesView";
+import Modal from "react-modal";
 
 interface LevelDisplayCardProps {
   level: LevelResponse;
@@ -50,29 +52,24 @@ const LevelDisplayCard: React.FC<LevelDisplayCardProps> = ({
       key={level.id}
     >
       <div className={clsx("card-body", hidden ? "w-0 p-0 " : "h-max")}>
-        <div className="flex justify-center bg-primary">
-          <h2 className="card-title font-extrabold text-base-100 left-50">{`...${level.title}`}</h2>{" "}
-          {focused && (
-            <StandardButton
-              onClick={showAllLevels}
-              className="btn btn-info bg-neutral border-none text-base-100 hover:bg-neutral/90 py-0.5 text-xs ml-auto"
-            >
-              Show all levels
-            </StandardButton>
-          )}
-        </div>
-
-        {!focused && <p>{level.subtitle}</p>}
-
+      <div className="flex justify-center bg-primary rounded-md p-1 text-center">
+        <h2 className="card-title font-extrabold text-base-100 left-50">{`...${level.title}`}</h2>{" "}
         {focused && (
-          <div>
-            <p className="p-2 text-center">{level.description}</p>
-            {allCourses.map((c) => (
-              <CourseCollapse course={c} showBookNowButton={true} />
-            ))}
-          </div>
+          <StandardButton
+            onClick={showAllLevels}
+            className="btn btn-info bg-neutral border-none text-base-100 hover:bg-neutral/90 py-0.5 text-xs ml-auto"
+          >
+            Show all levels
+          </StandardButton>
         )}
-
+      </div>
+        <AllCoursesView
+          allCourses={allCourses}
+          level={level}
+          showAllLevels={showAllLevels}
+          focused={focused}
+        />
+        {!focused && <p>{level.subtitle}</p>}
         {!hidden && !focused && (
           <div className="card-actions justify-start mt-4">
             <StandardButton
